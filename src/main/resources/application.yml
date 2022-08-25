@@ -6,7 +6,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: 'TRUE'
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     defer-datasource-initialization: true
     open-in-view: 'false'
   sql:

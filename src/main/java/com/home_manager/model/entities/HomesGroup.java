@@ -1,9 +1,8 @@
 package com.home_manager.model.entities;
 
-
 import com.home_manager.model.enums.HomesGroupEnum;
-
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,15 +13,20 @@ public class HomesGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
+    private String name;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private HomesGroupEnum name;
+    private HomesGroupEnum type;
 
-    public HomesGroup(HomesGroupEnum name) {
-        this.name = name;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(inverseJoinColumns=@JoinColumn(name="home_id"))
+    private Set<Home> homes;
+
+    public HomesGroup() {
+        this.homes = new HashSet<>();
     }
 
-    @OneToMany
-    private Set<Home> homes;
 
 }

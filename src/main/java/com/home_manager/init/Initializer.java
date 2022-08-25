@@ -1,9 +1,6 @@
 package com.home_manager.init;
 
-
-import com.home_manager.model.entities.HomesGroup;
 import com.home_manager.model.entities.Role;
-import com.home_manager.model.enums.HomesGroupEnum;
 import com.home_manager.model.enums.RoleEnum;
 import com.home_manager.repository.HomesGroupRepository;
 import com.home_manager.repository.RoleRepository;
@@ -32,12 +29,6 @@ public class Initializer implements CommandLineRunner {
             List<Role> roles = Arrays.stream(RoleEnum.values()).map(Role::new).toList();
 
             this.roleRepository.saveAll(roles);
-        }
-
-        if (this.homesGroupRepository.count() == 0) {
-            List<HomesGroup> roles = Arrays.stream(HomesGroupEnum.values()).map(HomesGroup::new).toList();
-
-            this.homesGroupRepository.saveAll(roles);
         }
     }
 }

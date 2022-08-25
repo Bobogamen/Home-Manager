@@ -20,12 +20,6 @@ public class Resident {
     @Column(nullable = false)
     private String lastName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "resident_roles",
-            joinColumns = @JoinColumn(name = "resident_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> role;
-
     @OneToMany(mappedBy = "resident",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
@@ -69,14 +63,7 @@ public class Resident {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-    public Set<Role> getRole() {
-        return role;
-    }
-
-    public void setRole(Set<Role> role) {
-        this.role = role;
-    }
+    
 
     public Set<MonthHomes> getPayments() {
         return payments;

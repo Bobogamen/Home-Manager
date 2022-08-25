@@ -28,5 +28,35 @@ public class HomesGroup {
         this.homes = new HashSet<>();
     }
 
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public HomesGroupEnum getType() {
+        return type;
+    }
+
+    public void setType(HomesGroupEnum type) {
+        this.type = type;
+    }
+
+    public Set<Home> getHomes() {
+        return homes;
+    }
+
+    public void setHomes(Set<Home> homes) {
+        this.homes = homes;
+    }
 }

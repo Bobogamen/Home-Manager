@@ -15,6 +15,7 @@ public class SecurityConfiguration {
         return new Pbkdf2PasswordEncoder();
     }
 
+    @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) {
 
         return null;

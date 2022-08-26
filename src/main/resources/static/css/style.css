@@ -1,0 +1,12 @@
+body {
+    background-image: linear-gradient(to top, #9be15d 0%, #00e3ae 100%);
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    margin-bottom: 5rem;
+    font-family: OCR A Std, monospace;
+    font-size: x-large;
+}
+
+
+

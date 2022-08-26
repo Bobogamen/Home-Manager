@@ -1,6 +1,7 @@
 package com.home_manager.model.entities;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +27,9 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private LocalDateTime registeredOn;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -103,5 +107,13 @@ public class User {
 
     public void setHomesGroups(Set<HomesGroup> homesGroups) {
         this.homesGroups = homesGroups;
+    }
+
+    public LocalDateTime getRegisteredOn() {
+        return registeredOn;
+    }
+
+    public void setRegisteredOn(LocalDateTime registeredOn) {
+        this.registeredOn = registeredOn;
     }
 }

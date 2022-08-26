@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap.rtl.css">
     <link rel="stylesheet" href="/css/bootstrap.rtl.min.css">
-    <link rel="stylesheet" href="/css/style.css">
     <title>Home manager</title>
 </head>
 <body>
 <main>
-    <div class="text-center mt-5 pt-5">
-        <h1>Welcome to Home manager</h1>
-        <a href="/login">Login</a>
+    <div class="text-center">
+        <h1 th:text="${#authentication.getPrincipal().getFirstName() +
+        #authentication.getPrincipal().getMiddleName() +
+        #authentication.getPrincipal().getLastName()}" class="pt-5 mt-5"></h1>
     </div>
 </main>
 

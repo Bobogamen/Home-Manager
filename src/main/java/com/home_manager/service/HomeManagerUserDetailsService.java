@@ -32,6 +32,7 @@ public class HomeManagerUserDetailsService implements UserDetailsService {
                 user.getMiddleName(),
                 user.getLastName(),
                 user.getPassword(),
+                user.getRegisteredOn(),
                 user.getRole().stream().map(this::map).toList(),
                 user.getHomesGroups());
     }

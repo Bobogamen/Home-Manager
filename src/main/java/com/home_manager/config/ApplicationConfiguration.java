@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-public class SecurityConfiguration {
+public class ApplicationConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -52,4 +52,6 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return new HomeManagerUserDetailsService(userRepository);
     }
+
+
 }

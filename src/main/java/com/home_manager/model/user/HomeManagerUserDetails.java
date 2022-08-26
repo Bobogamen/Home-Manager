@@ -4,6 +4,7 @@ import com.home_manager.model.entities.HomesGroup;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ public class HomeManagerUserDetails implements UserDetails {
     private String middleName;
     private String lastName;
     private String password;
+    private LocalDateTime registeredOn;
 
     private Collection<GrantedAuthority> authorities;
 
@@ -26,6 +28,7 @@ public class HomeManagerUserDetails implements UserDetails {
                                   String middleName,
                                   String lastName,
                                   String password,
+                                  LocalDateTime registeredOn,
                                   Collection<GrantedAuthority> authorities,
                                   Set<HomesGroup> homesGroups) {
         this.id = id;
@@ -34,6 +37,7 @@ public class HomeManagerUserDetails implements UserDetails {
         this.middleName = middleName;
         this.lastName = lastName;
         this.password = password;
+        this.registeredOn = registeredOn;
         this.authorities = authorities;
         this.homesGroups = homesGroups;
     }
@@ -80,6 +84,14 @@ public class HomeManagerUserDetails implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public LocalDateTime getRegisteredOn() {
+        return registeredOn;
+    }
+
+    public void setRegisteredOn(LocalDateTime registeredOn) {
+        this.registeredOn = registeredOn;
     }
 
     public void setAuthorities(Collection<GrantedAuthority> authorities) {

@@ -3,20 +3,60 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/bootstrap.rtl.css">
-    <link rel="stylesheet" href="/css/bootstrap.rtl.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <title>Home manager</title>
 </head>
 <body>
-<main>
-    <div class="text-center mt-5 pt-5">
-        <h1>Welcome to Home manager</h1>
-        <a href="/login">Login</a>
+
+<div class="container-fluid m-1 p-2 border border-danger">
+    <div class="row border border-danger">
+        <div class="col border border-danger">
+            <a class="button btn">Login</a>
+        </div>
+        <div class="col text-end border border-danger">
+            <a class="button btn">Login</a>
+        </div>
     </div>
-</main>
+    <div class="row mt-3 border border-danger">
+        <div class="col border border-danger">
+            <div class="card row m-auto mt-2" style="width: 20rem;">
+                <img id="card-image" src="/images/expenses.png" class="card-img-top" alt="expenses">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">Expenses</h5>
+                    <h6 class="card-text">Have control of
+                        all yours bills and expenses.
+                    </h6>
+                </div>
+            </div>
+
+            <div class="card row m-auto mt-2" style="width: 20rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">Secured</h5>
+                    <h6 class="card-text">Your date is secured.
+                    </h6>
+                </div>
+            </div>
+
+            <div class="card row m-auto mt-2" style="width: 20rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">Multiple places</h5>
+                    <h6 class="card-text">Manage your house, complex apartment or building.
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <div class="col text-center border border-danger">
+            <h1 class="p-3">Welcome to Home Manager</h1>
+            <img src="/images/logo.png" class="img-fluid" alt="logo">
+        </div>
+        <div class="col border border-danger">
+            <h1>RIGHT</h1>
+        </div>
+    </div>
+</div>
 
 <script src="/js/bootstrap.bundle.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>

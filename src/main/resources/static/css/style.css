@@ -11,7 +11,7 @@ body {
     display: flex;
 }
 
-#card-image {
+.card-image {
     object-fit: fill;
     max-width: 35%;
     padding: 0;
@@ -19,6 +19,19 @@ body {
     margin: 5px auto auto;
     border: solid black;
     border-radius: 100%;
+}
+
+.card {
+    background-color: #D4F3EEFF;
+    width: 22rem;
+    border: solid black 2px;
+    border-radius: 10px;
+
+}
+
+.card-body {
+    background-color: #D4F3EEFF;
+    border-radius: 10px;
 }
 
 /* ---------- Forms styling START ---------- */
@@ -42,7 +55,7 @@ body {
 }
 
 .subtitle {
-    color: #eee;
+    color: #abfaea;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 16px;
     font-weight: 600;
@@ -169,7 +182,7 @@ body {
 }
 
 .button:hover {
-    background-color: royalblue;
+    background-color: dodgerblue;
     color: black;
 }
 

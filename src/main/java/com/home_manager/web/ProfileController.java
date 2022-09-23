@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ProfileController {
 
-    private UserService userService;
+    private final UserService userService;
 
 
     public ProfileController(UserService userService) {

@@ -13,17 +13,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 @Controller
-public class LoginAndRegisterController {
+public class RegisterController {
 
     private final UserService userService;
 
-    public LoginAndRegisterController(UserService userService) {
+    public RegisterController(UserService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "/login";
     }
 
     @PostMapping("/login-fail")
@@ -34,7 +29,7 @@ public class LoginAndRegisterController {
         redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, userName);
         redirectAttributes.addFlashAttribute("badCredentials", true);
 
-        return "redirect:/login";
+        return "redirect:/";
     }
 
     @GetMapping("/register")

@@ -27,13 +27,13 @@ public class ApplicationConfiguration {
         http.
                 authorizeHttpRequests().
                 requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
-                antMatchers("/favicon.ico", "/", "/login", "/register").permitAll().
+                antMatchers("/favicon.ico", "/", "/register").permitAll().
                 antMatchers("/users/admin").hasRole(RoleEnum.ADMIN.name()).
                 antMatchers("/users/manager").hasRole(RoleEnum.MANAGER.name()).
                 antMatchers("/users/cashier").hasRole(RoleEnum.CASHIER.name()).
                 anyRequest().authenticated().
         and().
-                formLogin().loginPage("/login").
+                formLogin().loginPage("/").
                 usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY).
                 passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY).
                 defaultSuccessUrl("/profile").

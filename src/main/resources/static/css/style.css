@@ -34,13 +34,8 @@ body {
     border-radius: 10px;
 }
 
-/* ---------- LOGIN FORM START ---------- */
-
-/* ---------- LOGIN FORM END ---------- */
-
-
 /* ---------- Buttons styling START ---------- */
-.button{
+.button {
     position: relative;
     background-color: transparent;
     border-radius: 4em;
@@ -51,12 +46,14 @@ body {
     font-size: 14px;
     font-weight: bold;
     color: black;
-    padding: 0.4em 1.4em 0.4em 1.4em;
+    padding: 0.6em 1.4em 0.6em 1.4em;
     cursor: pointer;
     user-select: none;
     text-align: center;
     text-decoration: none;
+    vertical-align: middle;
 }
+
 
 .button:hover {
     background-color: dodgerblue;
@@ -64,58 +61,62 @@ body {
 }
 /* ---------- Buttons styling END ---------- */
 
-/*---------- MODAL ---------- */
-/* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    padding-top: 60px;
+/* ---------- Utilities START---------- */
+input {
+    width: 18em;
 }
 
-/* Modal Content/Box */
-.modal-content {
-    background-color: #fefefe;
-    margin: 1px auto auto auto; /* 5% from the top, 15% from the bottom and centered */
-    border: 1px solid #888;
-    width: 40%; /* Could be more or less, depending on screen size */
-    height: 80%;
+.field {
+    width: 24em;
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+    background: transparent;
+    border-style: inset;
 }
 
-/* Add Zoom Animation */
-.animate {
-    -webkit-animation: animateZoom 0.6s;
-    animation: animateZoom 0.6s
+.loginForm {
+    border-radius: 4em;
+    padding: 0.2em 0.2em 0.2em 0.2em;
 }
 
-@-webkit-keyframes animateZoom {
-    from {-webkit-transform: scale(0)}
-    to {-webkit-transform: scale(1)}
+.line {
+    border-style: solid;
+    border-width: 2px;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    padding-bottom: 0.6em;
 }
 
-@keyframes animateZoom {
-    from {transform: scale(0)}
-    to {transform: scale(1)}
+.notificationLogin {
+    position: absolute;
+    top: 0.6em;
+    left: 2em;
+    text-align: center;
+    margin: 1em;
+    font-size: 9pt;
 }
 
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-    span.psw {
-        display: block;
-        float: none;
-    }
-    .cancelBtn {
-        width: 100%;
-    }
+.notificationRegister {
+    font-size: 9pt;
+    text-align: left;
+    max-width: 69%;
 }
-/*---------- MODAL ---------- */
+
+.registrationForm {
+    max-width: 26em;
+    border-style: solid;
+    border-radius: 0.6em;
+    border-width: 0.1em;
+    margin-top: 1em;
+    text-align: center;
+    padding: 1em;
+}
+/* ---------- Utilities END---------- */
+
+
+
+
 
 
 

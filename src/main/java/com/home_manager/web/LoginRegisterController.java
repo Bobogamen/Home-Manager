@@ -13,14 +13,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 @Controller
-public class RegisterController {
+public class LoginRegisterController {
 
     private final UserService userService;
 
-    public RegisterController(UserService userService) {
+    public LoginRegisterController(UserService userService) {
         this.userService = userService;
     }
 
+    //-------------------- LOGIN FAIL SECTION START --------------------
     @PostMapping("/login-fail")
     public String loginFail(
             @ModelAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY) String userName,
@@ -31,6 +32,7 @@ public class RegisterController {
 
         return "redirect:/";
     }
+    //-------------------- LOGIN FAIL SECTION END --------------------
 
     @GetMapping("/register")
     public String register() {

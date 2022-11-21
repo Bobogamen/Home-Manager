@@ -1,26 +1,27 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/profile.css">
-    <script src="/js/indexUtils.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <title>Home manager</title>
 </head>
 <body>
-<nav>
-    <button class="button">Logout</button>
-</nav>
-<main>
-    <div class="text-center">
-        <h1 th:text="${#authentication.getPrincipal().getFirstName() + ' ' +
-        #authentication.getPrincipal().getMiddleName() + ' ' +
-        #authentication.getPrincipal().getLastName()}" class="pt-5 mt-5"></h1>
-        <h3 th:text="${#dates.format(#dates.createNow(), 'dd MMMM yyyy')}"></h3>
+<div class="container-fluid">
+    <section th:replace="/fragments/notification.html"></section>
+
+    <nav th:replace="/fragments/nav-bar.html"></nav>
+    <!------------------------CONTENT------------------------>
+    <div class="row line">
+        <div class="text-center">
+            <h1 th:text="|${#authentication.getPrincipal().getFirstName()} ${#authentication.getPrincipal().getLastName()}|" class="pt-5 mt-5"></h1>
+        </div>
     </div>
-</main>
+    <div class="row">
+        <footer th:replace="/fragments/footer.html"></footer>
+    </div>
+</div>
+
 </body>
-<script src="/static/js/profilUtils.js"></script>
+<script src="/js/profile-utils.js"></script>
 </html>

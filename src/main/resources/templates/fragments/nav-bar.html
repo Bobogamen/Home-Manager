@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title>Home Manager</title>
+</head>
+<body>
+<nav class="text-center">
+    <table class="col-12">
+        <thead>
+        <tr class="row-cols-auto align-middle text-center">
+            <th class="col-1 text-start">
+                <a href="/"><img href="/" src="/images/logo.png" alt="logo" style="max-height: 80px"></a>
+            </th>
+            <th sec:authorize="hasRole('ADMIN')" class="col-1">
+                <a href="#" class="authorize-button">Admin</a>
+            </th>
+            <th sec:authorize="hasRole('MANAGER')" class="col-1">
+                <a href="#" class="authorize-button">Manager</a>
+            </th>
+            <th sec:authorize="hasRole('CASHIER')" class="col-1">
+                <a href="#" class="authorize-button">Cashier</a>
+            </th>
+            <th sec:authorize="isAnonymous()" class="col-12">
+                <form th:action="@{/}" th:method="POST">
+                    <label for="username"></label>
+                    <input type="text" placeholder="Your email" name="username" id="username" class="loginForm">
+                    <label for="password"></label>
+                    <input type="password" placeholder="Password" name="password" id="password" class="loginForm">
+                    <button type="submit" class="button">Login</button>
+                </form>
+            </th>
+            <th sec:authorize="isAnonymous()" class="col-1">
+                <button id="registerBtn" class="button">Register</button>
+            </th>
+            <th sec:authorize="isAuthenticated()" class="col-1 text-end">
+                <span th:text="|${#authentication.getPrincipal().getFirstName()} ${#authentication.getPrincipal().getLastName()}|" class="me-2"></span>
+            </th>
+            <th sec:authorize="isAuthenticated()" class="col-1 text-start">
+                <form th:action="@{/logout}" th:method="POST">
+                    <button type="submit" class="button">Logout</button>
+                </form>
+            </th>
+        </tr>
+        </thead>
+    </table>
+</nav>
+</body>
+<script src="/js/index-utils.js"></script>
+</html>

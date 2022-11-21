@@ -38,6 +38,6 @@ public class HomeManagerUserDetailsService implements UserDetailsService {
     }
 
     private GrantedAuthority map (Role role) {
-        return new SimpleGrantedAuthority("ROLE" + role.getName().name());
+        return new SimpleGrantedAuthority("ROLE_" + role.getName().name());
     }
 }

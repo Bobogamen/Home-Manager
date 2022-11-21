@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title>Home Manager</title>
+</head>
+<body>
+<section class="notification">
+    <p th:if="${badCredentials}"
+       class="bg-danger text-light rounded mt-5 p-1">Invalid username or password!
+    </p>
+</section>
+</body>
+</html>

@@ -8,68 +8,75 @@
     <title>Home Manager Registration</title>
 </head>
 <body>
-<main>
-    <div class="registrationForm">
-        <h1>Create Account</h1>
-        <form th:action="@{/register}"
-              th:method="POST"
-              th:object="${registrationDTO}">
-            <label for="firstName">
-                <input th:field="*{firstName}"
-                       th:errorclass="is-invalid" type="text" placeholder="Your first name" name="firstName" id="firstName" class="field">
-            </label>
-            <div th:if="${#fields.hasErrors('firstName')}">
-                <p th:each="err : ${#fields.errors('firstName')}" th:text="${err}"></p>
-            </div>
+<main class="w-100">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="registrationForm">
+                <h1>Create Account</h1>
+                <form th:action="@{/register}"
+                      th:method="POST"
+                      th:object="${registrationDTO}">
+                    <label for="firstName">
+                        <input th:field="*{firstName}"
+                               th:errorclass="is-invalid" type="text" placeholder="Your first name" name="firstName" id="firstName" class="field">
+                    </label>
+                    <div th:if="${#fields.hasErrors('firstName')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('firstName')}" th:text="${err}" class="bg-danger text-light rounded m-1"></p>
+                    </div>
 
-            <label for="middleName">
-                <input th:field="*{middleName}"
-                       th:errorclass="is-invalid"
-                       type="text" placeholder="Your middle name" name="middleName" id="middleName" class="field">
-            </label>
-            <div th:if="${#fields.hasErrors('middleName')}">
-                <p th:each="err : ${#fields.errors('middleName')}" th:text="${err}"></p>
-            </div>
+                    <label for="middleName">
+                        <input th:field="*{middleName}"
+                               th:errorclass="is-invalid"
+                               type="text" placeholder="Your middle name" name="middleName" id="middleName" class="field">
+                    </label>
+                    <div th:if="${#fields.hasErrors('middleName')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('middleName')}" th:text="${err}" class="bg-danger text-light rounded m-1"></p>
+                    </div>
 
-            <label for="lastName">
-                <input th:field="*{lastName}"
-                       th:errorclass="is-invalid"
-                       type="text" placeholder="Your last name" name="lastName" id="lastName" class="field">
-            </label>
-            <div th:if="${#fields.hasErrors('lastName')}">
-                <p th:each="err : ${#fields.errors('lastName')}" th:text="${err}"></p>
-            </div>
+                    <label for="lastName">
+                        <input th:field="*{lastName}"
+                               th:errorclass="is-invalid"
+                               type="text" placeholder="Your last name" name="lastName" id="lastName" class="field">
+                    </label>
+                    <div th:if="${#fields.hasErrors('lastName')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('lastName')}" th:text="${err}" class="bg-danger text-light rounded m-1"></p>
+                    </div>
 
-            <label for="email">
-                <input th:field="*{email}"
-                       th:errorclass="is-invalid"
-                       type="text" placeholder="Your email" name="email" id="email" class="field">
-            </label>
-            <div th:if="${#fields.hasErrors('email')}">
-                <p th:each="err : ${#fields.errors('email')}" th:text="${err}"></p>
-            </div>
+                    <label for="email">
+                        <input th:field="*{email}"
+                               th:errorclass="is-invalid"
+                               type="text" placeholder="Your email" name="email" id="email" class="field">
+                    </label>
+                    <div th:if="${#fields.hasErrors('email')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('email')}" th:text="${err}" class="bg-danger text-light rounded m-1"></p>
+                    </div>
 
-            <label for="password">
-                <input th:field="*{password}"
-                       th:errorclass="is-invalid"
-                       type="password" placeholder="Enter password" name="password" id="password" class="field">
-            </label>
-            <div th:if="${#fields.hasErrors('password')}">
-                <p th:each="err : ${#fields.errors('password')}" th:text="${err}"></p>
-            </div>
+                    <label for="password">
+                        <input th:field="*{password}"
+                               th:errorclass="is-invalid"
+                               type="password" placeholder="Enter password" name="password" id="password" class="field">
+                    </label>
+                    <div th:if="${#fields.hasErrors('password')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('password')}" th:text="${err}" class="bg-danger text-light rounded m-1"></p>
+                    </div>
 
-            <label for="confirmPassword">
-                <input th:errorclass="is-invalid"
-                       type="password" placeholder="Confirm your password"
-                       name="confirmPassword" id="confirmPassword" class="field">
-            </label>
-            <p th:if="${#fields.hasErrors('confirmPassword')}"
-               th:errors="*{confirmPassword}"></p>
-            <button type="submit" class="button m-3">Register</button>
-            <h6 class="m-3">Already registered? <a href="/">Sign up</a></h6>
-        </form>
+                    <label for="confirmPassword">
+                        <input th:errorclass="is-invalid"
+                               type="password" placeholder="Confirm your password"
+                               name="confirmPassword" id="confirmPassword" class="field">
+                    </label>
+                    <div th:if="${#fields.hasErrors('password')}" class="notificationRegister">
+                        <p th:errors="*{confirmPassword}" class="bg-danger text-light rounded m-1"></p>
+                    </div>
+                    <button type="submit" class="button m-3">Register</button>
+                    <h6 class="m-3">Already registered? <a href="/">Sign up</a></h6>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <footer th:replace="/fragments/footer.html"></footer>
+        </div>
     </div>
 </main>
 </body>
-<script src="/js/registrationUtils.js"></script>
 </html>

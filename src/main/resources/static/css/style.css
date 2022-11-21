@@ -59,11 +59,36 @@ body {
     background-color: dodgerblue;
     color: black;
 }
+
+.authorize-button {
+    background-color: #c2fbd7;
+    border-radius: 100px;
+    box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+    color: #0c1f0c;
+    cursor: pointer;
+    display: inline-block;
+    font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+    padding: 7px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 250ms;
+    border: 0;
+    font-size: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.authorize-button:hover {
+    box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+    transform: scale(1.1) rotate(-1deg);
+    color: #0c1f0c;
+}
 /* ---------- Buttons styling END ---------- */
 
 /* ---------- Utilities START---------- */
 input {
-    width: 18em;
+    width: 12em;
 }
 
 .field {
@@ -80,20 +105,17 @@ input {
 }
 
 .line {
-    border-style: solid;
+    border-color: #2a5365;
+    border-style: solid none none none;
     border-width: 2px;
-    border-top-style: none;
-    border-right-style: none;
-    border-left-style: none;
     padding-bottom: 0.6em;
 }
 
-.notificationLogin {
+.notification {
     position: absolute;
-    top: 0.6em;
-    left: 2em;
+    top: 2em;
+    left: 41%;
     text-align: center;
-    margin: 1em;
     font-size: 9pt;
 }
 
@@ -112,6 +134,14 @@ input {
     text-align: center;
     padding: 1em;
 }
+
+.footer {
+    border-radius: 4em;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+}
+
 /* ---------- Utilities END---------- */
 
 

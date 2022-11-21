@@ -5,8 +5,9 @@ function register() {
 }
 
 setTimeout(() => {
-    document.querySelector('.notificationLogin').style.display = 'none';
+    document.querySelector('.notification').style.display = 'none';
 }, 6000);
+
 
 
 

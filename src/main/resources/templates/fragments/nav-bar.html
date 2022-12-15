@@ -13,35 +13,41 @@
         <thead>
         <tr class="row-cols-auto align-middle text-center">
             <th class="col-1 text-start">
-                <a href="/"><img href="/" src="/images/logo.png" alt="logo" style="max-height: 80px"></a>
+                <a sec:authorize="isAnonymous()" href="/"><img src="/images/logo.png" alt="logo" style="max-height: 80px"></a>
+                <a sec:authorize="isAuthenticated()" href="/profile"><img src="/images/logo.png" alt="logo" style="max-height: 80px"></a>
             </th>
             <th sec:authorize="hasRole('ADMIN')" class="col-1">
-                <a href="#" class="authorize-button">Admin</a>
+                <a th:text="#{admin}" href="#" class="authorize-button"></a>
             </th>
             <th sec:authorize="hasRole('MANAGER')" class="col-1">
-                <a href="#" class="authorize-button">Manager</a>
+                <a th:text="#{manager}" href="#" class="authorize-button"></a>
             </th>
             <th sec:authorize="hasRole('CASHIER')" class="col-1">
-                <a href="#" class="authorize-button">Cashier</a>
+                <a th:text="#{cashier}" href="#" class="authorize-button"></a>
             </th>
             <th sec:authorize="isAnonymous()" class="col-12">
+                <div>
                 <form th:action="@{/}" th:method="POST">
                     <label for="username"></label>
-                    <input type="text" placeholder="Your email" name="username" id="username" class="loginForm">
+                    <input type="text" placeholder="Email" name="username" id="username" class="loginForm">
                     <label for="password"></label>
-                    <input type="password" placeholder="Password" name="password" id="password" class="loginForm">
-                    <button type="submit" class="button">Login</button>
+                    <input type="password" th:placeholder="#{enter_password}" name="password" id="password" class="loginForm">
+                    <button th:text="#{login}" type="submit" class="button"></button>
                 </form>
+                </div>
+                <div>
+                    <a th:text="#{forgot_password}" href="/forgot-password" class="button" style="font-size: 8pt"></a>
+                </div>
             </th>
             <th sec:authorize="isAnonymous()" class="col-1">
-                <button id="registerBtn" class="button">Register</button>
+                <a th:text="#{register}" href="/register" class="button"></a>
             </th>
             <th sec:authorize="isAuthenticated()" class="col-1 text-end">
-                <span th:text="|${#authentication.getPrincipal().getFirstName()} ${#authentication.getPrincipal().getLastName()}|" class="me-2"></span>
+                <a th:text="|${#authentication.getPrincipal().getFirstName()} ${#authentication.getPrincipal().getLastName()}|" class="button me-2"></a>
             </th>
             <th sec:authorize="isAuthenticated()" class="col-1 text-start">
                 <form th:action="@{/logout}" th:method="POST">
-                    <button type="submit" class="button">Logout</button>
+                    <button th:text="#{logout}" type="submit" class="button"></button>
                 </form>
             </th>
         </tr>
@@ -49,5 +55,4 @@
     </table>
 </nav>
 </body>
-<script src="/js/index-utils.js"></script>
 </html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div style="text-align: center;
+            font-family: Verdana, serif;">
+    <img src="cid:logo" width="200" height="200" alt="logo"/>
+    <h1 th:text="#{registration_confirmed}" style="color: green;"></h1>
+    <div>
+        <div style="text-align: justify;
+                    width: 85%;
+                    margin: 5% 5% 1% 5%;
+                    border-style: outset;
+                    border-width: 2px;
+                    padding: 25px;">
+            <p th:text="#{hello}"></p>
+            <p th:text="#{registration_message(${email})}"></p>
+            <p th:text="#{questions}"></p>
+        </div>
+        <footer th:replace="/fragments/footer :: footer"></footer>
+    </div>
+</div>
+</body>
+</html>

@@ -11,25 +11,25 @@ import javax.validation.constraints.Size;
         confirmPassword = "confirmPassword")
 public class RegistrationDTO {
 
-    @NotEmpty(message = "Email cannot be empty")
-    @Email(message = "Enter valid email address.")
+    @NotEmpty(message = "{not_empty}")
+    @Email(message = "{valid_email}")
     @UniqueEmail
     private String email;
 
-    @NotEmpty(message = "Field cannot be empty")
-    @Size(min = 2, max = 30, message = "Field must be between 2 and 30 character")
+    @NotEmpty(message = "{not_empty}")
+    @Size(min = 2, max = 30, message = "{field_length}")
     private String firstName;
 
-    @NotEmpty(message = "Field cannot be empty")
-    @Size(min = 2, max = 30, message = "Field must be between 2 and 30 character")
+    @NotEmpty(message = "{not_empty}")
+    @Size(min = 2, max = 30, message = "{field_length}")
     private String middleName;
 
-    @NotEmpty(message = "Field cannot be empty")
-    @Size(min = 2, max = 30, message = "Field must be between 2 and 30 character")
+    @NotEmpty(message = "{not_empty}")
+    @Size(min = 2, max = 30, message = "{field_length}")
     private String lastName;
 
-    @NotEmpty(message = "Password cannot be empty")
-    @Size(min = 5, max = 20, message = "Password must be between 5 and 20 symbols")
+    @NotEmpty(message = "{password_match}")
+    @Size(min = 5, max = 20, message = "{password_length}")
     private String password;
 
     private String confirmPassword;

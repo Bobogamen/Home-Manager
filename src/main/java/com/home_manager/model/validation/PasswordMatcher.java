@@ -14,7 +14,7 @@ public @interface PasswordMatcher {
 
     String password();
     String confirmPassword();
-    String message() default "Passwords should match.";
+    String message() default "{password_match}";
 
     Class<?>[] groups() default {};
 

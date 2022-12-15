@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <title>Home Manager</title>
+    <title th:text="#{home_manager}"></title>
 </head>
 <body>
 <div class="container-fluid">
-    <section th:replace="/fragments/notification.html"></section>
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="/fragments/nav-bar :: nav"></nav>
 
-    <nav th:replace="/fragments/nav-bar.html"></nav>
     <!------------------------CONTENT------------------------>
     <div class="row line">
         <!------------------------LEFT SIDE------------------------>
@@ -19,34 +18,31 @@
             <div class="card row m-auto mt-5">
                 <img src="/images/expenses.png" class="card-img-top card-image" alt="expenses">
                 <div class="card-body">
-                    <h5 class="card-title font-weight-bold">Expenses</h5>
-                    <h6 class="card-text">Have control of
-                        all yours expenses.
-                    </h6>
+                    <h5 th:text="#{expenses}" class="card-title font-weight-bold"></h5>
+                    <h6 th:text="#{expenses_text}" class="card-text"></h6>
                 </div>
             </div>
 
             <div class="card row m-auto mt-2">
                 <img src="/images/secure.png" class="card-img-top card-image" alt="secure">
                 <div class="card-body">
-                    <h5 class="card-title font-weight-bold">Secured</h5>
-                    <h6 class="card-text">Your date is secured.
-                    </h6>
+                    <h5 th:text="#{secured}" class="card-title font-weight-bold"></h5>
+                    <h6 th:text="#{secured_text}" class="card-text"></h6>
                 </div>
             </div>
 
             <div class="card row m-auto mt-2">
                 <img src="/images/multi-places.png" class="card-img-top card-image" alt="multi-places">
                 <div class="card-body">
-                    <h5 class="card-title font-weight-bold">Multiple places</h5>
-                    <h6 class="card-text">Manage your house, complex apartment or building.
+                    <h5 th:text="#{multiple_places}" class="card-title font-weight-bold"></h5>
+                    <h6 th:text="#{multiple_places_text}" class="card-text">
                     </h6>
                 </div>
             </div>
         </div>
         <!------------------------CENTER------------------------>
         <div class="col text-center">
-            <h1 class="p-3">Welcome to Home Manager</h1>
+            <h1 th:text="#{home_manager}" class="p-3"></h1>
             <img src="/images/logo.png" class="img-fluid" alt="logo">
         </div>
 
@@ -55,34 +51,32 @@
             <div class="card row m-auto mt-5">
                 <img src="/images/resident.png" class="card-img-top card-image" alt="resident">
                 <div class="card-body">
-                    <h5 class="card-title font-weight-bold">Residents</h5>
-                    <h6 class="card-text">Add residents which can be set to different places.</h6>
+                    <h5 th:text="#{residents}" class="card-title font-weight-bold"></h5>
+                    <h6 th:text="#{residents_text}" class="card-text"></h6>
                 </div>
             </div>
 
             <div class="card row m-auto mt-2">
-                <img src="/images/utilities.png" class="card-img-top card-image" alt="utilities">
+                <img src="/images/bills.png" class="card-img-top card-image" alt="utilities">
                 <div class="card-body">
-                    <h5 class="card-title font-weight-bold">Utilities</h5>
-                    <h6 class="card-text">Control each of your utility bill.
-                    </h6>
+                    <h5 th:text="#{bills}" class="card-title font-weight-bold"></h5>
+                    <h6 th:text="#{bills_text}" class="card-text"></h6>
                 </div>
             </div>
 
             <div class="card row m-auto mt-2">
                 <img src="/images/surveillance.png" class="card-img-top card-image" alt="surveillance">
                 <div class="card-body">
-                    <h5 class="card-title font-weight-bold">Surveillance</h5>
-                    <h6 class="card-text">You have view of all.
-                    </h6>
+                    <h5 th:text="#{surveillance}" class="card-title font-weight-bold"></h5>
+                    <h6 th:text="#{surveillance_text}" class="card-text"></h6>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <footer th:replace="/fragments/footer.html"></footer>
+        <footer th:replace="/fragments/footer :: footer"></footer>
     </div>
 </div>
 </body>
-<script src="/js/index-utils.js"></script>
+<script src="/js/utils.js"></script>
 </html>

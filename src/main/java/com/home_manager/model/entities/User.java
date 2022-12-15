@@ -31,6 +31,9 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime registeredOn;
 
+    @Column
+    private String resetPasswordToken;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -97,8 +100,8 @@ public class User {
         return role;
     }
 
-    public void setRole(Set<Role> role) {
-        this.role = role;
+    public void setRole(Role role) {
+        this.role.add(role);
     }
 
     public Set<HomesGroup> getHomesGroups() {
@@ -115,5 +118,13 @@ public class User {
 
     public void setRegisteredOn(LocalDateTime registeredOn) {
         this.registeredOn = registeredOn;
+    }
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
     }
 }

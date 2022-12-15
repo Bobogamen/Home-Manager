@@ -8,9 +8,8 @@
 </head>
 <body>
 <section class="notification">
-    <p th:if="${badCredentials}"
-       class="bg-danger text-light rounded mt-5 p-1">Invalid username or password!
-    </p>
+    <p th:text="${fail}" class="bg-danger text-light rounded p-1 px-1"></p>
+    <p th:text="${success}" class="bg-success text-light rounded p-1 px-1"></p>
 </section>
 </body>
 </html>

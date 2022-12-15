@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-public class ApplicationConfiguration {
+public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -27,7 +27,7 @@ public class ApplicationConfiguration {
         http.
                 authorizeHttpRequests().
                 requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
-                antMatchers("/favicon.ico", "/", "/register").permitAll().
+                antMatchers("/favicon.ico", "/", "/register", "/forgot-password", "/reset-password").permitAll().
                 antMatchers("/users/admin").hasRole(RoleEnum.ADMIN.name()).
                 antMatchers("/users/manager").hasRole(RoleEnum.MANAGER.name()).
                 antMatchers("/users/cashier").hasRole(RoleEnum.CASHIER.name()).

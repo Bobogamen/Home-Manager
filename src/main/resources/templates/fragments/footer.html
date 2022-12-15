@@ -10,10 +10,10 @@
     <footer>
         <div class="bg-light py-2 mt-5 footer">
             <div class="container text-center">
-                <p class="text-muted mb-0 py-2">© 2022 Home Manager All rights reserved.</p>
+                <p th:text="'&#169;' + |${#dates.format(#dates.createNow(), 'YYYY')} #{home_manager}.  #{all_rights_reserved}|" class="text-muted mb-0 py-2"></p>
             </div>
         </div>
     </footer>
 </body>
-<script src="/js/index-utils.js"></script>
+<script src="/js/utils.js"></script>
 </html>

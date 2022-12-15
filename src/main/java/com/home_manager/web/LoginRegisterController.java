@@ -1,6 +1,7 @@
 package com.home_manager.web;
 
 import com.home_manager.model.dto.RegistrationDTO;
+import com.home_manager.service.EmailService;
 import com.home_manager.service.UserService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
@@ -10,15 +11,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletException;
 import javax.validation.Valid;
 
 @Controller
 public class LoginRegisterController {
 
     private final UserService userService;
+    private final EmailService emailService;
 
-    public LoginRegisterController(UserService userService) {
+    public LoginRegisterController(UserService userService, EmailService emailService) {
         this.userService = userService;
+        this.emailService = emailService;
     }
 
     //-------------------- LOGIN FAIL SECTION START --------------------
@@ -28,7 +32,7 @@ public class LoginRegisterController {
             RedirectAttributes redirectAttributes) {
 
         redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, userName);
-        redirectAttributes.addFlashAttribute("badCredentials", true);
+        redirectAttributes.addFlashAttribute("fail", "Невалиден email/парола");
 
         return "redirect:/";
     }
@@ -44,11 +48,8 @@ public class LoginRegisterController {
         return new RegistrationDTO();
     }
 
-
     @PostMapping("/register")
-    public String register(@Valid RegistrationDTO registrationDTO,
-                           BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes) {
+    public String register(@Valid RegistrationDTO registrationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws ServletException {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("registrationDTO", registrationDTO);
@@ -58,9 +59,10 @@ public class LoginRegisterController {
         }
 
         this.userService.register(registrationDTO);
+        this.emailService.sendRegistrationEmail(registrationDTO.getEmail());
 
-        redirectAttributes.addFlashAttribute("success", true);
+        redirectAttributes.addFlashAttribute("success", "Успешна регистрация!");
 
-        return "redirect:/login";
+        return "redirect:/profile";
     }
 }

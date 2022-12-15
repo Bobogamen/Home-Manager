@@ -23,8 +23,7 @@ public class Initializer implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-
+    public void run(String... args) {
         if (this.roleRepository.count() == 0) {
             List<Role> roles = Arrays.stream(RoleEnum.values()).map(Role::new).toList();
 

@@ -31,7 +31,7 @@ public class ForgotAndResetPasswordController {
 
     @GetMapping("/forgot-password")
     public String forgotPassword() {
-        return "forgot-password";
+        return "forgot_password";
     }
 
     @PostMapping("/forgot-password")
@@ -63,7 +63,7 @@ public class ForgotAndResetPasswordController {
     @GetMapping("/reset-password")
     public String resetPassword(@RequestParam String token, Model model) {
         model.addAttribute("token", token);
-        return "/reset-password";
+        return "/reset_password";
     }
 
     @ModelAttribute("passwordResetDTO")

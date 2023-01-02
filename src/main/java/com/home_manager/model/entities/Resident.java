@@ -1,7 +1,6 @@
 package com.home_manager.model.entities;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "residents")
@@ -20,14 +19,12 @@ public class Resident {
     @Column(nullable = false)
     private String lastName;
 
-    @OneToMany(mappedBy = "resident",
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    private Set<MonthHomes> payments;
-
-    private int phone;
+    private String phoneNumber;
 
     private String email;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Home home;
 
     public Resident() {
     }
@@ -63,22 +60,13 @@ public class Resident {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
 
-    public Set<MonthHomes> getPayments() {
-        return payments;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPayments(Set<MonthHomes> payments) {
-        this.payments = payments;
-    }
-
-    public int getPhone() {
-        return phone;
-    }
-
-    public void setPhone(int phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -87,5 +75,13 @@ public class Resident {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Home getHome() {
+        return home;
+    }
+
+    public void setHome(Home home) {
+        this.home = home;
     }
 }

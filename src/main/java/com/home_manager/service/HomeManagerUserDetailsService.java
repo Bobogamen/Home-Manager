@@ -27,13 +27,11 @@ public class HomeManagerUserDetailsService implements UserDetailsService {
     private UserDetails map(User user) {
         return new HomeManagerUserDetails(user.getId(),
                 user.getEmail(),
-                user.getFirstName(),
-                user.getMiddleName(),
-                user.getLastName(),
+                user.getName(),
                 user.getPassword(),
                 user.getRegisteredOn(),
                 user.getRole().stream().map(this::map).toList(),
-                user.getHomesGroups());
+                user.getHomesGroup());
     }
 
     private GrantedAuthority map (Role role) {

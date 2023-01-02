@@ -13,16 +13,13 @@ public class Year {
     private long id;
 
     @Column(nullable = false)
-    private int value;
+    private int number;
 
-    @OneToMany
-    @JoinTable(name="year_months",
-            joinColumns = @JoinColumn( name="year_id"),
-            inverseJoinColumns = @JoinColumn( name="month_id"))
+    @OneToMany(mappedBy = "year", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Month> months;
 
     public Year() {
-        this.months = new HashSet<>();
+        this.months = new HashSet<>(12);
     }
 
     public long getId() {
@@ -33,12 +30,12 @@ public class Year {
         this.id = id;
     }
 
-    public int getValue() {
-        return value;
+    public int getNumber() {
+        return number;
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public Set<Month> getMonths() {

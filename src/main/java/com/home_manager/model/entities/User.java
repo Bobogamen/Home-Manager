@@ -2,7 +2,9 @@ package com.home_manager.model.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,13 +19,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String middleName;
-
-    @Column(nullable = false)
-    private String lastName;
+    private String name;
 
     @Column(nullable = false)
     private String password;
@@ -35,17 +31,15 @@ public class User {
     private String resetPasswordToken;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "user_roles")
     private Set<Role> role;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private Set<HomesGroup> homesGroups;
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HomesGroup> homesGroup;
 
     public User() {
         this.role = new HashSet<>();
-        this.homesGroups = new HashSet<>();
+        this.homesGroup = new ArrayList<>();
     }
 
     public long getId() {
@@ -64,28 +58,12 @@ public class User {
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -104,12 +82,12 @@ public class User {
         this.role.add(role);
     }
 
-    public Set<HomesGroup> getHomesGroups() {
-        return homesGroups;
+    public List<HomesGroup> getHomesGroup() {
+        return homesGroup;
     }
 
-    public void setHomesGroups(Set<HomesGroup> homesGroups) {
-        this.homesGroups = homesGroups;
+    public void setHomesGroup(HomesGroup homesGroup) {
+        this.homesGroup.add(homesGroup);
     }
 
     public LocalDateTime getRegisteredOn() {

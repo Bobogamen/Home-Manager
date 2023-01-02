@@ -6,40 +6,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 public class HomeManagerUserDetails implements UserDetails {
 
     private long id;
     private String username;
-    private String firstName;
-    private String middleName;
-    private String lastName;
+    private String name;
     private String password;
     private LocalDateTime registeredOn;
-
     private Collection<GrantedAuthority> authorities;
-
-    private Set<HomesGroup> homesGroups;
+    private final List<HomesGroup> homesGroup;
 
     public HomeManagerUserDetails(long id,
                                   String email,
-                                  String firstName,
-                                  String middleName,
-                                  String lastName,
+                                  String name,
                                   String password,
                                   LocalDateTime registeredOn,
                                   Collection<GrantedAuthority> authorities,
-                                  Set<HomesGroup> homesGroups) {
+                                  List<HomesGroup> homesGroup) {
         this.id = id;
         this.username = email;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
+        this.name = name;
         this.password = password;
         this.registeredOn = registeredOn;
         this.authorities = authorities;
-        this.homesGroups = homesGroups;
+        this.homesGroup = homesGroup;
     }
 
     public long getId() {
@@ -58,28 +50,12 @@ public class HomeManagerUserDetails implements UserDetails {
         this.username = email;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPassword(String password) {
@@ -98,12 +74,12 @@ public class HomeManagerUserDetails implements UserDetails {
         this.authorities = authorities;
     }
 
-    public Set<HomesGroup> getHomesGroups() {
-        return homesGroups;
+    public List<HomesGroup> getHomesGroups() {
+        return homesGroup;
     }
 
-    public void setHomesGroups(Set<HomesGroup> homesGroups) {
-        this.homesGroups = homesGroups;
+    public void setHomesGroups(HomesGroup homesGroup) {
+        this.homesGroup.add(homesGroup);
     }
 
     @Override

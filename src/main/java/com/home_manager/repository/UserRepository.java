@@ -16,8 +16,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User getUserByEmail(String email);
 
+    User getUserById(long id);
+
     User getUserByResetPasswordToken(String token);
 
     @Query(value = "SELECT reset_password_token FROM users WHERE users.email = ?1", nativeQuery = true)
     String getResetPasswordTokenByEmail(String email);
+
+
 }

@@ -61,7 +61,7 @@ public class EmailService {
             messageHelper.setText(content, true);
 
             //--------LOGO PART--------
-            Path logo = Paths.get("src/main/resources/static/images/logo.png");
+            Path logo = Paths.get("src/main/resources/static/images/home-page/logo.png");
             FileSystemResource fileSystemResourceLogo = new FileSystemResource(logo);
             messageHelper.addInline("logo", fileSystemResourceLogo);
 

@@ -13,14 +13,14 @@
         <thead>
         <tr class="row-cols-auto align-middle text-center">
             <th class="col-1 text-start">
-                <a sec:authorize="isAnonymous()" href="/"><img src="/images/logo.png" alt="logo" style="max-height: 80px"></a>
-                <a sec:authorize="isAuthenticated()" href="/profile"><img src="/images/logo.png" alt="logo" style="max-height: 80px"></a>
+                <a sec:authorize="isAnonymous()" href="/"><img src="/images/home-page/logo.png" alt="logo" style="max-height: 80px"></a>
+                <a sec:authorize="isAuthenticated()" href="/profile"><img src="/images/home-page/logo.png" alt="logo" style="max-height: 80px"></a>
             </th>
             <th sec:authorize="hasRole('ADMIN')" class="col-1">
                 <a th:text="#{admin}" href="#" class="authorize-button"></a>
             </th>
             <th sec:authorize="hasRole('MANAGER')" class="col-1">
-                <a th:text="#{manager}" href="#" class="authorize-button"></a>
+                <a th:text="#{manager}" href="/profile" class="authorize-button"></a>
             </th>
             <th sec:authorize="hasRole('CASHIER')" class="col-1">
                 <a th:text="#{cashier}" href="#" class="authorize-button"></a>
@@ -43,7 +43,7 @@
                 <a th:text="#{register}" href="/register" class="button"></a>
             </th>
             <th sec:authorize="isAuthenticated()" class="col-1 text-end">
-                <a th:text="|${#authentication.getPrincipal().getFirstName()} ${#authentication.getPrincipal().getLastName()}|" class="button me-2"></a>
+                <a th:text="${#authentication.getPrincipal().getName()}" class="button me-2"></a>
             </th>
             <th sec:authorize="isAuthenticated()" class="col-1 text-start">
                 <form th:action="@{/logout}" th:method="POST">

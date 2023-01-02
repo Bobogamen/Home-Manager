@@ -4,24 +4,33 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <title>Home manager Profile</title>
+    <title th:text="#{profile}"></title>
 </head>
 <body>
 <div class="container-fluid">
-    <section th:replace="/fragments/notification.html"></section>
-
-    <nav th:replace="/fragments/nav-bar.html"></nav>
-    <!------------------------CONTENT------------------------>
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="/fragments/nav_bar :: nav"></nav>
     <div class="row line">
+
+    <!------------------------CONTENT------------------------>
         <div class="text-center">
-            <h1 th:text="|${#authentication.getPrincipal().getFirstName()} ${#authentication.getPrincipal().getLastName()}|" class="pt-5 mt-5"></h1>
+            <div class="add m-2">
+            <a href="/profile/add-homes_group">
+                <img src="/images/add.png" width="36" height="36" alt="add" class="m-1">
+                <span th:text="#{add-homes_group}"></span>
+            </a>
+            </div>
+            <h3 th:if="${homeGroups.size() == 0}" th:text="#{no_homes_group}"></h3>
+            <a th:each="hg : ${homeGroups}" th:href="|/profile/homesGroup${hg.getId()}|">
+                <p  th:text="${hg.getName()}"></p>
+            </a>
         </div>
     </div>
     <div class="row">
-        <footer th:replace="/fragments/footer.html"></footer>
+        <footer th:replace="/fragments/footer :: footer"></footer>
     </div>
 </div>
 
 </body>
-<script src="/js/profile-utils.js"></script>
+<script src="/js/utils.js"></script>
 </html>

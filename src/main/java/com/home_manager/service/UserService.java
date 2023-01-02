@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -31,9 +30,7 @@ public class UserService {
     public void register(RegistrationDTO registrationDTO) throws ServletException {
         User newUser = new User();
         newUser.setEmail(registrationDTO.getEmail());
-        newUser.setFirstName(registrationDTO.getFirstName());
-        newUser.setMiddleName(registrationDTO.getMiddleName());
-        newUser.setLastName(registrationDTO.getLastName());
+        newUser.setName(registrationDTO.getName());
         newUser.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
         newUser.setRegisteredOn(LocalDateTime.now());
 
@@ -77,4 +74,10 @@ public class UserService {
     public String getResetPasswordTokenByEmail(String email) {
         return this.userRepository.getResetPasswordTokenByEmail(email);
     }
+
+
+    public User getUserById(long id) {
+        return this.userRepository.getUserById(id);
+    }
+
 }

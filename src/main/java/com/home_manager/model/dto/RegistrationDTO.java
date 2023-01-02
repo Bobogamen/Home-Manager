@@ -18,15 +18,7 @@ public class RegistrationDTO {
 
     @NotEmpty(message = "{not_empty}")
     @Size(min = 2, max = 30, message = "{field_length}")
-    private String firstName;
-
-    @NotEmpty(message = "{not_empty}")
-    @Size(min = 2, max = 30, message = "{field_length}")
-    private String middleName;
-
-    @NotEmpty(message = "{not_empty}")
-    @Size(min = 2, max = 30, message = "{field_length}")
-    private String lastName;
+    private String name;
 
     @NotEmpty(message = "{password_match}")
     @Size(min = 5, max = 20, message = "{password_length}")
@@ -45,28 +37,12 @@ public class RegistrationDTO {
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

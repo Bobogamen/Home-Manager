@@ -15,20 +15,26 @@ public class Month {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "month",
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
+    private double total;
+
+    @Column(nullable = false)
+    private int homesCount;
+
+    @Column(nullable = false)
+    private int paidHomesCount;
+
+    @Column(nullable = false)
+    private int residentsCount;
+
+    @OneToMany(mappedBy = "month", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MonthHomes> homes;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="month_expenses",
-            joinColumns = @JoinColumn( name="month_id"),
-            inverseJoinColumns = @JoinColumn( name="expense_id"))
+    @OneToMany(mappedBy = "month", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Expense> expenses;
 
-    @Column(nullable = false,
-            columnDefinition = "DECIMAL(10,2)")
-    private double total;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Year year;
 
     public Month() {
         this.homes = new HashSet<>();
@@ -73,5 +79,37 @@ public class Month {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public Year getYear() {
+        return year;
+    }
+
+    public void setYear(Year year) {
+        this.year = year;
+    }
+
+    public int getHomesCount() {
+        return homesCount;
+    }
+
+    public void setHomesCount(int homesCount) {
+        this.homesCount = homesCount;
+    }
+
+    public int getPaidHomesCount() {
+        return paidHomesCount;
+    }
+
+    public void setPaidHomesCount(int paidHomesCount) {
+        this.paidHomesCount = paidHomesCount;
+    }
+
+    public int getResidentsCount() {
+        return residentsCount;
+    }
+
+    public void setResidentsCount(int residentsCount) {
+        this.residentsCount = residentsCount;
     }
 }

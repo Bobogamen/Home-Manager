@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="${homesGroup.getName()}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="/fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+
+        <!------------------------CONTENT------------------------>
+        <div class="text-center">
+            <div>
+                <div>
+                    <a th:href="|/profile/edit/homesGroup${homesGroup.getId()}|">
+                        <h4 th:text="|${homesGroup.getName()} - ${homesGroup.getType()}|" class="m-1"></h4>
+                    </a>
+                </div>
+                <div th:if="${homesGroup.getSize() > homesGroup.getHomes().size()}" class="add m-1">
+                    <a th:href="|/profile/homesGroup${homesGroup.getId()}/add-home|"|>
+                        <img src="/images/add.png" width="36" height="36" alt="add" class="m-1">
+                        <span th:text="|#{add} #{home}|"></span>
+                    </a>
+                </div>
+                <h3 th:if="${homesGroup.getHomes().size() == 0}" th:text="#{no_homes}"></h3>
+
+                <div th:unless="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
+                    <table class="table table-hover table-sm table-bordered border-primary w-75">
+                        <thead>
+                        <tr class="bg-info fw-bold align-middle">
+                            <td th:text="#{floor}"></td>
+                            <td th:text="#{apartment}"></td>
+                            <td th:text="#{resident}" class="w-50"></td>
+                            <td th:text="#{residents_count}"></td>
+                            <td th:text="#{paid_date}" class="w-25"></td>
+                            <td th:text="#{signature}" class="w-25"></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="h : ${homesGroup.getHomes()}" >
+                            <td th:text="${h.getFloor()}"></td>
+                            <td th:text="${h.getName()}"></td>
+                            <td th:text="|${h.getResidents().get(0).getFirstName()} ${h.getResidents().get(0).getLastName()}|"></td>
+                            <td th:text="${h.getResidents().size()}"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <footer th:replace="/fragments/footer :: footer"></footer>
+        </div>
+    </div>
+</div>
+</main>
+<script src="/js/utils.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="#{error}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="container align-items-center mt-5 pt-5">
+        <p class="h1 text-center mt-5">Status code: 500 Server error</p>
+        <p class="h4 text-center">The server encountered an unexpected condition that prevented it from fulfilling the request</p>
+    </div>
+    <div class="col text-center mt-5">
+        <a class="button" href="/profile" th:text="#{back}"></a>
+    </div>
+</div>
+</body>
+</html>

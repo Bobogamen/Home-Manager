@@ -1,9 +1,9 @@
 package com.home_manager.model.entities;
 
-import com.home_manager.model.enums.HomesGroupEnum;
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Entity
 @Table(name = "homes_group")
@@ -16,16 +16,19 @@ public class HomesGroup {
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private HomesGroupEnum type;
+    private String type;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(inverseJoinColumns=@JoinColumn(name="home_id"))
-    private Set<Home> homes;
+    private int size;
+
+    @OneToMany(mappedBy = "homesGroup", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Home> homes;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     public HomesGroup() {
-        this.homes = new HashSet<>();
+        this.homes = new ArrayList<>();
     }
 
     public long getId() {
@@ -44,19 +47,53 @@ public class HomesGroup {
         this.name = name;
     }
 
-    public HomesGroupEnum getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(HomesGroupEnum type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public Set<Home> getHomes() {
-        return homes;
+    public int getSize() {
+        return size;
     }
 
-    public void setHomes(Set<Home> homes) {
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public List<Home> getHomes() {
+        return this.homes.stream().sorted(Comparator.comparing(Home::getFloor).
+                thenComparing((n1, n2) -> {
+                    if(canConvertToInt(n1.getName()) && canConvertToInt(n2.getName())) {
+                        return Integer.compare(Integer.parseInt(n1.getName()), Integer.parseInt(n2.getName()));
+                    } else  {
+                        return n1.getName().compareTo(n2.getName());
+                    }
+                })).toList();
+    }
+
+    public void setHomes(List<Home> homes) {
         this.homes = homes;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    private static boolean canConvertToInt(String number) {
+        try {
+            Integer.parseInt(number);
+
+            return true;
+        } catch (NumberFormatException exception) {
+            System.out.println(exception.getMessage());
+            return false;
+        }
     }
 }

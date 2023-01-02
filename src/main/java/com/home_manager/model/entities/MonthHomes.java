@@ -1,6 +1,7 @@
 package com.home_manager.model.entities;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "month_homes")
@@ -10,26 +11,14 @@ public class MonthHomes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "month_id",
-            referencedColumnName = "id",
-            nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Month month;
 
-    @ManyToOne
-    @JoinColumn(name = "home_id",
-            referencedColumnName = "id",
-            nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Home home;
 
-    @ManyToOne
-    @JoinColumn(name = "resident_id",
-            referencedColumnName = "id",
-            nullable = false)
-    private Resident resident;
-
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
-    private double actualPayment = 0.0;
+    private LocalDate paidDate;
 
     public MonthHomes() {
     }
@@ -58,19 +47,19 @@ public class MonthHomes {
         this.home = home;
     }
 
-    public Resident getResident() {
-        return resident;
+    public Home getHome() {
+        return home;
     }
 
-    public void setResident(Resident resident) {
-        this.resident = resident;
+    public void setHome(Home home) {
+        this.home = home;
     }
 
-    public double getActualPayment() {
-        return actualPayment;
+    public LocalDate getPaidDate() {
+        return paidDate;
     }
 
-    public void setActualPayment(double actualPayment) {
-        this.actualPayment = actualPayment;
+    public void setPaidDate(LocalDate paidDate) {
+        this.paidDate = paidDate;
     }
 }

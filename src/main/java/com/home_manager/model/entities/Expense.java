@@ -17,9 +17,10 @@ public class Expense {
     private double value;
 
     @Column(nullable = false)
-    private String receipt;
+    private String documentNumber;
 
-    private String utilityNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Month month;
 
     public Expense() {
     }
@@ -48,19 +49,21 @@ public class Expense {
         this.value = value;
     }
 
-    public String getReceipt() {
-        return receipt;
+
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
-    public void setReceipt(String receipt) {
-        this.receipt = receipt;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
-    public String getUtilityNumber() {
-        return utilityNumber;
+    public Month getMonth() {
+        return month;
     }
 
-    public void setUtilityNumber(String utilityNumber) {
-        this.utilityNumber = utilityNumber;
+    public void setMonth(Month month) {
+        this.month = month;
     }
+
 }

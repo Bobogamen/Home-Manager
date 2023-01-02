@@ -13,40 +13,40 @@ body {
 
 .card-image {
     object-fit: fill;
-    max-width: 35%;
+    max-width: 7rem;
     padding: 0;
     position: relative;
-    margin: 5px auto auto;
-    border: solid black 1px;
+    margin: 0.3rem auto auto;
+    border: solid black 0.12rem;
     border-radius: 100%;
 }
 
 .card {
     background-color: #D4F3EEFF;
     width: 22rem;
-    border: solid black 1px;
-    border-radius: 10px;
+    border: solid black 0.12rem;
+    border-radius: 0.7rem;
 
 }
 
 .card-body {
     background-color: #D4F3EEFF;
-    border-radius: 10px;
+    border-radius: 0.7rem;
 }
 
 /* ---------- Buttons styling START ---------- */
 .button {
     position: relative;
     background-color: transparent;
-    border-radius: 4em;
+    border-radius: 4rem;
     border-color: black;
     border-style: solid;
-    border-width: 1px;
+    border-width: 0.12rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
+    font-size: 0.8rem;
     font-weight: bold;
     color: black;
-    padding: 0.6em 1.4em 0.6em 1.4em;
+    padding: 0.5rem 1.3rem 0.5rem 1.3rem;
     cursor: pointer;
     user-select: none;
     text-align: center;
@@ -62,18 +62,18 @@ body {
 
 .authorize-button {
     background-color: #c2fbd7;
-    border-radius: 100px;
+    border-radius: 6rem;
     box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
     color: #0c1f0c;
     cursor: pointer;
     display: inline-block;
     font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
-    padding: 7px 20px;
+    padding: 0.5rem 1.4rem;
     text-align: center;
     text-decoration: none;
     transition: all 250ms;
     border: 0;
-    font-size: 16px;
+    font-size: 1rem;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
@@ -84,37 +84,65 @@ body {
     transform: scale(1.1) rotate(-1deg);
     color: #0c1f0c;
 }
+
+.add {
+    display: inline-flex;
+    font-size: x-large;
+    font-family: sans-serif;
+    padding: 0.4rem 0.4rem 0.4rem 0.4rem;
+    background-color: #43ffd8;
+    border-radius: 0.7rem;
+    box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+    color: #0c1f0c;
+}
+
+.add a {
+    text-decoration: none;
+}
+
+.add:hover {
+    background-color: #a4dcf5;
+    border-radius: 0.7rem;
+    padding: 0.4rem 0.4rem 0.4rem 0.4rem;
+}
+
 /* ---------- Buttons styling END ---------- */
 
 /* ---------- Utilities START---------- */
 input {
-    width: 12em;
+    width: 16rem;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    color: black;
 }
 
 .field {
-    width: 24em;
-    margin-top: 0.4em;
-    margin-bottom: 0.4em;
-    background: transparent;
+    width: 26rem;
+    background: whitesmoke;
     border-style: inset;
 }
 
 .loginForm {
-    border-radius: 4em;
-    padding: 0.2em 0.2em 0.2em 0.2em;
+    border-radius: 4rem;
+    padding: 0.2rem 0.2rem 0.2rem 0.2rem;
 }
 
 .line {
     border-color: #2a5365;
     border-style: solid none none none;
-    border-width: 2px;
-    padding-bottom: 0.6em;
+    border-width: 0.1rem;
+    padding-bottom: 0.6rem;
 }
 
 .notification {
     position: absolute;
-    font-size: 12pt;
-    top: 55px;
+    font-size: 0.9rem;
+    top: 3rem;
     left: 8rem;
 }
 
@@ -123,30 +151,60 @@ input {
 }
 
 .notificationRegister {
-    font-size: 9pt;
-    text-align: left;
-    max-width: 69%;
+    font-size: 0.9rem;
+    text-align: center;
+    max-width: 24rem;
+    margin: auto;
 }
 
 .registrationForm {
-    max-width: 28em;
+    max-width: 34rem;
     border-style: solid;
-    border-radius: 0.6em;
-    border-width: 0.1em;
-    margin-top: 1em;
+    border-radius: 0.6rem;
+    border-width: 0.1rem;
+    margin-top: 1rem;
     text-align: center;
-    padding: 1em;
+    padding: 1rem;
+}
+
+.add-home {
+    border: ridge dodgerblue;
+    margin: 0.9rem 0 0.9rem 0;
+    padding: 0.3rem 0 1.3rem 0;
+}
+
+.add-owner {
+    border: ridge indianred;
+    margin: 0.9rem 0 0.9rem 0;
+    padding: 0.3rem 0.3rem 0.3rem 0.3rem;
+}
+
+.add-resident {
+    display: none;
+    border: ridge springgreen;
+    margin: 0.9rem 0 0.9rem 0;
+    padding: 0.3rem 0 1.3rem 0;
+}
+
+.add-field {
+    width: 28rem;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    background: whitesmoke;
+    border-style: inset;
+    border-color: darkgoldenrod;
+    height: 1.8rem;
+    font-size: 1.3rem;
 }
 
 .footer {
     border-radius: 4em;
     border-color: black;
     border-style: solid;
-    border-width: 1px;
+    border-width: 0.12rem;
 }
 
 /* ---------- Utilities END---------- */
-
 
 
 

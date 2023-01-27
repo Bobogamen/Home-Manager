@@ -20,6 +20,12 @@ public class MonthHomes {
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private LocalDate paidDate;
 
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
+    private double paidAmount;
+
+    @Column(nullable = false)
+    private int residentsCount;
+
     public MonthHomes() {
     }
 
@@ -61,5 +67,21 @@ public class MonthHomes {
 
     public void setPaidDate(LocalDate paidDate) {
         this.paidDate = paidDate;
+    }
+
+    public double getPaidAmount() {
+        return paidAmount;
+    }
+
+    public void setPaidAmount(double paidAmount) {
+        this.paidAmount = paidAmount;
+    }
+
+    public int getResidentsCount() {
+        return residentsCount;
+    }
+
+    public void setResidentsCount(int residentsCount) {
+        this.residentsCount = residentsCount;
     }
 }

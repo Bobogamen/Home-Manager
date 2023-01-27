@@ -1,7 +1,7 @@
 package com.home_manager.model.entities;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "fee")
@@ -18,7 +18,11 @@ public class Fee {
     private double value;
 
     @Column(nullable = false)
-    private LocalDateTime addedOn;
+    private LocalDate addedOn;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "homes_group_id", referencedColumnName = "id")
+    private HomesGroup homesGroup;
 
     public Fee() {
     }
@@ -47,11 +51,19 @@ public class Fee {
         this.value = value;
     }
 
-    public LocalDateTime getAddedOn() {
+    public LocalDate getAddedOn() {
         return addedOn;
     }
 
-    public void setAddedOn(LocalDateTime addedOn) {
+    public void setAddedOn(LocalDate addedOn) {
         this.addedOn = addedOn;
+    }
+
+    public HomesGroup getHomesGroup() {
+        return homesGroup;
+    }
+
+    public void setHomesGroup(HomesGroup homesGroup) {
+        this.homesGroup = homesGroup;
     }
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="${fee.getName()}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="/fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+
+        <!------------------------CONTENT------------------------>
+        <div class="text-center">
+            <div class="d-inline-flex justify-content-center align-items-center my-2">
+                <h2 th:text="|${fee.getName()} - ${fee.getValue()}#{currency}|" class="m-1"></h2>
+                <a th:href="|/profile/edit/fee${fee.getId()}|">
+                    <img src="/images/edit.png" alt="home" class="icon">
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <footer th:replace="/fragments/footer :: footer"></footer>
+    </div>
+</div>
+<script src="/js/utils.js"></script>
+<script src="/js/addResident.js"></script>
+</body>
+</html>

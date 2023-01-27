@@ -31,7 +31,8 @@ public class HomeManagerUserDetailsService implements UserDetailsService {
                 user.getPassword(),
                 user.getRegisteredOn(),
                 user.getRole().stream().map(this::map).toList(),
-                user.getHomesGroup());
+                user.getHomesGroup(),
+                user.getCashiers());
     }
 
     private GrantedAuthority map (Role role) {

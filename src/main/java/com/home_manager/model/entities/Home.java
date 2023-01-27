@@ -1,10 +1,11 @@
 package com.home_manager.model.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
@@ -27,21 +28,25 @@ public class Home implements Comparable<Home>{
     @OneToOne(fetch = FetchType.EAGER, targetEntity = Resident.class)
     private Resident owner;
 
-    @OneToMany(mappedBy = "home", fetch = FetchType.EAGER, cascade = CascadeType.MERGE, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "home", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Resident> residents;
 
-    @OneToMany(mappedBy = "home", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<MonthHomes> months;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "home", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MonthHomes> months;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, orphanRemoval = true)
-    private Set<Fee> fee;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "home", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HomesFee> fees;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private HomesGroup homesGroup;
 
     public Home() {
         this.residents = new ArrayList<>();
-        this.months = new HashSet<>();
+        this.months = new ArrayList<>();
+        this.fees = new ArrayList<>();
     }
 
     public long getId() {
@@ -84,16 +89,16 @@ public class Home implements Comparable<Home>{
         this.residents.add(resident);
     }
 
-    public Set<MonthHomes> getMonths() {
+    public List<MonthHomes> getMonths() {
         return months;
     }
 
-    public void setMonths(Set<MonthHomes> months) {
-        this.months = months;
+    public void setMonths(MonthHomes months) {
+        this.months.add(months);
     }
 
     public double getTotalForMonth() {
-        return totalForMonth;
+        return this.totalForMonth;
     }
 
     public void setTotalForMonth(double totalForMonth) {
@@ -108,12 +113,26 @@ public class Home implements Comparable<Home>{
         this.homesGroup = homesGroup;
     }
 
-    public Set<Fee> getFee() {
-        return fee;
+
+    public void setResidents(List<Resident> residents) {
+        this.residents = residents;
     }
 
-    public void setFee(Set<Fee> fee) {
-        this.fee = fee;
+    public void setMonths(List<MonthHomes> months) {
+        this.months = months;
+    }
+
+    public List<HomesFee> getFees() {
+        return fees.stream().toList();
+    }
+
+    public void addFee(HomesFee homesFee) {
+        this.fees.add(homesFee);
+    }
+
+    public void setFees(List<HomesFee> fees) {
+        this.fees.clear();
+        this.fees = fees;
     }
 
     @Override

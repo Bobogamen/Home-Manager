@@ -19,9 +19,6 @@ public class Month {
     private double total;
 
     @Column(nullable = false)
-    private int homesCount;
-
-    @Column(nullable = false)
     private int paidHomesCount;
 
     @Column(nullable = false)
@@ -87,14 +84,6 @@ public class Month {
 
     public void setYear(Year year) {
         this.year = year;
-    }
-
-    public int getHomesCount() {
-        return homesCount;
-    }
-
-    public void setHomesCount(int homesCount) {
-        this.homesCount = homesCount;
     }
 
     public int getPaidHomesCount() {

@@ -1,10 +1,11 @@
 package com.home_manager.model.user;
 
 import com.home_manager.model.entities.HomesGroup;
+import com.home_manager.model.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,17 +15,18 @@ public class HomeManagerUserDetails implements UserDetails {
     private String username;
     private String name;
     private String password;
-    private LocalDateTime registeredOn;
+    private LocalDate registeredOn;
     private Collection<GrantedAuthority> authorities;
     private final List<HomesGroup> homesGroup;
+    private final List<User> cashiers;
 
     public HomeManagerUserDetails(long id,
                                   String email,
                                   String name,
                                   String password,
-                                  LocalDateTime registeredOn,
+                                  LocalDate registeredOn,
                                   Collection<GrantedAuthority> authorities,
-                                  List<HomesGroup> homesGroup) {
+                                  List<HomesGroup> homesGroup, List<User> cashiers) {
         this.id = id;
         this.username = email;
         this.name = name;
@@ -32,6 +34,7 @@ public class HomeManagerUserDetails implements UserDetails {
         this.registeredOn = registeredOn;
         this.authorities = authorities;
         this.homesGroup = homesGroup;
+        this.cashiers = cashiers;
     }
 
     public long getId() {
@@ -62,11 +65,11 @@ public class HomeManagerUserDetails implements UserDetails {
         this.password = password;
     }
 
-    public LocalDateTime getRegisteredOn() {
+    public LocalDate getRegisteredOn() {
         return registeredOn;
     }
 
-    public void setRegisteredOn(LocalDateTime registeredOn) {
+    public void setRegisteredOn(LocalDate registeredOn) {
         this.registeredOn = registeredOn;
     }
 
@@ -80,6 +83,18 @@ public class HomeManagerUserDetails implements UserDetails {
 
     public void setHomesGroups(HomesGroup homesGroup) {
         this.homesGroup.add(homesGroup);
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public List<HomesGroup> getHomesGroup() {
+        return homesGroup;
+    }
+
+    public List<User> getCashiers() {
+        return cashiers;
     }
 
     @Override

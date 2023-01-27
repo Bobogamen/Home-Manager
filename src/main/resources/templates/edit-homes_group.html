@@ -10,30 +10,34 @@
 <body>
 <main class="w-100">
     <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="registrationForm">
-                <h3 th:text="|#{edit} ${homesGroup.getName()}|"></h3>
-                <form th:action="@{|/profile/edit/homesGroup${homesGroup.getId()}|}"
-                      th:method="POST"
-                      th:object="${addHomesGroupDTO}">
-                    <div th:text="#{name}" for="name" class="mt-3"></div>
-                    <input th:value="${homesGroup.name}" type="text" name="name" id="name" minlength="2" maxlength="20" class="field" required/>
+        <section th:replace="fragments/notification :: section"></section>
+        <nav th:replace="/fragments/nav_bar :: nav"></nav>
+        <div class="row line">
+            <div class="row justify-content-center">
+                <div class="registrationForm">
+                    <h3 th:text="|#{edit} ${homesGroup.getName()}|"></h3>
+                    <form th:action="@{|/profile/edit/homesGroup${homesGroup.getId()}|}"
+                          th:method="PUT"
+                          th:object="${addHomesGroupDTO}">
+                        <div th:text="#{name}" class="mt-3"></div>
+                        <input th:value="${homesGroup.name}" type="text" name="name" id="name" minlength="2" maxlength="20" class="field" required/>
 
-                    <div th:text="#{size}" for="size" class="mt-3"></div>
-                    <input th:value="${homesGroup.size}" type="number" name="size" id="size" class="field" required/>
+                        <div th:text="#{size}" class="mt-3"></div>
+                        <input th:value="${homesGroup.size}" type="number" name="size" id="size" class="field" required/>
 
-                    <div th:text="|#{choose} #{type}|" for="type" class="mt-3"></div>
-                    <span th:field="*{name}"></span>
-                    <select name="type" id="type" class="field">
-                        <option th:each="t : ${allTypes}"
-                                th:text="${t}"
-                                th:value="${t}"
-                                th:selected="${t} == ${homesGroup.type}">
-                        </option>
-                    </select>
+                        <div th:text="|#{choose} #{type}|" class="mt-3"></div>
+                        <span th:field="*{name}"></span>
+                        <select name="type" id="type" class="field">
+                            <option th:each="t : ${allTypes}"
+                                    th:text="${t}"
+                                    th:value="${t}"
+                                    th:selected="${t} == ${homesGroup.type}">
+                            </option>
+                        </select>
 
-                    <button th:text="#{edit}" type="submit" class="button m-3"></button>
-                </form>
+                        <button th:text="#{edit}" type="submit" class="button m-3"></button>
+                    </form>
+                </div>
             </div>
         </div>
         <div class="row">

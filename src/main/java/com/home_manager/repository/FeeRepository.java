@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FeeRepository extends JpaRepository<Fee, Long> {
+
+    Fee getFeeById(Long id);
 }

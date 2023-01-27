@@ -1,9 +1,13 @@
 package com.home_manager.model.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "homes_group")
@@ -22,13 +26,18 @@ public class HomesGroup {
     private int size;
 
     @OneToMany(mappedBy = "homesGroup", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Home> homes;
+    private Set<Home> homes;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "homesGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Fee> fees;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<User> users;
 
     public HomesGroup() {
-        this.homes = new ArrayList<>();
+        this.homes = new HashSet<>();
+        this.users = new HashSet<>();
     }
 
     public long getId() {
@@ -64,6 +73,7 @@ public class HomesGroup {
     }
 
     public List<Home> getHomes() {
+
         return this.homes.stream().sorted(Comparator.comparing(Home::getFloor).
                 thenComparing((n1, n2) -> {
                     if(canConvertToInt(n1.getName()) && canConvertToInt(n2.getName())) {
@@ -74,16 +84,25 @@ public class HomesGroup {
                 })).toList();
     }
 
-    public void setHomes(List<Home> homes) {
+    public int getTotalResidents() {
+        int residentsCount = 0;
+        for (Home home : this.homes) {
+            residentsCount += home.getResidents().size();
+        }
+
+        return residentsCount;
+    }
+
+    public void setHomes(Set<Home> homes) {
         this.homes = homes;
     }
 
-    public User getUser() {
-        return user;
+    public Set<User> getUsers() {
+        return this.users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(User users) {
+        this.users.add(users);
     }
 
     private static boolean canConvertToInt(String number) {
@@ -95,5 +114,13 @@ public class HomesGroup {
             System.out.println(exception.getMessage());
             return false;
         }
+    }
+
+    public List<Fee> getFees() {
+        return fees;
+    }
+
+    public void setFees(List<Fee> fees) {
+        this.fees = fees;
     }
 }

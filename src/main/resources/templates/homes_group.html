@@ -8,59 +8,153 @@
     <title th:text="${homesGroup.getName()}"></title>
 </head>
 <body>
+
+<!-- The Modal -->
+<div class="modal faded" id="mar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 th:text="|#{add} #{resident} #{in} #{apartment} |" class="modal-title"></h5>
+                <button id="close" type="button" class="add-button">
+                    <span class="h3">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <form id="add-resident" th:action="@{|/profile/homesGroup${homesGroup.getId()}/home/add-resident|}"
+                      th:method="POST"
+                      th:object="${addResidentDTO}">
+                    <input th:placeholder="#{first_name}" type="text" name="firstName" id="firstName" class="field my-1" required/>
+                    <input th:placeholder="#{middle_name}" type="text" name="middleName" id="middleName" class="field my-1"/>
+                    <input th:placeholder="#{last_name}" type="text" name="lastName" id="lastName" class="field my-1"/>
+                    <input placeholder="email" type="email" name="email" id="email" class="field my-1"/>
+                    <input th:placeholder="#{phone_number}" type="tel" name="phoneNumber" id="phoneNumber" class="field my-1"/>
+                    <div class="modal-footer border-0">
+                        <button th:text="#{add}" type="submit" class="button mx-3"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid">
     <section th:replace="fragments/notification :: section"></section>
     <nav th:replace="/fragments/nav_bar :: nav"></nav>
     <div class="row line">
-
         <!------------------------CONTENT------------------------>
         <div class="text-center">
-            <div>
-                <div>
-                    <a th:href="|/profile/edit/homesGroup${homesGroup.getId()}|">
-                        <h4 th:text="|${homesGroup.getName()} - ${homesGroup.getType()}|" class="m-1"></h4>
-                    </a>
-                </div>
-                <div th:if="${homesGroup.getSize() > homesGroup.getHomes().size()}" class="add m-1">
-                    <a th:href="|/profile/homesGroup${homesGroup.getId()}/add-home|"|>
-                        <img src="/images/add.png" width="36" height="36" alt="add" class="m-1">
-                        <span th:text="|#{add} #{home}|"></span>
-                    </a>
-                </div>
-                <h3 th:if="${homesGroup.getHomes().size() == 0}" th:text="#{no_homes}"></h3>
-
-                <div th:unless="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
-                    <table class="table table-hover table-sm table-bordered border-primary w-75">
+            <div class="d-flex justify-content-center align-items-center my-2">
+                <h2 th:text="|${homesGroup.getName()} - ${homesGroup.getType()}|" class="m-1"></h2>
+                <a th:href="|/profile/edit/homesGroup${homesGroup.getId()}|">
+                    <img src="/images/edit.png" alt="edit" class="icon">
+                </a>
+            </div>
+            <div th:if="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
+                <h3 th:text="#{no_homes}"></h3>
+            </div>
+            <div th:if="${homesGroup.getSize() > homesGroup.getHomes().size()}" class="add m-1">
+                <a th:href="|/profile/homesGroup${homesGroup.getId()}/add-home|">
+                    <img src="/images/add.png" width="36" height="36" alt="add" class="m-1">
+                    <span th:text="|#{add} #{home}|"></span>
+                </a>
+            </div>
+            <div th:unless="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
+                <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
+                    <h3 th:text="#{homes}"></h3>
+                    <table class="table table-hover table-sm table-bordered border-primary">
                         <thead>
                         <tr class="bg-info fw-bold align-middle">
                             <td th:text="#{floor}"></td>
                             <td th:text="#{apartment}"></td>
-                            <td th:text="#{resident}" class="w-50"></td>
+                            <td th:text="#{owner}"></td>
                             <td th:text="#{residents_count}"></td>
-                            <td th:text="#{paid_date}" class="w-25"></td>
-                            <td th:text="#{signature}" class="w-25"></td>
+                            <td th:text="|#{total}(#{currency})|"></td>
+                            <td></td>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:each="h : ${homesGroup.getHomes()}" >
+                        <tbody class="fs-6">
+                        <tr th:each="h : ${homesGroup.getHomes()}" class="align-middle">
                             <td th:text="${h.getFloor()}"></td>
                             <td th:text="${h.getName()}"></td>
-                            <td th:text="|${h.getResidents().get(0).getFirstName()} ${h.getResidents().get(0).getLastName()}|"></td>
+                            <td th:text="|${h.getOwner().getFirstName()} ${h.getOwner().getLastName()}|"></td>
                             <td th:text="${h.getResidents().size()}"></td>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${h.getTotalForMonth()}"></td>
+                            <td>
+                                <a th:href="|/profile/homesGroup${homesGroup.getId()}/home${h.getId()}|" class="add-button">
+                                    <img src="/images/home.png" alt="home" class="icon">
+                                </a>
+                                <a class="add-button">
+                                    <img src="/images/fee.png" alt="fee" class="icon">
+                                </a>
+                                <a th:id="${h.getId()}" onclick="addResident(this)" class="add-button">
+                                    <img src="/images/add_resident.png" alt="add_resident" class="icon">
+                                </a>
+                            </td>
                         </tr>
                         </tbody>
+                        <tfoot>
+                        <tr class="bg-info fw-bold align-middle">
+                            <td th:text="#{total}" colspan="3"></td>
+                            <td th:text="${homesGroup.getTotalResidents()}"></td>
+                            <td th:text="${#numbers.formatDecimal(total, 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                            <td></td>
+                        </tr>
+                        </tfoot>
                     </table>
+                </div>
+                <div th:if="${fees.size() == 0}" class="text-center d-block justify-content-center">
+                    <h3 th:text="#{no_fee}"></h3>
+                    <div class="add m-2">
+                        <a href="/profile/homesGroup1/add-fee">
+                            <img src="/images/add.png" alt="add" class="icon m-1">
+                            <span>Добави такса</span>
+                        </a>
+                    </div>
+                </div>
+                <div th:unless="${fees.size() == 0}" class="text-center d-flex justify-content-center">
+                    <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
+                        <h3 th:text="#{fees}"></h3>
+                        <table class="table table-hover table-sm table-bordered border-primary">
+                            <thead>
+                            <tr class="bg-info fw-bold align-middle">
+                                <td th:text="#{add_on}"></td>
+                                <td th:text="#{name}"></td>
+                                <td th:text="#{value}"></td>
+                                <td th:text="#{homes}"></td>
+                                <td></td>
+                            </tr>
+                            </thead>
+                            <tbody class="fs-6">
+                            <tr th:each="f : ${fees}" class="align-middle">
+                                <td th:text="${#temporals.format(f.getAddedOn(), 'dd-MM-yyyy')}"></td>
+                                <td th:text="${f.getName()}"></td>
+                                <td th:text="${f.getValue()} + #{currency}"></td>
+                                <td></td>
+                                <td><a th:href="|/profile/homesGroup${homesGroup.getId()}/edit-fee${f.getId()}|">
+                                    <img src="/images/edit.png" alt="edit" class="icon">
+                                </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="add m-2">
+                            <a href="/profile/homesGroup1/add-fee">
+                                <img src="/images/add.png" alt="add" class="icon m-1">
+                                <span>Добави такса</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <footer th:replace="/fragments/footer :: footer"></footer>
-        </div>
+    </div>
+    <div class="row">
+        <footer th:replace="/fragments/footer :: footer"></footer>
     </div>
 </div>
-</main>
 <script src="/js/utils.js"></script>
+<script src="/js/general.js"></script>
+<script src="/js/addResident.js"></script>
 </body>
 </html>
+

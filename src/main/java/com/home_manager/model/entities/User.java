@@ -1,7 +1,7 @@
 package com.home_manager.model.entities;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +25,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private LocalDateTime registeredOn;
+    private LocalDate registeredOn;
 
     @Column
     private String resetPasswordToken;
@@ -34,12 +34,16 @@ public class User {
     @JoinTable(name = "user_roles")
     private Set<Role> role;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "users",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<HomesGroup> homesGroup;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<User> cashiers;
 
     public User() {
         this.role = new HashSet<>();
         this.homesGroup = new ArrayList<>();
+        this.cashiers = new ArrayList<>();
     }
 
     public long getId() {
@@ -86,15 +90,11 @@ public class User {
         return homesGroup;
     }
 
-    public void setHomesGroup(HomesGroup homesGroup) {
-        this.homesGroup.add(homesGroup);
-    }
-
-    public LocalDateTime getRegisteredOn() {
+    public LocalDate getRegisteredOn() {
         return registeredOn;
     }
 
-    public void setRegisteredOn(LocalDateTime registeredOn) {
+    public void setRegisteredOn(LocalDate registeredOn) {
         this.registeredOn = registeredOn;
     }
 
@@ -104,5 +104,21 @@ public class User {
 
     public void setResetPasswordToken(String resetPasswordToken) {
         this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public void setRole(Set<Role> role) {
+        this.role = role;
+    }
+
+    public void setHomesGroup(List<HomesGroup> homesGroup) {
+        this.homesGroup = homesGroup;
+    }
+
+    public List<User> getCashiers() {
+        return cashiers;
+    }
+
+    public void setCashier(User cashier) {
+        this.cashiers.add(cashier);
     }
 }

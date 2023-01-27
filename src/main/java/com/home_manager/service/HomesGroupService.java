@@ -17,23 +17,23 @@ public class HomesGroupService {
     }
 
 
-    public HomesGroup addHomesGroup(AddHomesGroupDTO addHomesGroupDTO, User user) {
+    public void addHomesGroup(AddHomesGroupDTO addHomesGroupDTO, User user) {
 
         HomesGroup homesGroup = new HomesGroup();
         homesGroup.setName(addHomesGroupDTO.getName());
         homesGroup.setSize(addHomesGroupDTO.getSize());
         homesGroup.setType(addHomesGroupDTO.getType());
-        homesGroup.setUser(user);
+        homesGroup.setUsers(user);
 
-        return this.homesGroupRepository.save(homesGroup);
+        this.homesGroupRepository.save(homesGroup);
     }
 
     public HomesGroup getHomesGroupById(long id) {
-        return this.homesGroupRepository.findById(id).get();
+        return this.homesGroupRepository.getHomesGroupById(id);
     }
 
     public void editHomesGroup(AddHomesGroupDTO addHomesGroupDTO, long id) {
-        HomesGroup homesGroup = this.homesGroupRepository.findById(id).get();
+        HomesGroup homesGroup = this.homesGroupRepository.getHomesGroupById(id);
 
         homesGroup.setName(addHomesGroupDTO.getName());
         homesGroup.setType(addHomesGroupDTO.getType());

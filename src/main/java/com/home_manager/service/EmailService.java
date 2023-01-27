@@ -1,6 +1,7 @@
 package com.home_manager.service;
 
 import com.home_manager.config.mail.MailProperties;
+import com.home_manager.model.user.HomeManagerUserDetails;
 import com.home_manager.utility.MailUtility;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,14 +36,21 @@ public class EmailService {
 
         String subject = MailUtility.passwordResetMailSubject();
         String resetPasswordUrl = MailUtility.resetPasswordUrl(request, this.userService.getResetPasswordTokenByEmail(email));
-        String content = generateEmailContent(email, "forgot_password", resetPasswordUrl);
+        String content = generateEmailContent(email, null, "forgot_password", resetPasswordUrl);
 
         sendMessage(email, subject, content);
     }
 
     public void sendRegistrationEmail(String email) {
         String subject = MailUtility.registrationMailSubject();
-        String content = generateEmailContent(email, "registration", null);
+        String content = generateEmailContent(email, null, "registration", null);
+
+        sendMessage(email, subject, content);
+    }
+
+    public void sendCashierRegistrationEmail(String email, HomeManagerUserDetails manager, String baseUrl) {
+        String subject = MailUtility.registrationMailSubject();
+        String content = generateEmailContent(email, manager, "cashier", baseUrl);
 
         sendMessage(email, subject, content);
     }
@@ -72,14 +80,21 @@ public class EmailService {
         }
     }
 
-    private String generateEmailContent(String email,String content, String resetUrl) {
+    private String generateEmailContent(String email, HomeManagerUserDetails manager, String content, String resetUrl) {
 
         Context context = new Context();
         context.setVariable("email", email);
         context.setVariable("reset_url", resetUrl);
 
+        if (manager != null) {
+            context.setVariable("manager_name", manager.getName());
+            context.setVariable("manager_email", manager.getEmail());
+        }
+
         if (content.equals("registration")) {
             return this.templateEngine.process("email/registration", context);
+        } else if (content.equals("cashier")){
+            return this.templateEngine.process("email/cashier_registration", context);
         } else {
             return this.templateEngine.process("email/forgot_password", context);
         }

@@ -1,6 +1,7 @@
 package com.home_manager.service;
 
 import com.home_manager.model.dto.AddHomeDTO;
+import com.home_manager.model.dto.AddResidentDTO;
 import com.home_manager.model.entities.Home;
 import com.home_manager.model.entities.Resident;
 import com.home_manager.repository.ResidentRepository;
@@ -34,7 +35,7 @@ public class ResidentService {
         this.residentRepository.save(resident);
     }
 
-    public Resident addResident(AddHomeDTO addHomeDTO) {
+    public Resident addFirstResident(AddHomeDTO addHomeDTO) {
 
         Resident resident = new Resident();
         resident.setFirstName(addHomeDTO.getResidentFirstName());
@@ -44,6 +45,30 @@ public class ResidentService {
         resident.setPhoneNumber(addHomeDTO.getResidentPhoneNumber());
 
         return this.residentRepository.save(resident);
+    }
+
+    public void addResident(AddResidentDTO addResidentDTO, Home home) {
+
+        Resident resident = new Resident();
+        resident.setFirstName(addResidentDTO.getFirstName());
+        resident.setMiddleName(addResidentDTO.getMiddleName());
+        resident.setLastName(addResidentDTO.getLastName());
+        resident.setEmail(addResidentDTO.getEmail());
+        resident.setPhoneNumber(addResidentDTO.getPhoneNumber());
+
+        setResidentHome(home, resident);
+    }
+
+    public void editResident(AddResidentDTO addResidentDTO, long id) {
+        Resident resident = this.residentRepository.getResidentById(id);
+
+        resident.setFirstName(addResidentDTO.getFirstName());
+        resident.setMiddleName(addResidentDTO.getMiddleName());
+        resident.setLastName(addResidentDTO.getLastName());
+        resident.setEmail(addResidentDTO.getEmail());
+        resident.setPhoneNumber(addResidentDTO.getPhoneNumber());
+
+        this.residentRepository.save(resident);
     }
 }
 

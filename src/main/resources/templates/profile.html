@@ -16,8 +16,8 @@
         <div class="text-center">
             <div class="add m-2">
             <a href="/profile/add-homes_group">
-                <img src="/images/add.png" width="36" height="36" alt="add" class="m-1">
-                <span th:text="#{add-homes_group}"></span>
+                <img src="/images/add.png" alt="add" class="icon m-1">
+                <span th:text="|#{add} #{homes_group}|"></span>
             </a>
             </div>
             <h3 th:if="${homeGroups.size() == 0}" th:text="#{no_homes_group}"></h3>

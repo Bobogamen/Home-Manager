@@ -2,7 +2,6 @@ package com.home_manager.init;
 
 import com.home_manager.model.entities.Role;
 import com.home_manager.model.enums.RoleEnum;
-import com.home_manager.repository.HomesGroupRepository;
 import com.home_manager.repository.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -15,11 +14,9 @@ import java.util.List;
 public class Initializer implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
-    private final HomesGroupRepository homesGroupRepository;
 
-    public Initializer(RoleRepository roleRepository, HomesGroupRepository homesGroupRepository) {
+    public Initializer(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
-        this.homesGroupRepository = homesGroupRepository;
     }
 
     @Override

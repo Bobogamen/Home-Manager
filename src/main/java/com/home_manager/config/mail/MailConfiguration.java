@@ -1,6 +1,5 @@
 package com.home_manager.config.mail;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,7 +11,7 @@ import java.util.Properties;
 @Configuration
 public class MailConfiguration {
 
-    private MailProperties mailProperties;
+    private final MailProperties mailProperties;
 
     public MailConfiguration(MailProperties mailProperties) {
         this.mailProperties = mailProperties;

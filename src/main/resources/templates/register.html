@@ -1,62 +1,105 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <title th:text="#{register}"></title>
+    <title sec:authorize="isAnonymous()" th:text="#{registration}"></title>
+    <title sec:authorize="isAuthenticated()" th:text="|#{register} #{cashier}|"></title>
 </head>
 <body>
 <main class="w-100">
     <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="registrationForm">
-                <h3 th:text="#{create_account}"></h3>
-                <form th:action="@{/register}"
-                      th:method="POST"
-                      th:object="${registrationDTO}">
-                    <label for="name">
-                        <input th:field="*{name}"
-                               th:errorclass="is-invalid" type="text" th:placeholder="#{name}" name="name" id="name" class="field mt-3">
-                        <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
-                            <p th:each="err : ${#fields.errors('name')}" th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                        </div>
-                    </label>
+        <th:block sec:authorize="isAuthenticated()">
+            <section th:replace="fragments/notification :: section"></section>
+            <nav th:replace="/fragments/nav_bar :: nav"></nav>
+        </th:block>
+        <div class="row line">
+            <div class="row justify-content-center">
+                <div class="registrationForm">
+                    <h3 sec:authorize="isAnonymous()" th:text="#{create_account}"></h3>
+                    <h3 sec:authorize="isAuthenticated()" th:text="|#{register}  #{cashier}|"></h3>
+                    <form sec:authorize="isAnonymous()"
+                          th:action="@{/register}"
+                          th:method="POST"
+                          th:object="${registrationDTO}">
 
-                    <label for="email">
+                        <input th:field="*{name}"
+                               th:errorclass="is-invalid"
+                               th:placeholder="#{name}" type="text" name="name" class="field mt-3">
+                        <span th:if="${#fields.hasErrors('name')}" class="notificationRegister">
+                            <span th:each="err : ${#fields.errors('name')}" th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></span>
+                        </span>
+
                         <input th:field="*{email}"
                                th:errorclass="is-invalid"
-                               type="text" placeholder="Email" name="email" id="email" class="field mt-3">
-                        <div th:if="${#fields.hasErrors('email')}" class="notificationRegister">
-                            <p th:each="err : ${#fields.errors('email')}" th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                        </div>
-                    </label>
+                               type="text" placeholder="Email" name="email" class="field mt-3">
+                        <span th:if="${#fields.hasErrors('email')}" class="notificationRegister">
+                            <span th:each="err : ${#fields.errors('email')}" th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></span>
+                        </span>
 
-                    <label for="password">
                         <input th:field="*{password}"
                                th:errorclass="is-invalid"
-                               type="password" th:placeholder="#{enter_password}" name="password" id="password" class="field mt-3">
-                        <div th:if="${#fields.hasErrors('password')}" class="notificationRegister">
-                            <p th:each="err : ${#fields.errors('password')}" th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                        </div>
-                    </label>
+                               th:placeholder="#{enter_password}" type="password" name="password" class="field mt-3">
+                        <span th:if="${#fields.hasErrors('password')}" class="notificationRegister">
+                            <span th:each="err : ${#fields.errors('password')}" th:text="${err}"
+                                  class="bg-danger text-light rounded d-inline-flex p-1 m-1"></span>
+                        </span>
 
-                    <label for="confirmPassword">
+
                         <input th:errorclass="is-invalid"
-                               type="password" th:placeholder="#{confirm_password}"
-                               name="confirmPassword" id="confirmPassword" class="field mt-3">
-                        <div th:if="${#fields.hasErrors('confirmPassword')}" class="notificationRegister">
-                            <p th:errors="*{confirmPassword}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                        </div>
-                    </label>
+                               th:placeholder="#{confirm_password}" type="password" name="confirmPassword" class="field mt-3">
+                        <span th:if="${#fields.hasErrors('confirmPassword')}" class="notificationRegister">
+                            <span th:errors="*{confirmPassword}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></span>
+                        </span>
+                        <span class="d-block">
+                            <button th:text="#{registration}" type="submit" class="button m-3"></button>
+                        </span>
+                        <h6 class="m-3">
+                            <th:block th:text="#{already_registered}"></th:block>
+                            <a th:text="#{login}" href="/" class="button"></a>
+                        </h6>
+                    </form>
+                    <form sec:authorize="isAuthenticated()"
+                          th:action="@{/profile/register-cashier}"
+                          th:method="POST"
+                          th:object="${registrationDTO}">
 
-                    <button th:text="#{register}" type="submit" class="button m-3"></button>
-                    <h6 class="m-3">
-                        <th:block th:text="#{already_registered}"></th:block>
-                        <a th:text="#{login}" href="/" class="button"></a>
-                    </h6>
-                </form>
+                        <input th:field="*{name}"
+                               th:errorclass="is-invalid"
+                               th:placeholder="#{name}" type="text" name="name" class="field mt-3">
+                        <span th:if="${#fields.hasErrors('name')}" class="notificationRegister">
+                            <span th:each="err : ${#fields.errors('name')}" th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></span>
+                        </span>
+
+                        <input th:field="*{email}"
+                               th:errorclass="is-invalid"
+                               type="text" placeholder="Email" name="email" class="field mt-3">
+                        <span th:if="${#fields.hasErrors('email')}" class="notificationRegister">
+                            <span th:each="err : ${#fields.errors('email')}" th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></span>
+                        </span>
+
+                        <input th:field="*{password}"
+                               th:errorclass="is-invalid"
+                               th:placeholder="#{enter_password}" type="password" name="password" class="field mt-3">
+                        <span th:if="${#fields.hasErrors('password')}" class="notificationRegister">
+                            <span th:each="err : ${#fields.errors('password')}" th:text="${err}"
+                                  class="bg-danger text-light rounded d-inline-flex p-1 m-1"></span>
+                        </span>
+
+                        <input th:errorclass="is-invalid"
+                               th:placeholder="#{confirm_password}"
+                               type="password" name="confirmPassword" class="field mt-3">
+                        <span th:if="${#fields.hasErrors('confirmPassword')}" class="notificationRegister">
+                            <span th:errors="*{confirmPassword}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></span>
+                        </span>
+                        <span class="d-block">
+                            <button th:text="#{registration}" type="submit" class="button m-3"></button>
+                        </span>
+                    </form>
+                </div>
             </div>
         </div>
         <div class="row">

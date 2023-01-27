@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="|${homesGroup.getName()} #{apartment} ${home.getName()}|"></title>
+</head>
+<body>
+<!-- Edit times form -->
+<div class="edit-times">
+    <form th:action="@{|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/edit-fee-times|}"
+          th:method="PUT">
+        <input type="number" name="times" id="times" min="0" max="99" step="1" value="" class="inputNumber" required/>
+        <button type="submit" class="bg-transparent border-0 my-0">
+            <img src="/images/tick.png" alt="tick" class="icon">
+        </button>
+    </form>
+</div>
+
+<div class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="/fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+        <!------------------------CONTENT------------------------>
+        <div class="text-center col w-75">
+            <div>
+                <div class="d-inline-flex justify-content-center align-items-center my-2">
+                    <h3 th:text="${homesGroup.getName()}" class="m-1"></h3>
+                    <a th:href="|/profile/homesGroup${homesGroup.getId()}|">
+                        <img src="/images/back.png" alt="back" class="icon">
+                    </a>
+                </div>
+            </div>
+            <div class="d-inline-flex justify-content-center align-items-center my-2">
+                <a th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/previous|">
+                    <img src="/images/back.png" alt="back" class="icon">
+                </a>
+                <h4 th:text="|#{floor} ${home.getFloor()} #{apartment} ${home.getName()} #{residents_count} ${home.getResidents().size()}|" class="m-1"></h4>
+                <a th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/next|">
+                    <img src="/images/forward.png" alt="forward" class="icon">
+                </a>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="mx-5">
+                    <div class="card card-resident">
+                        <div class="card-header">
+                            <h3 th:text="|#{owner} ${home.getOwner().getFirstName()} ${home.getOwner().getLastName()}|"></h3>
+
+                        </div>
+                        <div class="card-body text-start pt-0">
+                            <div th:each="r, index : ${home.getResidents()}" class="card-body m-3 bg-success border border-dark rounded">
+                                <span th:text="${index.count}" class="badge float-end text-bg-light"></span>
+                                <form th:action="@{|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/edit-resident${r.getId()}|}"
+                                      th:method="PUT" onclick='editResident(this)'>
+                                    <input th:value="${r.getFirstName() != ''} ? ${r.getFirstName()} : ''"
+                                           th:placeholder="${r.getFirstName() == ''} ? #{first_name} : ''"
+                                           type="text" id="firstName" name="firstName" class="field-fit-content px-1 mb-1">
+
+                                    <input th:value="${r.getMiddleName() != ''} ? ${r.getMiddleName()} : ''"
+                                           th:placeholder="${r.getMiddleName() == ''} ? #{middle_name} : ''"
+                                           type="text" id="middleName" name="middleName" class="field-fit-content px-1 mb-1">
+
+                                    <input th:value="${r.getLastName() != ''} ? ${r.getLastName()} : ''"
+                                           th:placeholder="${r.getLastName() == ''} ? #{last_name} : ''"
+                                           type="text" id="lastName" name="lastName" class="field-fit-content px-1 mb-1">
+
+                                    <input th:value="${r.getEmail() != ''} ? ${r.getEmail()} : ''"
+                                           th:placeholder="${r.getEmail() == ''} ? 'email' : ''"
+                                           type="text" id="email" name="email" class="field-fit-content px-1 mb-1">
+
+                                    <input th:value="${r.getPhoneNumber() != ''} ? ${r.getPhoneNumber()} : ''"
+                                           th:placeholder="${r.getPhoneNumber() == ''} ? #{phone_number} : ''"
+                                           type="text" id="phoneNumber" name="phoneNumber" class="field-fit-content px-1 mb-1">
+                                    <span id="button" class="text-end pt-1 ms-5 d-none">
+                                        <button th:id="${index.count}"
+                                                th:text="#{change}" type="submit" class="btn btn-warning"></button>
+                                    </span>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mx-5">
+                    <div id="fees" class="card card-resident">
+                        <div class="card-header d-inline-flex justify-content-center">
+                            <h3 th:text="#{fees}"></h3>
+                        </div>
+                        <div class="card-body d-inline-flex justify-content-center">
+                            <p th:text="${home.getFees().size() == 0} ? #{no_fee} : ''"></p>
+                            <table th:if="${home.getFees().size() > 0}" class="table-fee">
+                                <thead>
+                                <tr>
+                                    <td th:text="#{name}" class="bg-info border-rounded"></td>
+                                    <td th:text="#{currency}" class="bg-info border-rounded"></td>
+                                    <td th:text="#{number_single}" class="bg-info border-rounded"></td>
+                                    <td th:text="#{total}" class="bg-info border-rounded"></td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="f : ${home.getFees()}" class="align-middle">
+                                    <td th:text="${f.getFee().getName()}" class="border-rounded"></td>
+                                    <td th:text="${#numbers.formatDecimal(f.getFee().getValue(), 1, 'WHITESPACE', 2, 'POINT')}" class="border-rounded"></td>
+                                    <td th:text="${f.getTimes()}" th:id="${f.getId()}" class="border-rounded" onclick="editFeeTimes(this)"></td>
+                                    <td th:text="${#numbers.formatDecimal(f.getFee().getValue() * f.getTimes(), 1, 'WHITESPACE', 2, 'POINT')}"
+                                        class="border-rounded"></td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td th:text="|#{total}: ${#numbers.formatDecimal(home.getTotalForMonth(), 1, 'WHITESPACE', 2, 'POINT')}| + #{currency}"
+                                        colspan="4" class="bg-info text-end border-rounded pe-2"></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <footer th:replace="/fragments/footer :: footer"></footer>
+    </div>
+</div>
+<script src="/js/utils.js"></script>
+<script src="/js/edit.js"></script>
+</body>
+</html>

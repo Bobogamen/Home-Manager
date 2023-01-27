@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ResidentRepository extends JpaRepository<Resident, Long> {
 
+    Resident getResidentById(long id);
 }

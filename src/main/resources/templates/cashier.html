@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="#{profile}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="/fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+        <!------------------------CONTENT------------------------>
+        <th:block sec:authorize="hasRole('MANAGER')">
+            <div class="text-center">
+                <div class="add m-2">
+                    <a href="/profile/register-cashier">
+                        <img src="/images/add.png" alt="add" class="icon m-1">
+                        <span th:text="|#{register} #{cashier}|"></span>
+                    </a>
+                </div>
+                <div class="add m-2">
+                    <a href="/profile/assign">
+                        <img src="/images/tick.png" alt="add" class="icon m-1">
+                        <span th:text="|#{assign} #{homes_group}|"></span>
+                    </a>
+                </div>
+                <h3 th:if="${cashiers.size() == 0}" th:text="#{no_cashier}"></h3>
+                <p th:each="c : ${cashiers}"
+                   th:text="|${c.getName()} - ${c.getHomesGroup().size()} #{number_single} #{homes_group}|"></p>
+            </div>
+        </th:block>
+        <th:block sec:authorize="hasRole('CASHIER')">
+            <div class="text-center">
+                <h3 th:text="#{no_assigned_homes_group}"></h3>
+            </div>
+        </th:block>
+    </div>
+    <div class="row">
+        <footer th:replace="/fragments/footer :: footer"></footer>
+    </div>
+</div>
+
+</body>
+<script src="/js/utils.js"></script>
+</html>

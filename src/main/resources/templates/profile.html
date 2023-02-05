@@ -22,7 +22,7 @@
             </div>
             <h3 th:if="${homeGroups.size() == 0}" th:text="#{no_homes_group}"></h3>
             <a th:each="hg : ${homeGroups}" th:href="|/profile/homesGroup${hg.getId()}|">
-                <p  th:text="${hg.getName()}"></p>
+                <p th:text="${hg.getName()}"></p>
             </a>
         </div>
     </div>

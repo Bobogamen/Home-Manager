@@ -293,6 +293,10 @@ a:hover {
     height: fit-content;
 }
 
+.webkit-appearance-none {
+    -webkit-appearance: none;
+}
+
 /* ---------- Utilities END ---------- */
 
 

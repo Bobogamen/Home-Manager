@@ -3,6 +3,7 @@ package com.home_manager.web;
 import com.home_manager.model.entities.Fee;
 import com.home_manager.model.entities.Home;
 import com.home_manager.model.entities.HomesGroup;
+import com.home_manager.model.enums.Notifications;
 import com.home_manager.model.user.HomeManagerUserDetails;
 import com.home_manager.service.FeeService;
 import com.home_manager.service.HomeService;
@@ -44,7 +45,7 @@ public class FeeController {
     private ModelAndView addFee(@PathVariable long homesGroupId) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("add-fee");
+        modelAndView.setViewName("/manager/add-fee");
 
         modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
 
@@ -57,7 +58,7 @@ public class FeeController {
                           @AuthenticationPrincipal HomeManagerUserDetails user) {
 
         if (homes == null) {
-            redirectAttributes.addFlashAttribute("fail", "Изберете поне един дом!");
+            redirectAttributes.addFlashAttribute("fail", Notifications.CHOOSE_AT_LEAST_ONE_HOME.getValue());
             return "redirect:/profile/homesGroup{homesGroupId}/add-fee";
         }
 
@@ -65,7 +66,8 @@ public class FeeController {
             Fee fee = this.feeService.addFee(name, value, this.homesGroupService.getHomesGroupById(homesGroupId));
             homes.forEach(h -> this.homeService.setFeeToHome(h, fee));
 
-            redirectAttributes.addFlashAttribute("success", "Такса " + name + " e добавена за избраните домове");
+            redirectAttributes.addFlashAttribute("success",
+                    homes.size() == 1 ? Notifications.FEE_ADD_FOR_HOME : Notifications.FEE_ADD_FOR_HOMES);
             return "redirect:/profile/homesGroup{homesGroupId}";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -76,7 +78,7 @@ public class FeeController {
     public ModelAndView editFee(@PathVariable long homesGroupId, @PathVariable long feeId, @AuthenticationPrincipal HomeManagerUserDetails user) {
         if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("edit-fee");
+            modelAndView.setViewName("/manager/edit-fee");
 
             HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             modelAndView.addObject("homesGroup", homesGroup);
@@ -114,7 +116,7 @@ public class FeeController {
 
             this.homeService.changeHomesFee(homesMap, fee);
 
-            redirectAttributes.addFlashAttribute("success", "Таксата е редактирана успешно");
+            redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
             return "redirect:/profile/homesGroup{homesGroupId}";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);

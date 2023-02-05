@@ -6,6 +6,9 @@ import com.home_manager.model.entities.User;
 import com.home_manager.repository.HomesGroupRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 public class HomesGroupService {
@@ -23,7 +26,7 @@ public class HomesGroupService {
         homesGroup.setName(addHomesGroupDTO.getName());
         homesGroup.setSize(addHomesGroupDTO.getSize());
         homesGroup.setType(addHomesGroupDTO.getType());
-        homesGroup.setUsers(user);
+        homesGroup.addUser(user);
 
         this.homesGroupRepository.save(homesGroup);
     }
@@ -40,5 +43,37 @@ public class HomesGroupService {
         homesGroup.setSize(addHomesGroupDTO.getSize());
 
         this.homesGroupRepository.save(homesGroup);
+    }
+
+    public void homesGroupAssignment(List<HomesGroup> managerHomesGroup, User cashier, List<Long> homesGroupsIds) {
+
+        List<HomesGroup> updated = new ArrayList<>();
+
+        if (homesGroupsIds != null) {
+
+            managerHomesGroup.forEach(hg -> {
+                boolean isFound = cashier.getHomesGroup().stream().anyMatch(uhg -> uhg.getId() == hg.getId());
+                boolean isRequested = homesGroupsIds.stream().anyMatch(id -> id == hg.getId());
+
+                if (isFound) {
+                    if (!isRequested) {
+                        hg.removeUser(cashier);
+                        updated.add(hg);
+
+                    }
+                } else {
+                    if (isRequested) {
+                        hg.addUser(cashier);
+                        updated.add(hg);
+                    }
+                }
+            });
+        } else  {
+            managerHomesGroup.forEach(hg -> {
+                hg.removeUser(cashier);
+                updated.add(hg);
+            });
+        }
+        this.homesGroupRepository.saveAll(updated);
     }
 }

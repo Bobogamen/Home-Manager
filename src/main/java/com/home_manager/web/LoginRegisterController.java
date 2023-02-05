@@ -1,6 +1,7 @@
 package com.home_manager.web;
 
 import com.home_manager.model.dto.RegistrationDTO;
+import com.home_manager.model.enums.Notifications;
 import com.home_manager.service.EmailService;
 import com.home_manager.service.UserService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -32,7 +33,7 @@ public class LoginRegisterController {
             RedirectAttributes redirectAttributes) {
 
         redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, userName);
-        redirectAttributes.addFlashAttribute("fail", "Невалиден email/парола");
+        redirectAttributes.addFlashAttribute("fail", Notifications.INVALID_LOGIN.getValue());
 
         return "redirect:/";
     }
@@ -61,7 +62,7 @@ public class LoginRegisterController {
         this.userService.register(registrationDTO);
         this.emailService.sendRegistrationEmail(registrationDTO.getEmail());
 
-        redirectAttributes.addFlashAttribute("success", "Успешна регистрация!");
+        redirectAttributes.addFlashAttribute("success", Notifications.REGISTRATION_SUCCESSFULLY.getValue());
 
         return "redirect:/profile";
     }

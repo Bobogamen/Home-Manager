@@ -13,7 +13,7 @@ public class Month {
     private long id;
 
     @Column(nullable = false)
-    private String name;
+    private int number;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double total;
@@ -46,28 +46,12 @@ public class Month {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public int getNumber() {
+        return number;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<MonthHomes> getHomes() {
-        return homes;
-    }
-
-    public void setHomes(Set<MonthHomes> houses) {
-        this.homes = houses;
-    }
-
-    public Set<Expense> getExpenses() {
-        return expenses;
-    }
-
-    public void setExpenses(Set<Expense> expenses) {
-        this.expenses = expenses;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public double getTotal() {
@@ -76,14 +60,6 @@ public class Month {
 
     public void setTotal(double total) {
         this.total = total;
-    }
-
-    public Year getYear() {
-        return year;
-    }
-
-    public void setYear(Year year) {
-        this.year = year;
     }
 
     public int getPaidHomesCount() {
@@ -100,5 +76,29 @@ public class Month {
 
     public void setResidentsCount(int residentsCount) {
         this.residentsCount = residentsCount;
+    }
+
+    public Set<MonthHomes> getHomes() {
+        return homes;
+    }
+
+    public void setHomes(Set<MonthHomes> homes) {
+        this.homes = homes;
+    }
+
+    public Set<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(Set<Expense> expenses) {
+        this.expenses = expenses;
+    }
+
+    public Year getYear() {
+        return year;
+    }
+
+    public void setYear(Year year) {
+        this.year = year;
     }
 }

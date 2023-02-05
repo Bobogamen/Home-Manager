@@ -7,6 +7,8 @@ import com.home_manager.model.entities.Fee;
 import com.home_manager.model.entities.Home;
 import com.home_manager.model.entities.HomesGroup;
 import com.home_manager.model.entities.Resident;
+import com.home_manager.model.enums.Commons;
+import com.home_manager.model.enums.Notifications;
 import com.home_manager.model.user.HomeManagerUserDetails;
 import com.home_manager.service.HomeService;
 import com.home_manager.service.HomesGroupService;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -43,25 +46,24 @@ public class HomesGroupController {
         this.residentService = residentService;
     }
 
-    private boolean isAuthorized(long homeGroupId, long userId) {
-        return this.userService.isOwner(homeGroupId, userId);
+    private boolean isAuthorized(long homesGroupId, long userId) {
+        return this.userService.isOwner(homesGroupId, userId);
     }
 
-    @GetMapping("/homesGroup{homeGroupId}")
-    ModelAndView viewHomesGroup(@PathVariable long homeGroupId, @AuthenticationPrincipal HomeManagerUserDetails user) {
+    @GetMapping("/homesGroup{homesGroupId}")
+    ModelAndView viewHomesGroup(@PathVariable long homesGroupId, @AuthenticationPrincipal HomeManagerUserDetails user) {
 
-        if (isAuthorized(homeGroupId, user.getId())) {
+        if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("homes_group");
+            modelAndView.setViewName("/manager/homes_group");
 
-            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homeGroupId);
+            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             modelAndView.addObject("homesGroup", homesGroup);
 
             List<Fee> fees = homesGroup.getFees();
             modelAndView.addObject("fees", fees);
 
             double total = homesGroup.getHomes().stream().mapToDouble(Home::getTotalForMonth).sum();
-
             modelAndView.addObject("total", new DecimalFormat("#.##").format(total));
 
             return modelAndView;
@@ -71,13 +73,13 @@ public class HomesGroupController {
     }
 
 
-    @GetMapping("/homesGroup{homeGroupId}/add-home")
-    public ModelAndView addHome(@PathVariable long homeGroupId, @AuthenticationPrincipal HomeManagerUserDetails user) {
+    @GetMapping("/homesGroup{homesGroupId}/add-home")
+    public ModelAndView addHome(@PathVariable long homesGroupId, @AuthenticationPrincipal HomeManagerUserDetails user) {
 
-        if (isAuthorized(homeGroupId, user.getId())) {
+        if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("add_home");
-            modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homeGroupId));
+            modelAndView.setViewName("/manager/add_home");
+            modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
             return modelAndView;
 
         } else {
@@ -95,11 +97,11 @@ public class HomesGroupController {
         return new AddResidentDTO();
     }
 
-    @PostMapping("/homesGroup{homeGroupId}/add-home")
-    public String addHome(@PathVariable long homeGroupId, @AuthenticationPrincipal HomeManagerUserDetails user,
+    @PostMapping("/homesGroup{homesGroupId}/add-home")
+    public String addHome(@PathVariable long homesGroupId, @AuthenticationPrincipal HomeManagerUserDetails user,
                           @Valid AddHomeDTO addHomeDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        if (isAuthorized(homeGroupId, user.getId())) {
+        if (isAuthorized(homesGroupId, user.getId())) {
 
             boolean isResident = addHomeDTO.isResident();
 
@@ -112,7 +114,7 @@ public class HomesGroupController {
                     redirectAttributes.addFlashAttribute("addHomeDTO", addHomeDTO);
                     redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addHomeDTO", bindingResult);
 
-                    return "redirect:/profile/homesGroup{homeGroupId}/add-home";
+                    return "redirect:/profile/homesGroup{homesGroupId}/add-home";
                 }
 
             } else {
@@ -121,11 +123,11 @@ public class HomesGroupController {
                     redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addHomeDTO", bindingResult);
                     redirectAttributes.addFlashAttribute("residentValue", false);
 
-                    return "redirect:/profile/homesGroup{id}/add-home";
+                    return "redirect:/profile/homesGroup{homesGroupId}/add-home";
                 }
             }
 
-            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homeGroupId);
+            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             Resident owner = this.residentService.addOwner(addHomeDTO);
             Home home = this.homeService.addHome(addHomeDTO, homesGroup);
 
@@ -140,7 +142,7 @@ public class HomesGroupController {
                 this.residentService.setResidentHome(home, resident);
             }
 
-            redirectAttributes.addFlashAttribute("success", "Домът е добавен успешно");
+            redirectAttributes.addFlashAttribute("success", Notifications.HOME_ADDED_SUCCESSFULLY.getValue());
             return "redirect:/profile/homesGroup{id}";
 
         } else {
@@ -148,14 +150,19 @@ public class HomesGroupController {
         }
     }
 
+    @ModelAttribute("allTypes")
+    public List<String> allTypes() {
+        return Arrays.stream(Commons.values()).map(Commons::getValue).toList();
+    }
 
-    @GetMapping("/edit/homesGroup{id}")
-    public ModelAndView editHomesGroup(@PathVariable long id, @AuthenticationPrincipal HomeManagerUserDetails user) {
 
-        if (isAuthorized(id, user.getId())) {
+    @GetMapping("/edit/homesGroup{homesGroupId}")
+    public ModelAndView editHomesGroup(@PathVariable long homesGroupId, @AuthenticationPrincipal HomeManagerUserDetails user) {
+
+        if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("edit-homes_group");
-            modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(id));
+            modelAndView.setViewName("/manager/edit-homes_group");
+            modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
 
             return modelAndView;
         } else {
@@ -168,22 +175,22 @@ public class HomesGroupController {
         return new AddHomesGroupDTO();
     }
 
-    @PutMapping("/edit/homesGroup{id}")
-    public String editHomesGroup(@PathVariable long id, @AuthenticationPrincipal HomeManagerUserDetails user,
+    @PutMapping("/edit/homesGroup{homesGroupId}")
+    public String editHomesGroup(@PathVariable long homesGroupId, @AuthenticationPrincipal HomeManagerUserDetails user,
                                  @Valid AddHomesGroupDTO addHomesGroupDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        if (isAuthorized(id, user.getId())) {
+        if (isAuthorized(homesGroupId, user.getId())) {
             if (bindingResult.hasErrors()) {
                 redirectAttributes.addFlashAttribute("addHomesGroupDTO", addHomesGroupDTO);
                 redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addHomesGroupDTO", bindingResult);
 
-                return "redirect:/edit/homesGroups{id}";
+                return "redirect:/edit/homesGroups{homesGroupId}";
             }
 
-            this.homesGroupService.editHomesGroup(addHomesGroupDTO, id);
+            this.homesGroupService.editHomesGroup(addHomesGroupDTO, homesGroupId);
 
-            redirectAttributes.addFlashAttribute("success", "Група " + addHomesGroupDTO.getName() + " e редактирана");
-            return "redirect:/profile/homesGroup{id}";
+            redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
+            return "redirect:/profile/homesGroup{homesGroupId}";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

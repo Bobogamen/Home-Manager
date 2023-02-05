@@ -11,16 +11,12 @@ function hide(tag) {
     tag.style.display = 'none';
 }
 
+let boxChecked = false
+
 function checkAll() {
-    document.querySelectorAll(".inputCheckBox").forEach(i => {
-        if (i.checked) {
-            i.checked = false;
-            changeValueAttribute(i)
-        } else {
-            i.checked = true;
-            changeValueAttribute(i)
-        }
-    });
+    boxChecked === false ?
+        (document.querySelectorAll('.inputCheckBox').forEach(i => i.checked = true), boxChecked = true) :
+        (document.querySelectorAll('.inputCheckBox').forEach(i => i.checked = false), boxChecked = false);
 }
 
 function changeValueAttribute(target) {
@@ -39,6 +35,8 @@ function changeValueAttribute(target) {
         target.parentElement.append(hidden);
     }
 }
+
+
 
 
 

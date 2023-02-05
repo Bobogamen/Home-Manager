@@ -12,31 +12,40 @@
     <section th:replace="fragments/notification :: section"></section>
     <nav th:replace="/fragments/nav_bar :: nav"></nav>
     <div class="row line">
-        <!------------------------CONTENT------------------------>
+        <!------------------------MANAGER------------------------>
         <th:block sec:authorize="hasRole('MANAGER')">
             <div class="text-center">
-                <div class="add m-2">
-                    <a href="/profile/register-cashier">
-                        <img src="/images/add.png" alt="add" class="icon m-1">
-                        <span th:text="|#{register} #{cashier}|"></span>
-                    </a>
-                </div>
-                <div class="add m-2">
-                    <a href="/profile/assign">
-                        <img src="/images/tick.png" alt="add" class="icon m-1">
-                        <span th:text="|#{assign} #{homes_group}|"></span>
-                    </a>
-                </div>
-                <h3 th:if="${cashiers.size() == 0}" th:text="#{no_cashier}"></h3>
-                <p th:each="c : ${cashiers}"
-                   th:text="|${c.getName()} - ${c.getHomesGroup().size()} #{number_single} #{homes_group}|"></p>
+                <h3 th:if="${user.getCashiers().size() == 0}" th:text="#{no_cashier}"></h3>
+                <h3 th:if="${user.getHomesGroup().size() == 0}" th:text="#{no_homes_group}"></h3>
+                <th:block th:if="${user.getCashiers().size() > 0 && user.getHomesGroup().size() > 0}">
+                    <div class="add m-2">
+                        <a href="/profile/register-cashier">
+                            <img src="/images/add.png" alt="add" class="icon m-1">
+                            <span th:text="|#{register} #{cashier}|"></span>
+                        </a>
+                    </div>
+                    <div class="add m-2">
+                        <a href="/profile/assign">
+                            <img src="/images/tick.png" alt="add" class="icon m-1">
+                            <span th:text="|#{assign} #{homes_group}|"></span>
+                        </a>
+                    </div>
+                    <p th:each="c : ${user.getCashiers()}"
+                       th:text="|${c.getName()} - ${c.getHomesGroup().size()} #{number_single} #{homes_group}|"></p>
+                </th:block>
             </div>
         </th:block>
+        <!------------------------MANAGER------------------------>
+
+        <!------------------------CASHIER------------------------>
         <th:block sec:authorize="hasRole('CASHIER')">
-            <div class="text-center">
-                <h3 th:text="#{no_assigned_homes_group}"></h3>
+            <div th:each="hg : ${user.getHomesGroup()}" class="text-center">
+                <a th:href="'/cashier/homesGroup' + ${hg.getId()}">
+                    <h3 th:text="${hg.getName()}"></h3>
+                </a>
             </div>
         </th:block>
+        <!------------------------CASHIER------------------------>
     </div>
     <div class="row">
         <footer th:replace="/fragments/footer :: footer"></footer>

@@ -1,6 +1,7 @@
 package com.home_manager.web;
 
 import com.home_manager.model.dto.PasswordResetDTO;
+import com.home_manager.model.enums.Notifications;
 import com.home_manager.service.EmailService;
 import com.home_manager.service.UserService;
 import com.home_manager.utility.MailUtility;
@@ -80,7 +81,7 @@ public class ForgotAndResetPasswordController {
         boolean foundEmailByToken = this.userService.findEmailByToken(token);
 
         if (!foundEmailByToken) {
-            redirectAttributes.addFlashAttribute("fail", "Невалиден адрес!");
+            redirectAttributes.addFlashAttribute("fail", Notifications.INVALID_EMAIL.getValue());
             return "redirect:/";
 
         } else if (bindingResult.hasErrors()) {
@@ -92,7 +93,7 @@ public class ForgotAndResetPasswordController {
         String password = passwordResetDTO.getPassword();
         this.userService.changePasswordOnEmailByToken(token, password);
 
-        redirectAttributes.addFlashAttribute("success", "Паролата е сменена успешно!");
+        redirectAttributes.addFlashAttribute("success", Notifications.PASSWORD_CHANGED_SUCCESSFULLY.getValue());
         return "redirect:/";
     }
 }

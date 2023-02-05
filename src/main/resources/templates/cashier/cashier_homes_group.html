@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="${homesGroup.getName()}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="/fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+        <!------------------------CONTENT------------------------>
+        <div class="text-center">
+            <div th:if="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
+                <h3 th:text="#{no_homes}"></h3>
+            </div>
+            <th:block th:if="${homesGroup.getHomes().size() > 0}">
+                <h3 th:text="${homesGroup.getName()}" class="m-1"></h3>
+                <div class="d-inline-flex justify-content-center align-items-center my-2">
+                    <img src="/images/back.png" alt="back" class="icon">
+                    <select class="m-1 bg-transparent text-center webkit-appearance-none">
+                        <option th:each="m, index : ${T(com.home_manager.model.enums.Months).values()}"
+                                th:value="${index.count}" th:text="${m.getValue()}">
+                        </option>
+                    </select>
+                    <select class="m-1 bg-transparent text-center webkit-appearance-none">
+                        <option th:each="y : ${#numbers.sequence(2010, 2050)}"
+                                th:value="${y}" th:text="${y}"></option>
+                    </select>
+                    <img src="/images/forward.png" alt="forward" class="icon">
+                </div>
+                <div class="text-center d-flex justify-content-center">
+                    <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
+                        <h3 th:text="#{homes}"></h3>
+                        <table class="table table-hover table-sm table-bordered border-primary">
+                            <thead>
+                            <tr class="bg-info fw-bold align-middle">
+                                <td th:text="#{floor}"></td>
+                                <td th:text="#{apartment}"></td>
+                                <td th:text="#{owner}"></td>
+                                <td th:text="#{residents_count}"></td>
+                                <td th:text="|#{total}(#{currency})|"></td>
+                                <td th:text="#{paid_date}"></td>
+                                <td th:text="#{signature}"></td>
+                            </tr>
+                            </thead>
+                            <tbody class="fs-6">
+                            <tr th:each="h : ${homesGroup.getHomes()}" class="align-middle">
+                                <td th:text="${h.getFloor()}"></td>
+                                <td th:text="${h.getName()}"></td>
+                                <td th:text="|${h.getOwner().getFirstName()} ${h.getOwner().getLastName()}|"></td>
+                                <td th:text="${h.getResidents().size()}"></td>
+                                <td th:text="${h.getTotalForMonth()}"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr class="bg-info fw-bold align-middle">
+                                <td th:text="#{total}" colspan="3"></td>
+                                <td th:text="${homesGroup.getTotalResidents()}"></td>
+                                <td th:text="${#numbers.formatDecimal(total, 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+    <div class="row">
+        <footer th:replace="/fragments/footer :: footer"></footer>
+    </div>
+</div>
+<script src="/js/utils.js"></script>
+</body>
+</html>
+

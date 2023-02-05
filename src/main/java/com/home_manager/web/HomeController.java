@@ -3,6 +3,7 @@ package com.home_manager.web;
 import com.home_manager.model.dto.AddResidentDTO;
 import com.home_manager.model.entities.Home;
 import com.home_manager.model.entities.HomesGroup;
+import com.home_manager.model.enums.Notifications;
 import com.home_manager.model.user.HomeManagerUserDetails;
 import com.home_manager.service.*;
 import org.springframework.http.HttpStatus;
@@ -66,7 +67,7 @@ public class HomeController {
 
     private ModelAndView getModelAndView(long homesGroupId, long homeId, String state) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
+        modelAndView.setViewName("/manager/home");
 
         HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
         modelAndView.addObject("homesGroup", homesGroup);
@@ -111,7 +112,7 @@ public class HomeController {
 
         if (isAuthorized(homesGroupId, user.getId())) {
             this.residentService.addResident(addResidentDTO, this.homeService.getHomeById(homeId));
-            redirectAttributes.addFlashAttribute("success", "Живущ е добавен успешно");
+            redirectAttributes.addFlashAttribute("success", Notifications.RESIDENT_ADDED_SUCCESSFULLY.getValue());
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -128,7 +129,7 @@ public class HomeController {
 
         if (isAuthorized(homesGroupId, user.getId())) {
             this.residentService.editResident(addResidentDTO, residentId);
-            redirectAttributes.addFlashAttribute("success", "Живущ е редактиран успешно");
+            redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -142,7 +143,7 @@ public class HomeController {
         if (isAuthorized(homesGroupId, user.getId())) {
             this.homeService.changeTimesOfFeeById(homeId, feeId, times);
 
-            redirectAttributes.addFlashAttribute("success", "Таксата е редактирана успешно");
+            redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

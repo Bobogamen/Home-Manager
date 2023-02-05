@@ -10,5 +10,4 @@ public class HomeManagerApplication {
         SpringApplication.run(HomeManagerApplication.class, args);
         System.out.println("Домоуправител е стартиран...");
     }
-
 }

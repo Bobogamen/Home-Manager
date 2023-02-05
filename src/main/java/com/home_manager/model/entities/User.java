@@ -121,4 +121,8 @@ public class User {
     public void setCashier(User cashier) {
         this.cashiers.add(cashier);
     }
+
+    public boolean hasThisHomesGroup(HomesGroup homesGroup) {
+        return this.homesGroup.stream().anyMatch(hg -> hg.getId() == homesGroup.getId());
+    }
 }

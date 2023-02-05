@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "homes_group")
@@ -32,6 +33,7 @@ public class HomesGroup {
     @OneToMany(mappedBy = "homesGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Fee> fees;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> users;
 
@@ -101,7 +103,7 @@ public class HomesGroup {
         return this.users;
     }
 
-    public void setUsers(User users) {
+    public void addUser(User users) {
         this.users.add(users);
     }
 
@@ -122,5 +124,11 @@ public class HomesGroup {
 
     public void setFees(List<Fee> fees) {
         this.fees = fees;
+    }
+
+    public void removeUser(User user) {
+        this.users = this.users.stream()
+                .filter(u -> u.getId() != user.getId())
+                .collect(Collectors.toSet());
     }
 }

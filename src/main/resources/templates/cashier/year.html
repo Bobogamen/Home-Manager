@@ -8,65 +8,6 @@
     <title th:text="${homesGroup.getName()}"></title>
 </head>
 <body>
-<!-- The Modal Payment -->
-<div class="modal faded" id="mar">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 th:text="|#{fees} ${monthName} ${yearNumber}|" class="modal-title"></h5>
-                <button id="close" type="button" class="add-button">
-                    <span class="h3">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <p class="m-0"></p>
-                <div class="card-body d-inline-flex justify-content-center w-100">
-                    <div class="w-100">
-                        <table class="table-fee m-auto">
-                            <thead>
-                            <tr>
-                                <td th:text="#{name}" class="bg-info border-rounded"></td>
-                                <td th:text="#{currency}" class="bg-info border-rounded"></td>
-                                <td th:text="#{number_single}" class="bg-info border-rounded"></td>
-                                <td th:text="#{total}" class="bg-info border-rounded"></td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr id="" class="align-middle">
-                                <td class="border-rounded"></td>
-                                <td class="border-rounded"></td>
-                                <td class="border-rounded">
-                                    <select onchange="calculateRowTotal(this)" class="bg-transparent text-center m-0 p-0 border-0 webkit-appearance-none">
-                                        <option th:each="n : ${#numbers.sequence(0, 50)}"
-                                                th:value="${n}"
-                                                th:text="${n}">
-                                        </option>
-                                    </select>
-                                </td>
-                                <td class="border-rounded"></td>
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td colspan="4" class="bg-info text-end border-rounded pe-2"></td>
-                            </tr>
-                            </tfoot>
-                        </table>
-                        <form th:action="@{|/cashier/homesGroup${homesGroup.getId()}/pay|}"
-                              th:method="POST">
-                            <input name="month" th:value="${monthNumber}" type="hidden">
-                            <input name="year" th:value="${yearNumber}" type="hidden">
-                            <input id="monthHomeId" name="monthHomeId" value="" type="hidden">
-                            <input name="data" value="" type="hidden">
-                            <button th:text="#{pay}" type="submit" class="button mt-4" onclick="pay(this)"></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="container-fluid">
     <section th:replace="fragments/notification :: section"></section>
     <nav th:replace="/fragments/nav_bar :: nav"></nav>
@@ -74,60 +15,12 @@
         <!------------------------CONTENT------------------------>
         <div class="text-center">
             <div th:if="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
-                <h3 th:text="#{no_homes}"></h3>
+                <h3 th:text="#{no_added_month_year}"></h3>
             </div>
             <th:block th:if="${homesGroup.getHomes().size() > 0}">
-                <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${now.getMonthValue()}&year=${now.getYear()}|">
-                    <h3 th:text="${homesGroup.getName()}" class="m-1"></h3>
-                </a>
-                <div>
-                    <div class="d-inline-flex justify-content-center align-items-center my-2">
-                        <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${monthNumber - 1}&year=${yearNumber}|">
-                            <img src="/images/back.png" alt="back" class="icon">
-                        </a>
-                        <form th:action="|/cashier/homesGroup${homesGroup.getId()}|"
-                              th:method="GET" onchange="this.submit()">
-                            <select name="month" class="m-1 bg-transparent text-center webkit-appearance-none">
-                                <option th:each="m, index : ${T(com.home_manager.model.enums.Months).values()}"
-                                        th:value="${index.count}"
-                                        th:text="${m.getValue()}"
-                                        th:selected="${index.count} == ${monthNumber}">
-                                </option>
-                            </select>
-                            <select name="year" class="m-1 bg-transparent text-center webkit-appearance-none">
-                                <option th:each="y : ${#numbers.sequence(2010, 2050)}"
-                                        th:value="${y}"
-                                        th:text="${y}"
-                                        th:selected="${y} == ${yearNumber}">
-                                </option>
-                            </select>
-                        </form>
-                        <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${monthNumber + 1}&year=${yearNumber}|">
-                            <img src="/images/forward.png" alt="forward" class="icon">
-                        </a>
-                    </div>
-                </div>
-                <div th:if="${currentMonth} == null">
-                    <p th:text="|#{current} #{month} #{no_created}|"></p>
-                </div>
-                <div th:if="${currentMonth == null}" class="add m-2">
-                    <form th:action="|/cashier/homesGroup${homesGroupId}/create-month|"
-                          th:method="POST">
-                        <input th:value="${monthNumber}" type="hidden" name="month">
-                        <input th:value="${yearNumber}" type="hidden" name="year">
-                        <button type="submit" class="bg-transparent border-0">
-                            <img src="/images/add_month.png" alt="add" class="icon m-1">
-                            <span th:text="|#{create} #{month}|"></span>
-                        </button>
-                    </form>
-                </div>
-
-                <div th:if="${currentMonth} != null" class="text-center d-flex justify-content-center">
+                <div th:if="${year} != null" class="text-center d-flex justify-content-center">
                     <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
                         <h3 th:text="#{years}"></h3>
-                        <h4>2010</h4>
-                        <h4>2011</h4>
-                        <h4>2012</h4>
                     </div>
                     <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
                         <h3 th:text="|${homesGroup.getName()} #{for} ${monthName} ${yearNumber}|"></h3>

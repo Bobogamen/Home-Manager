@@ -1,10 +1,15 @@
 let modal = document.getElementById("mar");
+let modalBody = modal.querySelector('.modal-body').innerHTML;
 let span = document.getElementById("close");
 let modalTitle = document.querySelector("h5");
 let modalTitleValue = document.querySelector("h5").textContent
 
+span.onclick = () => xCLose();
+window.onclick = (event) => outsideClickClose(event);
+
 function setRawModalTitle(value) {
     modalTitle.textContent = value;
+    modal.querySelector('.modal-body').innerHTML = modalBody;
 }
 
 function xCLose() {
@@ -18,3 +23,7 @@ function outsideClickClose(event) {
         setRawModalTitle(modalTitleValue);
     }
 }
+
+
+
+

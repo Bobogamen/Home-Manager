@@ -259,8 +259,8 @@ a:hover {
 }
 
 .icon {
-    width: 2.1rem;
-    height: 2.1rem;
+    width: 1.8rem;
+    height: 1.8rem;
 }
 
 .faded {
@@ -293,8 +293,16 @@ a:hover {
     height: fit-content;
 }
 
+.width-fit-content {
+    width: fit-content;
+}
+
 .webkit-appearance-none {
     -webkit-appearance: none;
+}
+
+.webkit-appearance-none:hover {
+    cursor: pointer;
 }
 
 /* ---------- Utilities END ---------- */

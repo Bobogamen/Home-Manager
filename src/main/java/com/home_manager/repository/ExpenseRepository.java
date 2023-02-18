@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
+
+    Expense getExpenseById(long id);
 }

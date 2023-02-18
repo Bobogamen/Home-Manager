@@ -12,13 +12,13 @@
     <nav th:replace="/fragments/nav_bar :: nav"></nav>
     <div class="row line">
 
-    <!------------------------CONTENT------------------------>
+        <!------------------------CONTENT------------------------>
         <div class="text-center">
             <div class="add m-2">
-            <a href="/profile/add-homes_group">
-                <img src="/images/add.png" alt="add" class="icon m-1">
-                <span th:text="|#{add} #{homes_group}|"></span>
-            </a>
+                <a href="/profile/add-homes_group">
+                    <img src="/images/add.png" alt="add" class="icon m-1">
+                    <span th:text="|#{add} #{homes_group}|"></span>
+                </a>
             </div>
             <h3 th:if="${homeGroups.size() == 0}" th:text="#{no_homes_group}"></h3>
             <a th:each="hg : ${homeGroups}" th:href="|/profile/homesGroup${hg.getId()}|">

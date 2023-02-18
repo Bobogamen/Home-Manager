@@ -5,11 +5,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-public enum Commons {
+public enum HomesGroupEnums {
     APARTMENT_BUILDING,
-    HOUSE_COMPLEX,
-    HOME_MANAGER_FORGOTTEN_PASSWORD,
-    HOME_MANAGER_WELCOME;
+    HOUSE_COMPLEX;
 
     private Properties properties;
 
@@ -18,7 +16,7 @@ public enum Commons {
         if (properties == null) {
             properties = new Properties();
 
-            String path = "src/main/resources/i18n/enums.properties";
+            String path = "src/main/resources/i18n/homesGroup.properties";
 
             try {
                 FileInputStream input = new FileInputStream(path);

@@ -1,7 +1,12 @@
 package com.home_manager.model.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "fee")
@@ -24,7 +29,12 @@ public class Fee {
     @JoinColumn(name = "homes_group_id", referencedColumnName = "id")
     private HomesGroup homesGroup;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "fee", fetch = FetchType.LAZY)
+    private List<Payment> payments;
+
     public Fee() {
+        this.payments = new ArrayList<>();
     }
 
     public long getId() {
@@ -65,5 +75,13 @@ public class Fee {
 
     public void setHomesGroup(HomesGroup homesGroup) {
         this.homesGroup = homesGroup;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
     }
 }

@@ -1,7 +1,11 @@
 package com.home_manager.model.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "month_homes")
@@ -11,20 +15,20 @@ public class MonthHomes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Month month;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Home home;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "monthHomes", fetch = FetchType.LAZY)
+    private List<Payment> payments;
+
     private LocalDate paidDate;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
-    private double paidAmount;
-
-    @Column(nullable = false)
-    private int residentsCount;
+    private double totalPaid;
 
     public MonthHomes() {
     }
@@ -45,14 +49,6 @@ public class MonthHomes {
         this.month = month;
     }
 
-    public Home getHouse() {
-        return home;
-    }
-
-    public void setHouse(Home home) {
-        this.home = home;
-    }
-
     public Home getHome() {
         return home;
     }
@@ -69,19 +65,19 @@ public class MonthHomes {
         this.paidDate = paidDate;
     }
 
-    public double getPaidAmount() {
-        return paidAmount;
+    public List<Payment> getPayments() {
+        return payments;
     }
 
-    public void setPaidAmount(double paidAmount) {
-        this.paidAmount = paidAmount;
+    public void setPayments(Payment payment) {
+        this.payments.add(payment);
     }
 
-    public int getResidentsCount() {
-        return residentsCount;
+    public double getTotalPaid() {
+        return totalPaid;
     }
 
-    public void setResidentsCount(int residentsCount) {
-        this.residentsCount = residentsCount;
+    public void setTotalPaid(double totalPaid) {
+        this.totalPaid = totalPaid;
     }
 }

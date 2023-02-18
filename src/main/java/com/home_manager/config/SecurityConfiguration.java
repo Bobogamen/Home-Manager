@@ -7,11 +7,6 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.AuthenticatedPrincipal;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
@@ -33,9 +28,9 @@ public class SecurityConfiguration {
                 authorizeHttpRequests().
                 requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
                 antMatchers("/favicon.ico", "/", "/register", "/forgot-password", "/reset-password").permitAll().
-                antMatchers("/users/admin").hasRole(RoleEnum.ADMIN.name()).
-                antMatchers("/users/manager").hasRole(RoleEnum.MANAGER.name()).
-                antMatchers("/users/cashier").hasRole(RoleEnum.CASHIER.name()).
+                antMatchers("/admin").hasRole(RoleEnum.ADMIN.name()).
+                antMatchers("/manager").hasRole(RoleEnum.MANAGER.name()).
+                antMatchers("/cashier").hasRole(RoleEnum.CASHIER.name()).
                 anyRequest().authenticated().
         and().
                 formLogin().loginPage("/").

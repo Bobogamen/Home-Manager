@@ -4,10 +4,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -34,12 +31,17 @@ public class HomesGroup {
     private List<Fee> fees;
 
     @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "homesGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Month> months;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> users;
 
     public HomesGroup() {
         this.homes = new HashSet<>();
         this.users = new HashSet<>();
+        this.months = new ArrayList<>();
     }
 
     public long getId() {
@@ -130,5 +132,19 @@ public class HomesGroup {
         this.users = this.users.stream()
                 .filter(u -> u.getId() != user.getId())
                 .collect(Collectors.toSet());
+    }
+
+    public Month getMonthByDate(int month, int year) {
+        return this.getMonths().stream()
+                .filter(m -> m.getNumber() == month && m.getYear() == year)
+                .findFirst().orElse(null);
+    }
+
+    public List<Month> getMonths() {
+        return months.stream().sorted(Comparator.comparing(Month::getYear)).toList();
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

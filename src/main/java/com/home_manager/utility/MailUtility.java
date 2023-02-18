@@ -1,6 +1,6 @@
 package com.home_manager.utility;
 
-import com.home_manager.model.enums.Commons;
+import com.home_manager.model.enums.Mail;
 import net.bytebuddy.utility.RandomString;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,11 +12,11 @@ public class MailUtility {
     }
 
     public static String passwordResetMailSubject() {
-        return Commons.HOME_MANAGER_FORGOTTEN_PASSWORD.getValue();
+        return Mail.HOME_MANAGER_FORGOTTEN_PASSWORD.getValue();
     }
 
     public static String registrationMailSubject() {
-        return Commons.HOME_MANAGER_WELCOME.getValue();
+        return Mail.HOME_MANAGER_WELCOME.getValue();
     }
 
     public static String resetPasswordUrl(HttpServletRequest request, String token) {

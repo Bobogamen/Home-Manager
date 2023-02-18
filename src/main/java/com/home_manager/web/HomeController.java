@@ -122,8 +122,8 @@ public class HomeController {
 
     @PutMapping("/edit-resident{residentId}")
     public String editResident(@PathVariable long homesGroupId,
-                               @PathVariable long homeId,
                                @PathVariable long residentId,
+                               @PathVariable String homeId,
                                @AuthenticationPrincipal HomeManagerUserDetails user,
                                AddResidentDTO addResidentDTO, RedirectAttributes redirectAttributes) {
 

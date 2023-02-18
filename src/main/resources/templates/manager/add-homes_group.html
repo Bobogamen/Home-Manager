@@ -34,7 +34,7 @@
 
                         <div th:text="|#{choose} #{type}|"></div>
                         <select th:field="*{type}" id="type" class="field mt-3">
-                            <option th:each="t : ${T(com.home_manager.model.enums.Commons).values()}"
+                            <option th:each="t : ${T(com.home_manager.model.enums.HomesGroupEnums).values()}"
                                     th:text="${t.getValue()}"
                                     th:value="${t.getValue()}"
                                     th:selected="${t.getValue()} == *{type}">

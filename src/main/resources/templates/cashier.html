@@ -40,9 +40,12 @@
         <!------------------------CASHIER------------------------>
         <th:block sec:authorize="hasRole('CASHIER')">
             <div th:each="hg : ${user.getHomesGroup()}" class="text-center">
-                <a th:href="'/cashier/homesGroup' + ${hg.getId()}">
-                    <h3 th:text="${hg.getName()}"></h3>
-                </a>
+                <form th:action="|/cashier/homesGroup${hg.getId()}|"
+                      th:method="GET">
+                    <input th:value="${now.getMonthValue()}" type="hidden" name="month">
+                    <input th:value="${now.getYear()}" type="hidden" name="year">
+                    <button th:text="${hg.getName()}" type="submit" class="h3"></button>
+                </form>
             </div>
         </th:block>
         <!------------------------CASHIER------------------------>

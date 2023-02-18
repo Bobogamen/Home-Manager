@@ -58,7 +58,7 @@
                     <span th:text="|#{add} #{home}|"></span>
                 </a>
             </div>
-            <div th:unless="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
+            <div th:if="${homesGroup.getHomes().size() > 0}" class="text-center d-flex justify-content-center">
                 <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
                     <h3 th:text="#{homes}"></h3>
                     <table class="table table-hover table-sm table-bordered border-primary">
@@ -102,26 +102,19 @@
                         </tfoot>
                     </table>
                 </div>
-                <div th:if="${fees.size() == 0}" class="text-center d-block justify-content-center">
-                    <h3 th:text="#{no_fee}"></h3>
-                    <div class="add m-2">
-                        <a href="/profile/homesGroup1/add-fee">
-                            <img src="/images/add.png" alt="add" class="icon m-1">
-                            <span>Добави такса</span>
-                        </a>
-                    </div>
-                </div>
-                <div th:unless="${fees.size() == 0}" class="text-center d-flex justify-content-center">
+                <div class="text-center d-flex justify-content-center">
                     <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
                         <h3 th:text="#{fees}"></h3>
-                        <table class="table table-hover table-sm table-bordered border-primary">
+                        <div th:if="${fees.size() == 0}" class="text-center d-block justify-content-center">
+                            <h3 th:text="#{no_fee}"></h3>
+                        </div>
+                        <table th:if="${fees.size() > 0}" class="table table-hover table-sm table-bordered border-primary">
                             <thead>
                             <tr class="bg-info fw-bold align-middle">
                                 <td th:text="#{add_on}"></td>
                                 <td th:text="#{name}"></td>
                                 <td th:text="#{value}"></td>
                                 <td th:text="#{homes}"></td>
-                                <td></td>
                             </tr>
                             </thead>
                             <tbody class="fs-6">
@@ -129,18 +122,18 @@
                                 <td th:text="${#temporals.format(f.getAddedOn(), 'dd-MM-yyyy')}"></td>
                                 <td th:text="${f.getName()}"></td>
                                 <td th:text="${f.getValue()} + #{currency}"></td>
-                                <td></td>
-                                <td><a th:href="|/profile/homesGroup${homesGroup.getId()}/edit-fee${f.getId()}|">
-                                    <img src="/images/edit.png" alt="edit" class="icon">
-                                </a>
+                                <td>
+                                    <a th:href="|/profile/homesGroup${homesGroup.getId()}/edit-fee${f.getId()}|">
+                                        <img src="/images/edit.png" alt="edit" class="icon">
+                                    </a>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                         <div class="add m-2">
-                            <a href="/profile/homesGroup1/add-fee">
+                            <a th:href="|/profile/homesGroup${homesGroup.getId()}/add-fee|">
                                 <img src="/images/add.png" alt="add" class="icon m-1">
-                                <span>Добави такса</span>
+                                <span th:text="#{add-fee}"></span>
                             </a>
                         </div>
                     </div>

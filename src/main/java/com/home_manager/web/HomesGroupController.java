@@ -7,7 +7,7 @@ import com.home_manager.model.entities.Fee;
 import com.home_manager.model.entities.Home;
 import com.home_manager.model.entities.HomesGroup;
 import com.home_manager.model.entities.Resident;
-import com.home_manager.model.enums.Commons;
+import com.home_manager.model.enums.HomesGroupEnums;
 import com.home_manager.model.enums.Notifications;
 import com.home_manager.model.user.HomeManagerUserDetails;
 import com.home_manager.service.HomeService;
@@ -24,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -64,7 +63,8 @@ public class HomesGroupController {
             modelAndView.addObject("fees", fees);
 
             double total = homesGroup.getHomes().stream().mapToDouble(Home::getTotalForMonth).sum();
-            modelAndView.addObject("total", new DecimalFormat("#.##").format(total));
+            modelAndView.addObject("total", total);
+//            modelAndView.addObject("total", new DecimalFormat("#.##").format(total));
 
             return modelAndView;
         } else {
@@ -127,7 +127,7 @@ public class HomesGroupController {
                 }
             }
 
-            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
+            com.home_manager.model.entities.HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             Resident owner = this.residentService.addOwner(addHomeDTO);
             Home home = this.homeService.addHome(addHomeDTO, homesGroup);
 
@@ -152,7 +152,7 @@ public class HomesGroupController {
 
     @ModelAttribute("allTypes")
     public List<String> allTypes() {
-        return Arrays.stream(Commons.values()).map(Commons::getValue).toList();
+        return Arrays.stream(HomesGroupEnums.values()).map(HomesGroupEnums::getValue).toList();
     }
 
 

@@ -7,7 +7,3 @@ function addResident(target) {
 
     formAction.value = formAction.value.replace('/home/', `/home${target.attributes[0].value}/`);
 }
-
-span.onclick = () => xCLose();
-
-window.onclick = (event) => outsideClickClose(event);

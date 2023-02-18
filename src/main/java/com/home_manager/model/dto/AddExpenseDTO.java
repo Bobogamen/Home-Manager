@@ -1,40 +1,21 @@
-package com.home_manager.model.entities;
+package com.home_manager.model.dto;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "expenses")
-public class Expense {
+public class AddExpenseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(nullable = false)
     private LocalDate addedOn;
 
-    @Column(nullable = false)
+    @NotEmpty(message = "{not_empty}")
     private String name;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double value;
 
-    @Column(nullable = false)
+    @NotEmpty(message = "{not_empty}")
     private String documentNumber;
 
-    @ManyToOne
-    private Month month;
-
-    public Expense() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public AddExpenseDTO() {
     }
 
     public LocalDate getAddedOn() {
@@ -61,7 +42,6 @@ public class Expense {
         this.value = value;
     }
 
-
     public String getDocumentNumber() {
         return documentNumber;
     }
@@ -69,13 +49,4 @@ public class Expense {
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
     }
-
-    public Month getMonth() {
-        return month;
-    }
-
-    public void setMonth(Month month) {
-        this.month = month;
-    }
-
 }

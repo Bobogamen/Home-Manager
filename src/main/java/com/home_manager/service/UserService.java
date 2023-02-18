@@ -28,6 +28,9 @@ public class UserService {
         this.httpServletRequest = httpServletRequest;
     }
 
+    public Role admin() {
+        return this.roleRepository.getById(1);
+    }
     public Role manager() {
         return this.roleRepository.getById(2);
     }
@@ -43,6 +46,9 @@ public class UserService {
         newUser.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
         newUser.setRegisteredOn(LocalDate.now());
 
+        if (this.userRepository.count() == 0) {
+            newUser.setRole(admin());
+        }
 
         newUser.setRole(manager());
         newUser.setRole(cashier());

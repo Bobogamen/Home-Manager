@@ -17,7 +17,7 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
 
-    public void addExpenseToMonth(Month month, AddExpenseDTO addExpenseDTO) {
+    public Expense addExpenseToMonth(Month month, AddExpenseDTO addExpenseDTO) {
 
         Expense expense = new Expense();
         expense.setMonth(month);
@@ -26,9 +26,8 @@ public class ExpenseService {
         expense.setValue(addExpenseDTO.getValue());
         expense.setDocumentNumber(addExpenseDTO.getDocumentNumber());
 
-        this.expenseRepository.save(expense);
+        return this.expenseRepository.save(expense);
     }
-
 
     public Expense getExpenseById(long expenseId) {
         return this.expenseRepository.getExpenseById(expenseId);

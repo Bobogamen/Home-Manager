@@ -67,7 +67,7 @@ public class FeeController {
             homes.forEach(h -> this.homeService.setFeeToHome(h, fee));
 
             redirectAttributes.addFlashAttribute("success",
-                    homes.size() == 1 ? Notifications.FEE_ADD_FOR_HOME : Notifications.FEE_ADD_FOR_HOMES);
+                    homes.size() == 1 ? Notifications.FEE_ADD_FOR_HOME : Notifications.FEE_ADD_FOR_HOMES.getValue());
             return "redirect:/profile/homesGroup{homesGroupId}";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -103,7 +103,7 @@ public class FeeController {
 
         inputs.remove("_csrf");
         String name = inputs.remove("name");
-        double value  = Double.parseDouble(inputs.remove("value"));
+        double value = Double.parseDouble(inputs.remove("value"));
 
         if (isAuthorized(homesGroupId, user.getId())) {
 

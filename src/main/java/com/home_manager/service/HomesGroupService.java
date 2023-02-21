@@ -1,7 +1,6 @@
 package com.home_manager.service;
 
 import com.home_manager.model.dto.AddHomesGroupDTO;
-import com.home_manager.model.dto.YearDTO;
 import com.home_manager.model.entities.HomesGroup;
 import com.home_manager.model.entities.User;
 import com.home_manager.repository.HomesGroupRepository;
@@ -76,14 +75,5 @@ public class HomesGroupService {
             });
         }
         this.homesGroupRepository.saveAll(updated);
-    }
-
-    public List<YearDTO> getYears(HomesGroup homesGroup) {
-
-        List<YearDTO> years = new ArrayList<>();
-
-        //TODO
-
-        return years;
     }
 }

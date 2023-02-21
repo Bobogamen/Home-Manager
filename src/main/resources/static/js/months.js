@@ -1,8 +1,8 @@
-function showPayment(data) {
-    fillFooter(fillRows(data));
+function showPayment(data, view) {
+    fillFooter(fillRows(data, view));
 }
 
-function fillRows(data) {
+function fillRows(data, view) {
     let tbody = document.querySelector('.table-fee').tBodies[0];
     let row = document.querySelector('.table-fee').tBodies[0].children[0];
 
@@ -13,12 +13,18 @@ function fillRows(data) {
 
         data.forEach(o => {
             let newRow = row.cloneNode(true)
-            let match = matchSelected(newRow.cells[2].children[0], o.times);
 
             newRow.id = o.id;
             newRow.cells[0].textContent = o.name
+
+            if (view) {
+                let match = matchSelected(newRow.cells[2].children[0], o.times);
+                match.selected = true
+            } else {
+                newRow.cells[2].textContent = o.times
+            }
+
             newRow.cells[1].textContent = o.value
-            match.selected = true
             newRow.cells[3].textContent = o.total.toFixed(2)
 
             total += o.value * o.times
@@ -32,13 +38,25 @@ function fillRows(data) {
     return total;
 }
 
+function changeHeader() {
+    modalTitle.textContent = 'Платено за ' + modalTitle.textContent.substring(6);
+}
+
+function fillTitle(target) {
+    let floorName = target.parentElement.parentElement.parentElement.parentElement.tHead.children[0].children[0].textContent
+    let homeName = target.parentElement.parentElement.parentElement.parentElement.tHead.children[0].children[1].textContent
+    let floorValue = target.parentElement.parentElement.children[0].textContent
+    let homeValue = target.parentElement.parentElement.children[1].textContent;
+
+    modal.querySelector('p').textContent = `${floorName} ${floorValue} ${homeName} ${homeValue}`;
+}
+
 function fillFooter(data) {
     let tfoot = document.querySelector('.table-fee').tFoot.children[0];
     tfoot.children[0].textContent = `Общо: ${data.toFixed(2)}лв`
 }
 
 function matchSelected(target, match) {
-
     for (let i = 0; i < target.length; i++) {
         if (target[i].value == match) {
             return target[i]
@@ -93,21 +111,29 @@ function pay(target) {
     target.parentElement[4].value = collectDataFromRows()
 }
 
+async function viewPayments(target) {
+    let data = await request(`/cashier/homesGroup${target.id}/view-payment?monthId=${target.name}&monthHomeId=${target.value}`, 'GET');
+
+    fillTitle(target)
+    showPayment(data.response)
+    changeHeader()
+    modal.querySelector('form').remove();
+    modal.style.display = 'block';
+}
+
 async function getPayment(target) {
     const homesGroupId = target.id;
     const monthId = target.name;
-    const monthHomeId = target.value
+    const monthHomeId = target.value;
 
     fillMonthHomeId(monthHomeId)
 
     let data = await request(`/cashier/homesGroup${homesGroupId}/get-payment?monthId=${monthId}&monthHomeId=${monthHomeId}`, 'GET');
+
     modal.style.display = 'block';
-    let floorName = target.parentElement.parentElement.parentElement.parentElement.tHead.children[0].children[0].textContent
-    let homeName = target.parentElement.parentElement.parentElement.parentElement.tHead.children[0].children[1].textContent
-    let floorValue = target.parentElement.parentElement.children[0].textContent
-    let homeValue = target.parentElement.parentElement.children[1].textContent;
-    modal.querySelector('p').textContent = `${floorName} ${floorValue} ${homeName} ${homeValue}`;
-    showPayment(data.response)
+
+    fillTitle(target)
+    showPayment(data.response, true);
 }
 
 async function request(url, method, data) {

@@ -37,7 +37,11 @@
                 <a th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/previous|">
                     <img src="/images/back.png" alt="back" class="icon">
                 </a>
-                <h4 th:text="|#{floor} ${home.getFloor()} #{apartment} ${home.getName()} #{residents_count} ${home.getResidents().size()}|" class="m-1"></h4>
+                <h4 class="mb-0 mx-2">
+                    <span th:text="|#{floor} |"></span><span th:text="${home.getFloor()}" class="badge text-bg-primary"></span>
+                    <span th:text="|#{apartment} |"></span><span th:text="${home.getName()}" class="badge text-bg-secondary"></span>
+                    <span th:text="|#{residents_count} |"></span><span th:text="${home.getResidents().size()}" class="badge text-bg-warning"></span>
+                </h4>
                 <a th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/next|">
                     <img src="/images/forward.png" alt="forward" class="icon">
                 </a>
@@ -93,7 +97,7 @@
                                 <thead>
                                 <tr>
                                     <td th:text="#{name}" class="bg-info border-rounded"></td>
-                                    <td th:text="#{currency}" class="bg-info border-rounded"></td>
+                                    <td th:text="#{BGN}" class="bg-info border-rounded"></td>
                                     <td th:text="#{number_single}" class="bg-info border-rounded"></td>
                                     <td th:text="#{total}" class="bg-info border-rounded"></td>
                                 </tr>
@@ -109,7 +113,7 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td th:text="|#{total}: ${#numbers.formatDecimal(home.getTotalForMonth(), 1, 'WHITESPACE', 2, 'POINT')}| + #{currency}"
+                                    <td th:text="|#{total}: ${#numbers.formatDecimal(home.getTotalForMonth(), 1, 'WHITESPACE', 2, 'POINT')}| + #{BGN}"
                                         colspan="4" class="bg-info text-end border-rounded pe-2"></td>
                                 </tr>
                                 </tfoot>

@@ -47,7 +47,11 @@ public class HomePaymentsDTO {
         return total;
     }
 
-    public void setTotal() {
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public void calculateTotal() {
         this.total = this.value * this.times;
     }
 }

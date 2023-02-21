@@ -14,5 +14,5 @@ public interface MonthRepository extends JpaRepository<Month, Long> {
 
     Month getMonthByNumberAndYear(int month, int year);
 
-    List<Month> getMonthByYear(int year);
+    List<Month> getMonthsByYear(int year);
 }

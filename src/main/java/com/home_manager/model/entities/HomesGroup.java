@@ -147,4 +147,16 @@ public class HomesGroup {
     public void setUsers(Set<User> users) {
         this.users = users;
     }
+
+    public List<Integer> getYears() {
+        List<Integer> years = new ArrayList<>();
+
+        this.months.forEach(m -> {
+            if (!years.contains(m.getYear())) {
+                years.add(m.getYear());
+            }
+        });
+
+        return years;
+    }
 }

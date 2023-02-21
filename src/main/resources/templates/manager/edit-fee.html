@@ -20,7 +20,7 @@
                           th:method="POST">
                         <div th:text="#{name}"></div>
                         <input th:value="${fee.getName()}" type="text" name="name" minlength="2" max="30" class="field" required/>
-                        <div th:text="|#{value} (#{currency})|" class="mt-3"></div>
+                        <div th:text="|#{value} (#{BGN})|" class="mt-3"></div>
                         <input th:value="${fee.getValue()}"
                                type="number" name="value" min="0" max="99999999.99" step="0.01" class="field" required/>
                         <div th:text="#{homes}" class="h3 mt-3"></div>

@@ -45,7 +45,7 @@
         <div class="text-center">
             <div class="d-flex justify-content-center align-items-center my-2">
                 <h2 th:text="|${homesGroup.getName()} - ${homesGroup.getType()}|" class="m-1"></h2>
-                <a th:href="|/profile/edit/homesGroup${homesGroup.getId()}|">
+                <a th:href="|/profile/homesGroup${homesGroup.getId()}/edit|">
                     <img src="/images/edit.png" alt="edit" class="icon">
                 </a>
             </div>
@@ -68,7 +68,7 @@
                             <td th:text="#{apartment}"></td>
                             <td th:text="#{owner}"></td>
                             <td th:text="#{residents_count}"></td>
-                            <td th:text="|#{total}(#{currency})|"></td>
+                            <td th:text="|#{total}(#{BGN})|"></td>
                             <td></td>
                         </tr>
                         </thead>
@@ -78,13 +78,10 @@
                             <td th:text="${h.getName()}"></td>
                             <td th:text="|${h.getOwner().getFirstName()} ${h.getOwner().getLastName()}|"></td>
                             <td th:text="${h.getResidents().size()}"></td>
-                            <td th:text="${h.getTotalForMonth()}"></td>
+                            <td th:text="${#numbers.formatDecimal(h.getTotalForMonth(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                             <td>
                                 <a th:href="|/profile/homesGroup${homesGroup.getId()}/home${h.getId()}|" class="add-button">
                                     <img src="/images/home.png" alt="home" class="icon">
-                                </a>
-                                <a class="add-button">
-                                    <img src="/images/fee.png" alt="fee" class="icon">
                                 </a>
                                 <a th:id="${h.getId()}" onclick="addResident(this)" class="add-button">
                                     <img src="/images/add_resident.png" alt="add_resident" class="icon">
@@ -121,7 +118,7 @@
                             <tr th:each="f : ${fees}" class="align-middle">
                                 <td th:text="${#temporals.format(f.getAddedOn(), 'dd-MM-yyyy')}"></td>
                                 <td th:text="${f.getName()}"></td>
-                                <td th:text="${f.getValue()} + #{currency}"></td>
+                                <td th:text="|${#numbers.formatDecimal(f.getValue(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
                                 <td>
                                     <a th:href="|/profile/homesGroup${homesGroup.getId()}/edit-fee${f.getId()}|">
                                         <img src="/images/edit.png" alt="edit" class="icon">

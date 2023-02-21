@@ -7,10 +7,11 @@ import com.home_manager.model.dto.HomePaymentsDTO;
 import com.home_manager.model.entities.Expense;
 import com.home_manager.model.entities.HomesGroup;
 import com.home_manager.model.entities.Month;
-import com.home_manager.model.enums.Months;
+import com.home_manager.model.entities.MonthHomes;
 import com.home_manager.model.enums.Notifications;
 import com.home_manager.model.user.HomeManagerUserDetails;
 import com.home_manager.service.*;
+import com.home_manager.utility.MonthsUtility;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -90,7 +91,7 @@ public class CashierController {
             }
 
             modelAndView.addObject("monthNumber", month);
-            modelAndView.addObject("monthName", getMonthName(month));
+            modelAndView.addObject("monthName", MonthsUtility.getMonthName(month));
             modelAndView.addObject("yearNumber", year);
             modelAndView.addObject("now", this.now);
 
@@ -101,31 +102,13 @@ public class CashierController {
 
             if (currnetMonth != null) {
                 modelAndView.addObject("currentMonth", this.monthService.getMonthById(currnetMonth.getId()));
-                modelAndView.addObject("years", this.homesGroupService.getYears(homesGroup));
+                modelAndView.addObject("years", homesGroup.getYears());
             }
 
             return modelAndView;
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-    }
-
-    private String getMonthName(int month) {
-        return switch (month) {
-            case 1 -> Months.JANUARY.getValue();
-            case 2 -> Months.FEBRUARY.getValue();
-            case 3 -> Months.MARCH.getValue();
-            case 4 -> Months.APRIL.getValue();
-            case 5 -> Months.MAY.getValue();
-            case 6 -> Months.JUNE.getValue();
-            case 7 -> Months.JULY.getValue();
-            case 8 -> Months.AUGUST.getValue();
-            case 9 -> Months.SEPTEMBER.getValue();
-            case 10 -> Months.OCTOBER.getValue();
-            case 11 -> Months.NOVEMBER.getValue();
-            case 12 -> Months.DECEMBER.getValue();
-            default -> "Wrong month number!";
-        };
     }
 
     @PostMapping("/homesGroup{homesGroupId}/create-month")
@@ -135,8 +118,7 @@ public class CashierController {
         if (isAuthorized(homesGroupId, user.getId())) {
             HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
 
-            Month updatedMonth = this.monthService.setHomesToMonth(this.monthService.createMonth(month, year, homesGroup), homesGroup);
-            this.paymentsService.setPayments(updatedMonth);
+            this.monthService.setHomesToMonth(this.monthService.createMonth(month, year, homesGroup), homesGroup);
 
             redirectAttributes.addAttribute("month", month);
             redirectAttributes.addAttribute("year",year);
@@ -166,6 +148,24 @@ public class CashierController {
         }
     }
 
+    @GetMapping("/homesGroup{homesGroupId}/view-payment")
+    @ResponseBody
+    public Map<String, List<HomePaymentsDTO>> viewPaymentsByHomeId(@PathVariable long homesGroupId,
+                                                                  @RequestParam long monthId, @RequestParam long monthHomeId,
+                                                                  @AuthenticationPrincipal HomeManagerUserDetails user) {
+
+        if (isAuthorized(homesGroupId, user.getId())) {
+
+            List<HomePaymentsDTO> paymentsByHome =
+                    this.paymentsService.viewPaymentsByHome(this.monthService.getMonthHomeOfMonthById(this.monthService.getMonthById(monthId), monthHomeId));
+
+            return Collections.singletonMap("response", paymentsByHome);
+
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
     @PostMapping("/homesGroup{homesGroupId}/pay")
     public String pay(@PathVariable long homesGroupId, @RequestParam int month, @RequestParam int year, @RequestParam long monthHomeId,
                       @RequestParam(name = "data") String data, @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) throws Exception {
@@ -174,7 +174,10 @@ public class CashierController {
             ObjectMapper objectMapper = new ObjectMapper();
             FeePaymentDTO[] feePaymentDTOS = objectMapper.readValue(data, FeePaymentDTO[].class);
 
-            this.monthService.setTotalPaymentForHome(month, year, monthHomeId, this.paymentsService.makePayments(monthHomeId, feePaymentDTOS));
+            Month currentMonth = this.monthService.getMonthByMonthNumberAndYear(month, year);
+            MonthHomes monthHomes = currentMonth.getHomeById(monthHomeId);
+
+            this.monthService.setTotalPaymentForHome(currentMonth, monthHomes, this.paymentsService.makePayments(monthHomes, feePaymentDTOS));
 
             redirectAttributes.addFlashAttribute("success", Notifications.PAYMENT_SUCCESSFULLY.getValue());
             return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, month, year);
@@ -203,8 +206,9 @@ public class CashierController {
                 return redirectURL;
             }
 
-            Month currentMonth = this.monthService.getMonthById(month);
-            this.expenseService.addExpenseToMonth(currentMonth, addExpenseDTO);
+            Month currentMonth = this.monthService.getMonthByMonthNumberAndYear(month, year);
+            currentMonth.setExpenses(this.expenseService.addExpenseToMonth(currentMonth, addExpenseDTO));
+
             this.monthService.calculateTotalExpense(currentMonth);
 
             redirectAttributes.addFlashAttribute("success", Notifications.ADDED_SUCCESSFULLY.getValue());
@@ -246,14 +250,16 @@ public class CashierController {
         }
     }
 
-    @GetMapping("/homesGroup{homesGroupId}/year{yearNumber}")
-    public ModelAndView getYear(@PathVariable long homesGroupId, @PathVariable int yearNumber) {
+    @GetMapping("/homesGroup{homesGroupId}/years")
+    public ModelAndView getYear(@PathVariable long homesGroupId) {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("cashier/year");
 
-        modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
-        modelAndView.addObject("year", this.monthService.getYear(yearNumber));
+        HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
+        modelAndView.addObject("homesGroup",  homesGroup);
+        modelAndView.addObject("years", this.monthService.years(homesGroup.getYears()));
+        modelAndView.addObject("now", this.now);
 
         return modelAndView;
     }

@@ -1,5 +1,6 @@
 package com.home_manager.model.entities;
 
+import com.home_manager.utility.MonthsUtility;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -22,16 +23,22 @@ public class Month {
     private int year;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
+    private double currentIncome;
+
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double totalIncome;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double totalExpenses;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
-    private double difference;
+    private double currentDifference;
 
-    @Column(nullable = false)
-    private int paidHomesCount;
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
+    private double totalDifference;
+
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
+    private double previousMonthDifference;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private HomesGroup homesGroup;
@@ -65,6 +72,10 @@ public class Month {
         this.number = number;
     }
 
+    public String getMonthName(int number) {
+        return MonthsUtility.getMonthName(number);
+    }
+
     public int getYear() {
         return year;
     }
@@ -73,38 +84,52 @@ public class Month {
         this.year = year;
     }
 
+    public double getCurrentIncome() {
+        return currentIncome;
+    }
+
+    public void setCurrentIncome(double currentIncome) {
+        this.currentIncome = currentIncome;
+    }
+
     public double getTotalIncome() {
-        return this.homes.stream()
-                .mapToDouble(h ->
-                        h.getPayments().stream().mapToDouble(Payment::getValuePaid).sum()).sum();
+        return this.totalIncome;
     }
 
     public void setTotalIncome(double totalIncome) {
         this.totalIncome = totalIncome;
     }
 
-    public int getPaidHomesCount() {
-        return paidHomesCount;
-    }
-
-    public void setPaidHomesCount(int paidHomesCount) {
-        this.paidHomesCount = paidHomesCount;
-    }
-
     public double getTotalExpenses() {
-        return this.expenses.stream().mapToDouble(Expense::getValue).sum();
+        return totalExpenses;
     }
 
     public void setTotalExpenses(double totalExpenses) {
         this.totalExpenses = totalExpenses;
     }
 
-    public double getDifference() {
-        return getTotalIncome() - getTotalExpenses();
+    public double getCurrentDifference() {
+        return currentDifference;
     }
 
-    public void setDifference(double difference) {
-        this.difference = difference;
+    public void setCurrentDifference(double currentDifference) {
+        this.currentDifference = currentDifference;
+    }
+
+    public double getTotalDifference() {
+        return totalDifference;
+    }
+
+    public void setTotalDifference(double totalDifference) {
+        this.totalDifference = totalDifference;
+    }
+
+    public double getPreviousMonthDifference() {
+        return previousMonthDifference;
+    }
+
+    public void setPreviousMonthDifference(double previousMonthDifference) {
+        this.previousMonthDifference = previousMonthDifference;
     }
 
     public HomesGroup getHomesGroup() {
@@ -127,7 +152,11 @@ public class Month {
         return expenses;
     }
 
-    public void setExpenses(List<Expense> expenses) {
-        this.expenses = expenses;
+    public void setExpenses(Expense expenses) {
+        this.expenses.add(expenses);
+    }
+
+    public MonthHomes getHomeById(long monthHomeId) {
+        return this.homes.stream().filter(h -> h.getId() == monthHomeId).iterator().next();
     }
 }

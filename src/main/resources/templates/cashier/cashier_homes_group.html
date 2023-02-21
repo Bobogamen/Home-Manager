@@ -11,7 +11,7 @@
 <!-- The Modal Payment -->
 <div class="modal faded" id="mar">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content card-resident">
             <div class="modal-header">
                 <h5 th:text="|#{fees} ${monthName} ${yearNumber}|" class="modal-title"></h5>
                 <button id="close" type="button" class="add-button">
@@ -26,7 +26,7 @@
                             <thead>
                             <tr>
                                 <td th:text="#{name}" class="bg-info border-rounded"></td>
-                                <td th:text="#{currency}" class="bg-info border-rounded"></td>
+                                <td th:text="#{BGN}" class="bg-info border-rounded"></td>
                                 <td th:text="#{number_single}" class="bg-info border-rounded"></td>
                                 <td th:text="#{total}" class="bg-info border-rounded"></td>
                             </tr>
@@ -82,6 +82,11 @@
                 </a>
                 <div>
                     <div class="d-inline-flex justify-content-center align-items-center my-2">
+                        <div>
+                            <a th:href="|/cashier/homesGroup${homesGroup.getId()}/years|">
+                                <button th:text="#{years}" class="btn btn-dark years"></button>
+                            </a>
+                        </div>
                         <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${monthNumber - 1}&year=${yearNumber}|">
                             <img src="/images/back.png" alt="back" class="icon">
                         </a>
@@ -124,12 +129,6 @@
 
                 <div th:if="${currentMonth} != null" class="text-center d-flex justify-content-center">
                     <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
-                        <h3 th:text="#{years}"></h3>
-                        <h4>2010</h4>
-                        <h4>2011</h4>
-                        <h4>2012</h4>
-                    </div>
-                    <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
                         <h3 th:text="|${homesGroup.getName()} #{for} ${monthName} ${yearNumber}|"></h3>
                         <table class="table table-hover table-sm table-bordered border-primary">
                             <thead>
@@ -137,7 +136,7 @@
                                 <td th:text="#{floor}"></td>
                                 <td th:text="#{apartment}"></td>
                                 <td th:text="#{owner}"></td>
-                                <td th:text="|#{total}(#{currency})|"></td>
+                                <td th:text="|#{total}(#{BGN})|"></td>
                                 <td th:text="#{paid_date}"></td>
                                 <td th:text="#{signature}"></td>
                             </tr>
@@ -154,9 +153,13 @@
                                             th:id="${homesGroup.getId()}"
                                             th:name="${h.getMonth().getId()}"
                                             th:value="${h.getId()}"
-                                            class="button" onclick="getPayment(this)"></button>
-                                    <span th:if="${h.getPaidDate() != null}"
-                                          th:text="${#temporals.format(h.getPaidDate(), 'dd-MM-yyyy')}"></span>
+                                            class="button py-1" onclick="getPayment(this)"></button>
+                                    <button th:if="${h.getPaidDate() != null}"
+                                            th:text="${#temporals.format(h.getPaidDate(), 'dd-MM-yyyy')}"
+                                            th:id="${homesGroup.getId()}"
+                                            th:name="${h.getMonth().getId()}"
+                                            th:value="${h.getId()}"
+                                            class="button py-0 px-1 m-0" onclick="viewPayments(this)"></button>
                                 </td>
                                 <td>
                                     <div th:if="${h.getPaidDate() != null}">
@@ -168,7 +171,7 @@
                             <tfoot>
                             <tr class="bg-info fw-bold align-middle">
                                 <td th:text="#{total}" colspan="3"></td>
-                                <td th:text="${#numbers.formatDecimal(currentMonth.getTotalIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -178,24 +181,28 @@
                     <div class="text-center justify-content-center">
                         <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content bg-light">
                             <h3 th:text="|#{total} #{for} ${monthName} ${yearNumber}|"></h3>
-                            <div th:if="${currentMonth.getExpenses().size() == 0} and ${currentMonth.getTotalIncome() == 0}" class="text-center d-block justify-content-center">
+                            <div th:if="${currentMonth.getExpenses().size() == 0} and ${currentMonth.getCurrentIncome() == 0}"
+                                 class="text-center d-block justify-content-center">
                                 <h3 th:text="|#{no_expenses}/#{incomes}|"></h3>
                             </div>
-                            <table th:if="${currentMonth.getExpenses().size() > 0} or ${currentMonth.getTotalExpenses() != 0}" class="table table-hover table-sm table-bordered border-primary">
+                            <table th:if="${currentMonth.getExpenses().size() > 0} or ${currentMonth.getCurrentIncome() > 0}"
+                                   class="table table-hover table-sm table-bordered border-primary">
                                 <tbody class="fs-6">
                                 <tr class="align-middle">
                                     <td th:text="#{incomes}"></td>
-                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getTotalIncome(), 1, 'WHITESPACE', 2, 'POINT')} #{currency}|"></td>
+                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
                                 </tr>
                                 <tr class="align-middle">
                                     <td th:text="#{expenses}"></td>
-                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')} #{currency}|"></td>
+                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr class="bg-info fw-bold align-middle">
                                     <td th:text="#{difference}"></td>
-                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getDifference(), 1, 'WHITESPACE', 2, 'POINT')} #{currency}|"></td>
+                                    <td th:text="(${currentMonth.getCurrentDifference()} > 0 ?
+                                '+' + ${#numbers.formatDecimal(currentMonth.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')}
+                                : ${#numbers.formatDecimal(currentMonth.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')}) + #{BGN}"></td>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -208,23 +215,25 @@
                             <table th:if="${currentMonth.getExpenses().size() > 0}" class="table table-hover table-sm table-bordered border-primary">
                                 <thead>
                                 <tr class="bg-info fw-bold align-middle">
+                                    <td>#</td>
                                     <td th:text="#{creation}"></td>
                                     <td th:text="#{name}"></td>
-                                    <td th:text="|#{value}(#{currency})|"></td>
+                                    <td th:text="|#{value}(#{BGN})|"></td>
                                     <td th:text="#{document_number}"></td>
                                 </tr>
                                 </thead>
                                 <tbody class="fs-6">
-                                <tr th:each="e : ${currentMonth.getExpenses()}" class="align-middle">
+                                <tr th:each="e,index : ${currentMonth.getExpenses()}" class="align-middle">
+                                    <td th:text="${index.count}"></td>
                                     <td th:text="${#temporals.format(e.getAddedOn(), 'dd-MM-yyyy')}"></td>
                                     <td th:text="${e.getName()}"></td>
-                                    <td th:text="${e.getValue()}"></td>
+                                    <td th:text="${#numbers.formatDecimal(e.getValue(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                     <td th:text="${e.getDocumentNumber()}"></td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr class="bg-info fw-bold align-middle">
-                                    <td th:text="#{total}" colspan="2"></td>
+                                    <td th:text="#{total}" colspan="3"></td>
                                     <td th:text="${#numbers.formatDecimal(currentMonth.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                     <td></td>
                                 </tr>

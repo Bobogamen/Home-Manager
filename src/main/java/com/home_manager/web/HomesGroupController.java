@@ -156,7 +156,7 @@ public class HomesGroupController {
     }
 
 
-    @GetMapping("/edit/homesGroup{homesGroupId}")
+    @GetMapping("/homesGroup{homesGroupId}/edit")
     public ModelAndView editHomesGroup(@PathVariable long homesGroupId, @AuthenticationPrincipal HomeManagerUserDetails user) {
 
         if (isAuthorized(homesGroupId, user.getId())) {
@@ -175,7 +175,7 @@ public class HomesGroupController {
         return new AddHomesGroupDTO();
     }
 
-    @PutMapping("/edit/homesGroup{homesGroupId}")
+    @PutMapping("/homesGroup{homesGroupId}/edit")
     public String editHomesGroup(@PathVariable long homesGroupId, @AuthenticationPrincipal HomeManagerUserDetails user,
                                  @Valid AddHomesGroupDTO addHomesGroupDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 

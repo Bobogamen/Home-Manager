@@ -8,6 +8,6 @@ public class HomeManagerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(HomeManagerApplication.class, args);
-        System.out.println("Домоуправител е стартиран...");
+        System.out.println("Home manager is started...");
     }
 }

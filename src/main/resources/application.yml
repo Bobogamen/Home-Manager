@@ -1,0 +1,61 @@
+logging:
+  level:
+    blog: WARN
+    org:
+      hibernate:
+        SQL: ERROR
+        type:
+          descriptor: ERROR
+      nodeValue: WARN
+      springframework:
+        security: ERROR
+server:
+  port: 8080
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/home_manager?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+    password: 1234
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+  mail:
+    host: smtp.abv.bg
+    protocol: smtp
+    jndi-name: mail/Session
+    username: homgr@abv.bg
+    password: d1v9d0FF
+    port: 465
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+          mime:
+            charset: true
+  mvc:
+    hidden-method:
+      filter:
+        enabled: true
+  sql:
+    init:
+      mode: never
+  thymeleaf:
+    cache: false
+    enabled: true
+  web:
+    resources:
+      static-locations:
+        - file:src/main/resources/static/
+        - classpath:/static/

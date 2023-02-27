@@ -13,10 +13,10 @@ server:
   port: 8080
 spring:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/home_manager?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    username: root
-    password: 1234
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgres://home_manager_user:iy9B11DQsbUJPVuvejvA4V0AjaFOFWkM@dpg-cftgi99a6gdotceoiqd0-a.frankfurt-postgres.render.com/home_manager
+    username: home_manager_user
+    password: ${db_password}
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -24,14 +24,14 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
   mail:
     host: smtp.abv.bg
     protocol: smtp
     jndi-name: mail/Session
     username: homgr@abv.bg
-    password: d1v9d0FF
+    password: ${mail_password}
     port: 465
     default-encoding: UTF-8
     properties:

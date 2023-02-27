@@ -67,7 +67,7 @@ public class HomeController {
 
     private ModelAndView getModelAndView(long homesGroupId, long homeId, String state) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/manager/home");
+        modelAndView.setViewName("manager/home");
 
         HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
         modelAndView.addObject("homesGroup", homesGroup);

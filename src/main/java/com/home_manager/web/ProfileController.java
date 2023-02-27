@@ -132,7 +132,7 @@ public class ProfileController {
 
         if (this.request.isUserInRole("MANAGER")) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("/manager/assign");
+            modelAndView.setViewName("manager/assign");
             modelAndView.addObject("manager", this.userService.getUserById(user.getId()));
 
             return modelAndView;

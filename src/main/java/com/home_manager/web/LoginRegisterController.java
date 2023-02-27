@@ -41,7 +41,7 @@ public class LoginRegisterController {
 
     @GetMapping("/register")
     public String register() {
-        return "/register";
+        return "register";
     }
 
     @ModelAttribute("registrationDTO")

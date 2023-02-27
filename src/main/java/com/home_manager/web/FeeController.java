@@ -45,7 +45,7 @@ public class FeeController {
     private ModelAndView addFee(@PathVariable long homesGroupId) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/manager/add-fee");
+        modelAndView.setViewName("manager/add-fee");
 
         modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
 
@@ -78,7 +78,7 @@ public class FeeController {
     public ModelAndView editFee(@PathVariable long homesGroupId, @PathVariable long feeId, @AuthenticationPrincipal HomeManagerUserDetails user) {
         if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("/manager/edit-fee");
+            modelAndView.setViewName("manager/edit-fee");
 
             HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             modelAndView.addObject("homesGroup", homesGroup);

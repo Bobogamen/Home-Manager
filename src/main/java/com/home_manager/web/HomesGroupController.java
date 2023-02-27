@@ -54,7 +54,7 @@ public class HomesGroupController {
 
         if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("/manager/homes_group");
+            modelAndView.setViewName("manager/homes_group");
 
             HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             modelAndView.addObject("homesGroup", homesGroup);
@@ -78,7 +78,7 @@ public class HomesGroupController {
 
         if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("/manager/add_home");
+            modelAndView.setViewName("manager/add_home");
             modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
             return modelAndView;
 
@@ -161,7 +161,7 @@ public class HomesGroupController {
 
         if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("/manager/edit-homes_group");
+            modelAndView.setViewName("manager/edit-homes_group");
             modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
 
             return modelAndView;

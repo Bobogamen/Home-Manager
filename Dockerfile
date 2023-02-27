@@ -1,4 +1,5 @@
-FROM gradle:jdk18 AS build
+FROM openjdk:18-alpine
 VOLUME /tmp
-COPY /build/libs/HomeManager.jar app.jar
+ARG JAR_FILE
+COPY ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]

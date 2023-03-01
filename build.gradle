@@ -29,6 +29,15 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+      'Main-Class': 'com.home_manager.HomeManagerApplication'
+    )
+  }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

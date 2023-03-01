@@ -13,10 +13,10 @@ server:
   port: 8080
 spring:
   datasource:
-    driverClassName: org.postgresql.Driver
-    url: jdbc:postgres://home_manager_user:iy9B11DQsbUJPVuvejvA4V0AjaFOFWkM@dpg-cftgi99a6gdotceoiqd0-a.frankfurt-postgres.render.com/home_manager
-    username: home_manager_user
-    password: ${db_password}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${{ MYSQLUSER }}:${{ MYSQLPASSWORD }}@${{ MYSQLHOST }}:${{ MYSQLPORT }}/${{ MYSQLDATABASE }}
+    username: ${MYSQLUSER}
+    password: ${MYSQLPASSWORD}
   jpa:
     defer-datasource-initialization: true
     hibernate:

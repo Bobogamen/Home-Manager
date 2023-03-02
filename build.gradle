@@ -6,6 +6,14 @@ plugins {
 
 group = 'com.home_manager'
 
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'com.home_manager.HomeManagerApplication'
+    )
+  }
+}
+
 repositories {
     mavenCentral()
 }

@@ -6,6 +6,10 @@ plugins {
 
 group = 'com.home_manager'
 
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+
 jar {
   manifest {
     attributes(

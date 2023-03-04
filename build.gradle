@@ -22,7 +22,7 @@ apply plugin: 'org.springframework.boot'
 jar {
     manifest {
         attributes(
-                'Main-Class': 'com.home_manage.HomeManagerApplication'
+                'Main-Class': 'com.home_manager.HomeManagerApplication'
         )
     }
 }

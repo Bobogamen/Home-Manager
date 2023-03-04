@@ -127,7 +127,7 @@ public class HomesGroupController {
                 }
             }
 
-            com.home_manager.model.entities.HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
+            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             Resident owner = this.residentService.addOwner(addHomeDTO);
             Home home = this.homeService.addHome(addHomeDTO, homesGroup);
 
@@ -143,7 +143,7 @@ public class HomesGroupController {
             }
 
             redirectAttributes.addFlashAttribute("success", Notifications.HOME_ADDED_SUCCESSFULLY.getValue());
-            return "redirect:/profile/homesGroup{id}";
+            return "redirect:/profile/homesGroup{homesGroupId}";
 
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);

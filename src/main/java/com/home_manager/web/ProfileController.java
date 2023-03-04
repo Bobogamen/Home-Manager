@@ -181,10 +181,6 @@ public class ProfileController {
 
         redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
 
-        if (this.request.isUserInRole("CASHIER")) {
-            return "redirect:/cashier";
-        }
-
         return "redirect:/profile";
     }
 

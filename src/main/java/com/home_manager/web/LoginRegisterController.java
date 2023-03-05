@@ -64,7 +64,8 @@ public class LoginRegisterController {
         }
 
         this.userService.register(registrationDTO);
-        this.emailService.sendRegistrationEmail(registrationDTO.getEmail());
+        System.out.printf("%s is registered successfully%n", registrationDTO.getEmail());
+//        this.emailService.sendRegistrationEmail(registrationDTO.getEmail());
 
         redirectAttributes.addFlashAttribute("success", Notifications.REGISTRATION_SUCCESSFULLY.getValue());
 

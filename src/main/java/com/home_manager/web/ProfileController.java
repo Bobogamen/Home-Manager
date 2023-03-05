@@ -119,7 +119,7 @@ public class ProfileController {
             }
 
             this.userService.registerCashier(registrationDTO, user.getId());
-            this.emailService.sendCashierRegistrationEmail(registrationDTO.getEmail(), user, MailUtility.appUrl(request));
+//            this.emailService.sendCashierRegistrationEmail(registrationDTO.getEmail(), user, MailUtility.appUrl(request));
 
             redirectAttributes.addFlashAttribute("success", Notifications.CASHIER_REGISTRATION_SUCCESSFULLY.getValue());
         }

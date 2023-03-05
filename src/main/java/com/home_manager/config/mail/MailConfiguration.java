@@ -27,9 +27,6 @@ public class MailConfiguration {
         mailSender.setPassword(mailProperties.getPassword());
         mailSender.setJavaMailProperties(setProperty(mailProperties.getProperties()));
 
-        System.out.println(mailProperties.getUsername());
-        System.out.println(mailProperties.getPassword());
-
         return  mailSender;
     }
 

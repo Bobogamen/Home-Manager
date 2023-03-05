@@ -39,17 +39,17 @@ public class ForgotAndResetPasswordController {
     public String forgotPassword(HttpServletRequest request, String email, RedirectAttributes redirectAttributes) {
         boolean found = this.userService.findEmail(email);
 
-//        if (found) {
-//            this.userService.updateResetPasswordToken(MailUtility.getToken(), email);
-//
-//            try {
-//                this.emailService.sendRecoveryPasswordEmail(email, request);
-//                System.out.printf("%s request a password reset%n", email);
-//            } catch (Exception exception) {
-//                System.out.println("Fail to sent password reset email");
-//                throw new RuntimeException(exception.getMessage());
-//            }
-//        }
+        if (found) {
+            this.userService.updateResetPasswordToken(MailUtility.getToken(), email);
+
+            try {
+                this.emailService.sendRecoveryPasswordEmail(email, request);
+                System.out.printf("%s request a password reset%n", email);
+            } catch (Exception exception) {
+                System.out.println("Fail to sent password reset email");
+                throw new RuntimeException(exception.getMessage());
+            }
+        }
 
         redirectAttributes.addFlashAttribute("foundEmail", found);
         redirectAttributes.addFlashAttribute("email", email);

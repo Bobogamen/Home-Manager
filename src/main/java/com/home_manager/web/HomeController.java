@@ -9,6 +9,7 @@ import com.home_manager.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
@@ -79,7 +80,7 @@ public class HomeController {
         } else {
             if (state.equals("next")) {
                 modelAndView.addObject("home", nextPreviousHomeFinder(homesGroup.getHomes(), homeId, true));
-            } else if (state.equals("previous")){
+            } else if (state.equals("previous")) {
                 modelAndView.addObject("home", nextPreviousHomeFinder(homesGroup.getHomes(), homeId, false));
             }
         }
@@ -120,6 +121,23 @@ public class HomeController {
         return "redirect:/profile/homesGroup{homesGroupId}";
     }
 
+    @GetMapping("/edit-owner{residentId}")
+    public ModelAndView editOwner(@PathVariable long homesGroupId, @PathVariable long homeId,
+                                  @PathVariable long residentId, @AuthenticationPrincipal HomeManagerUserDetails user) {
+
+        if (isAuthorized(homesGroupId, user.getId())) {
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("manager/edit_owner");
+            modelAndView.addObject("owner", this.residentService.getResidentById(residentId));
+            modelAndView.addObject("home", this.homeService.getHomeById(homeId));
+
+            return modelAndView;
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
     @PutMapping("/edit-resident{residentId}")
     public String editResident(@PathVariable long homesGroupId,
                                @PathVariable long residentId,
@@ -135,6 +153,40 @@ public class HomeController {
         }
 
         return "redirect:/profile/homesGroup{homesGroupId}/home{homeId}";
+    }
+
+    @GetMapping("/delete-resident{residentId}")
+    public ModelAndView deleteResident(@PathVariable long homesGroupId, @PathVariable long homeId, @PathVariable long residentId,
+                                       @AuthenticationPrincipal HomeManagerUserDetails user) {
+
+        if (isAuthorized(homesGroupId, user.getId())) {
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("manager/delete_resident");
+            modelAndView.addObject("resident", this.residentService.getResidentById(residentId));
+
+            return modelAndView;
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @DeleteMapping("/delete-resident{residentId}")
+    public String deleteResident(@PathVariable long homesGroupId, @PathVariable long homeId, @PathVariable long residentId,
+                                 @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) {
+
+        if (isAuthorized(homesGroupId, user.getId())) {
+
+            this.residentService.deleteResidentById(residentId);
+
+            redirectAttributes.addFlashAttribute("fail", Notifications.RESIDENT_DELETED_SUCCESSFULLY.getValue());
+
+            return "redirect:/profile/homesGroup{homesGroupId}/home{homeId}";
+
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
     }
 
     @PutMapping("/edit-fee-times{feeId}")

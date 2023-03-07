@@ -1,5 +1,8 @@
 package com.home_manager.model.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,7 +26,7 @@ public class Resident {
 
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Home home;
 
     public Resident() {

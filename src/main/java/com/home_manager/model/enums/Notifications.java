@@ -21,7 +21,8 @@ public enum Notifications {
     ASSIGN_SUCCESSFULLY,
     CREATED_SUCCESSFULLY,
     PAYMENT_SUCCESSFULLY,
-    ADDED_SUCCESSFULLY;
+    ADDED_SUCCESSFULLY,
+    RESIDENT_DELETED_SUCCESSFULLY;
     private Properties properties;
 
     public void init() {

@@ -70,5 +70,13 @@ public class ResidentService {
 
         this.residentRepository.save(resident);
     }
+
+    public Resident getResidentById(long residentId) {
+        return this.residentRepository.getResidentById(residentId);
+    }
+
+    public void deleteResidentById(long residentId) {
+        this.residentRepository.deleteById(residentId);
+    }
 }
 

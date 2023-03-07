@@ -40,7 +40,8 @@
                 <h4 class="mb-0 mx-2">
                     <span th:text="|#{floor} |"></span><span th:text="${home.getFloor()}" class="badge text-bg-primary"></span>
                     <span th:text="|#{apartment} |"></span><span th:text="${home.getName()}" class="badge text-bg-secondary"></span>
-                    <span th:text="|#{residents_count} |"></span><span th:text="${home.getResidents().size()}" class="badge text-bg-warning"></span>
+                    <span th:text="|#{residents_count} |"></span><span th:text="${home.getResidents().size()}"
+                                                                       class="badge text-bg-warning"></span>
                 </h4>
                 <a th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/next|">
                     <img src="/images/forward.png" alt="forward" class="icon">
@@ -50,8 +51,16 @@
                 <div class="mx-5">
                     <div class="card card-resident">
                         <div class="card-header">
-                            <h3 th:text="|#{owner} ${home.getOwner().getFirstName()} ${home.getOwner().getLastName()}|"></h3>
+                            <th:block th:if="${home.getOwner().getHome() != null}">
+                                <h3 th:text="|#{owner} ${home.getOwner().getFirstName()} ${home.getOwner().getLastName()}|"></h3>
+                            </th:block>
 
+                            <div th:if="${home.getOwner().getHome() == null}" class="d-inline-flex">
+                                <h3 th:text="#{owner}" class="pe-3"></h3>
+                                <a th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/edit-owner${home.getOwner().getId()}|">
+                                    <h3 th:text="|${home.getOwner().getFirstName()} ${home.getOwner().getLastName()}|"></h3>
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body text-start pt-0">
                             <div th:each="r, index : ${home.getResidents()}" class="card-body m-3 bg-success border border-dark rounded">
@@ -77,9 +86,14 @@
                                     <input th:value="${r.getPhoneNumber() != ''} ? ${r.getPhoneNumber()} : ''"
                                            th:placeholder="${r.getPhoneNumber() == ''} ? #{phone_number} : ''"
                                            type="text" id="phoneNumber" name="phoneNumber" class="field-fit-content px-1 mb-1">
-                                    <span id="button" class="text-end pt-1 ms-5 d-none">
+                                    <span id="button" class="d-none">
                                         <button th:id="${index.count}"
-                                                th:text="#{change}" type="submit" class="btn btn-warning"></button>
+                                                th:text="#{change}" type="submit" class="btn btn-warning">
+                                        </button>
+                                        <a th:if="${home.getOwner().getId() != r.getId()}"
+                                           th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/delete-resident${r.getId()}|">
+                                            <img src="/images/delete.png" alt="delete" class="icon pointer">
+                                        </a>
                                     </span>
                                 </form>
                             </div>
@@ -105,8 +119,10 @@
                                 <tbody>
                                 <tr th:each="f : ${home.getFees()}" class="align-middle">
                                     <td th:text="${f.getFee().getName()}" class="border-rounded"></td>
-                                    <td th:text="${#numbers.formatDecimal(f.getFee().getValue(), 1, 'WHITESPACE', 2, 'POINT')}" class="border-rounded"></td>
-                                    <td th:text="${f.getTimes()}" th:id="${f.getId()}" class="border-rounded" onclick="editFeeTimes(this)"></td>
+                                    <td th:text="${#numbers.formatDecimal(f.getFee().getValue(), 1, 'WHITESPACE', 2, 'POINT')}"
+                                        class="border-rounded"></td>
+                                    <td th:text="${f.getTimes()}" th:id="${f.getId()}" class="border-rounded"
+                                        onclick="editFeeTimes(this)"></td>
                                     <td th:text="${#numbers.formatDecimal(f.getFee().getValue() * f.getTimes(), 1, 'WHITESPACE', 2, 'POINT')}"
                                         class="border-rounded"></td>
                                 </tr>

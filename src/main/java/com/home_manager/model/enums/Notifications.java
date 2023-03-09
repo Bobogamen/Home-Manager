@@ -23,6 +23,7 @@ public enum Notifications {
     PAYMENT_SUCCESSFULLY,
     ADDED_SUCCESSFULLY,
     RESIDENT_DELETED_SUCCESSFULLY;
+
     private Properties properties;
 
     public void init() {

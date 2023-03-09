@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/profile/homesGroup{homesGroupId}")
@@ -53,21 +54,33 @@ public class FeeController {
     }
 
     @PostMapping("/add-fee")
-    private String addFee(@PathVariable long homesGroupId, String name, double value,
-                          @RequestParam(name = "homes", required = false) List<Long> homes, RedirectAttributes redirectAttributes,
-                          @AuthenticationPrincipal HomeManagerUserDetails user) {
+    private String addFee(@PathVariable long homesGroupId, @RequestParam Map<String, String> inputs,
+                          RedirectAttributes redirectAttributes, @AuthenticationPrincipal HomeManagerUserDetails user) {
 
-        if (homes == null) {
+        inputs.remove("_csrf");
+        String name = inputs.remove("name");
+        double value = Double.parseDouble(inputs.remove("value"));
+
+        if (inputs.size() == 0) {
             redirectAttributes.addFlashAttribute("fail", Notifications.CHOOSE_AT_LEAST_ONE_HOME.getValue());
             return "redirect:/profile/homesGroup{homesGroupId}/add-fee";
         }
 
         if (isAuthorized(homesGroupId, user.getId())) {
+
+            List<Long> homes = inputs.entrySet().stream().map( entry -> {
+                if (entry.getValue().equals("true")) {
+                    return Long.parseLong(entry.getKey());
+                }
+
+                return null;
+            }).filter(Objects::nonNull).toList();
+
             Fee fee = this.feeService.addFee(name, value, this.homesGroupService.getHomesGroupById(homesGroupId));
             homes.forEach(h -> this.homeService.setFeeToHome(h, fee));
 
             redirectAttributes.addFlashAttribute("success",
-                    homes.size() == 1 ? Notifications.FEE_ADD_FOR_HOME : Notifications.FEE_ADD_FOR_HOMES.getValue());
+                    inputs.size() == 1 ? Notifications.FEE_ADD_FOR_HOME.getValue() : Notifications.FEE_ADD_FOR_HOMES.getValue());
             return "redirect:/profile/homesGroup{homesGroupId}";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);

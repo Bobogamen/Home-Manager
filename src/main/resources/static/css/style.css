@@ -212,6 +212,7 @@ a:hover {
 }
 
 .notificationRegister {
+    display: block;
     font-size: 0.9rem;
     text-align: center;
     max-width: 24rem;
@@ -263,6 +264,20 @@ a:hover {
     height: 1.8rem;
 }
 
+.big-icon {
+    width: 9rem;
+    height: 9rem;
+}
+
+.homes-group {
+    background-color: #69ef8a;
+    border-radius: 1rem;
+    width: fit-content;
+    display: grid;
+    padding: 0.6rem 0.6rem 0.4rem 0.6rem;
+    border: 0.2rem outset #0e1111;
+}
+
 .faded {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
@@ -307,6 +322,10 @@ a:hover {
 
 .years {
     margin: 0 0 0 -25rem;
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 /* ---------- Utilities END ---------- */

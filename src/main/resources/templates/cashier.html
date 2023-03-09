@@ -17,7 +17,7 @@
             <div class="text-center">
                 <h3 th:if="${user.getCashiers().size() == 0}" th:text="#{no_cashier}"></h3>
                 <h3 th:if="${user.getHomesGroup().size() == 0}" th:text="#{no_homes_group}"></h3>
-                <th:block th:if="${user.getCashiers().size() > 0 && user.getHomesGroup().size() > 0}">
+                <th:block th:if="${user.getHomesGroup().size() > 0}">
                     <div class="add m-2">
                         <a href="/profile/register-cashier">
                             <img src="/images/add.png" alt="add" class="icon m-1">

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,10 +43,8 @@ public class ForgotAndResetPasswordController {
         if (found) {
             this.userService.updateResetPasswordToken(MailUtility.getToken(), email);
 
-
             try {
                 this.emailService.sendRecoveryPasswordEmail(email, request);
-
                 System.out.printf("%s request a password reset%n", email);
             } catch (Exception exception) {
                 System.out.println("Fail to sent password reset email");
@@ -62,9 +61,13 @@ public class ForgotAndResetPasswordController {
 
 
     @GetMapping("/reset-password")
-    public String resetPassword(@RequestParam String token, Model model) {
-        model.addAttribute("token", token);
-        return "/reset_password";
+    public ModelAndView resetPassword(@RequestParam String token) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("reset_password");
+        modelAndView.addObject("token", token);
+
+        return modelAndView;
     }
 
     @ModelAttribute("passwordResetDTO")

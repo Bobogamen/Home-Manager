@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <th:block sec:authorize="isAuthenticated()">
             <section th:replace="fragments/notification :: section"></section>
-            <nav th:replace="/fragments/nav_bar :: nav"></nav>
+            <nav th:replace="fragments/nav_bar :: nav"></nav>
         </th:block>
         <div class="row line">
             <div class="row justify-content-center">

@@ -4,6 +4,11 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+ER_Diagram.png
+!**/src/main/resources/application.yml
+src/main/resources/application.yml
+
+
 
 ### STS ###
 .apt_generated
@@ -16,7 +21,6 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-/src/main/resources/application.yml
 
 ### IntelliJ IDEA ###
 .idea

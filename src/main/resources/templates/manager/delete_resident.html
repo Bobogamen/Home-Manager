@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="|#{delete} #{resident}|"></title>
+
+</head>
+<body>
+<main class="w-100">
+    <div class="container-fluid">
+        <section th:replace="fragments/notification :: section"></section>
+        <nav th:replace="fragments/nav_bar :: nav"></nav>
+        <div class="row line">
+            <div class="row justify-content-center">
+                <div class="d-grid justify-content-center align-items-center mt-4">
+                    <h3 th:text="|#{delete} #{resident} #{in} #{apartment} ${resident.getHome().getName()}|" class="text-center"></h3>
+                    <div class="card m-auto">
+                        <div class="card-body text-center m-3 bg-success border border-dark rounded">
+                            <form th:action="@{|/profile/homesGroup${homesGroupId}/home${homeId}/delete-resident${resident.getId()}|}"
+                                  th:method="DELETE">
+                                <input th:value="${resident.getFirstName() != ''} ? ${resident.getFirstName()} : ''"
+                                       th:placeholder="${resident.getFirstName() == ''} ? #{first_name} : ''"
+                                       type="text" id="firstName" name="firstName" class="field-fit-content px-1 mb-1">
+
+                                <input th:value="${resident.getMiddleName() != ''} ? ${resident.getMiddleName()} : ''"
+                                       th:placeholder="${resident.getMiddleName() == ''} ? #{middle_name} : ''"
+                                       type="text" id="middleName" name="middleName" class="field-fit-content px-1 mb-1">
+
+                                <input th:value="${resident.getLastName() != ''} ? ${resident.getLastName()} : ''"
+                                       th:placeholder="${resident.getLastName() == ''} ? #{last_name} : ''"
+                                       type="text" id="lastName" name="lastName" class="field-fit-content px-1 mb-1">
+
+                                <input th:value="${resident.getEmail() != ''} ? ${resident.getEmail()} : ''"
+                                       th:placeholder="${resident.getEmail() == ''} ? 'email' : ''"
+                                       type="text" id="email" name="email" class="field-fit-content px-1 mb-1">
+
+                                <input th:value="${resident.getPhoneNumber() != ''} ? ${resident.getPhoneNumber()} : ''"
+                                       th:placeholder="${resident.getPhoneNumber() == ''} ? #{phone_number} : ''"
+                                       type="text" id="phoneNumber" name="phoneNumber" class="field-fit-content px-1 mb-1">
+
+                                <h5 th:text="|#{are_you_sure} #{deletion_is_irreversible}|" class="bg-light mt-5"></h5>
+
+                                <button th:text="#{delete}" type="submit" class="btn btn-danger mt-5"></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+</main>
+</body>
+</html>

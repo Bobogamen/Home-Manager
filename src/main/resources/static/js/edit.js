@@ -5,7 +5,7 @@ function editResident(target) {
 
     target.parentElement.parentElement.querySelectorAll('button').forEach(b => {
         if (b.id === buttonDiv.children[0].id) {
-            buttonDiv.className = 'text-end pt-1 ms-5';
+            buttonDiv.className = 'd-inline float-end';
         } else {
             b.parentElement.className = 'd-none';
         }

@@ -147,8 +147,7 @@ public class ProfileController {
 
         if (this.request.isUserInRole("MANAGER")) {
 
-            this.homesGroupService.homesGroupAssignment(user.getHomesGroup(),
-                    this.userService.getUserById(cashierId), homesGroups);
+            this.homesGroupService.homesGroupAssignment(user.getHomesGroup(), this.userService.getUserById(cashierId), homesGroups);
 
             if (homesGroups == null) {
                 redirectAttributes.addFlashAttribute("fail", Notifications.CASHIER_NO_HOMES_GROUP.getValue());
@@ -180,10 +179,6 @@ public class ProfileController {
         user.setName(name);
 
         redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
-
-        if (this.request.isUserInRole("CASHIER")) {
-            return "redirect:/cashier";
-        }
 
         return "redirect:/profile";
     }

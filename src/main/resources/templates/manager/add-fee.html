@@ -41,7 +41,8 @@
                                 <td th:text="${h.getName()}"></td>
                                 <td th:text="|${h.getOwner().getFirstName()} ${h.getOwner().getLastName()}|"></td>
                                 <td>
-                                    <input type="checkbox" th:id="${h.getId()}" th:value="${h.getId()}" name="homes" class="inputCheckBox">
+                                    <input th:name="${h.getId()}"
+                                           value="false" type="checkbox" class="inputCheckBox" onclick="changeValueAttribute(this)">
                                 </td>
                             </tr>
                             </tbody>

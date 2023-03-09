@@ -1,7 +1,30 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.9.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin")
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.7.7'
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'java'
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.home_manager.HomeManagerApplication'
+        )
+    }
 }
 
 group = 'com.home_manager'
@@ -11,7 +34,8 @@ repositories {
 }
 
 dependencies {
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:3.0.0'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -23,12 +47,21 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-parent:3.0.0'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.postgresql:postgresql'
+
+    runtimeOnly 'mysql:mysql-connector-java'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.jar {
+    enabled = false
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+

@@ -6,9 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public enum HomesGroupEnums {
-    APARTMENT_BUILDING,
-    HOUSE_COMPLEX;
-
+    APARTMENT_BUILDING;
     private Properties properties;
 
     public void init() {

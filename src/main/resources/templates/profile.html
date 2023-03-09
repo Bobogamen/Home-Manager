@@ -21,9 +21,16 @@
                 </a>
             </div>
             <h3 th:if="${homeGroups.size() == 0}" th:text="#{no_homes_group}"></h3>
-            <a th:each="hg : ${homeGroups}" th:href="|/profile/homesGroup${hg.getId()}|">
-                <p th:text="${hg.getName()}"></p>
-            </a>
+            <div class="justify-content-center d-flex">
+                <div th:each="hg : ${homeGroups}" class="width-fit-content m-auto p-2">
+                    <a th:href="|/profile/homesGroup${hg.getId()}|" style="text-decoration: none">
+                        <div class="homes-group">
+                            <img src="/images/apartment_building.png" alt="apartment_building" class="big-icon m-auto">
+                            <span th:text="${hg.getName()}" class="bg-light rounded-2 mt-1 fw-bold fs-4 px-3"></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">

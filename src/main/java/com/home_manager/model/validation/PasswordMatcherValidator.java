@@ -2,7 +2,6 @@ package com.home_manager.model.validation;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
-import org.yaml.snakeyaml.introspector.Property;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

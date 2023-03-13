@@ -14,38 +14,51 @@
     <div class="row line">
         <!------------------------MANAGER------------------------>
         <th:block sec:authorize="hasRole('MANAGER')">
-            <div class="text-center">
-                <h3 th:if="${user.getCashiers().size() == 0}" th:text="#{no_cashier}"></h3>
-                <h3 th:if="${user.getHomesGroup().size() == 0}" th:text="#{no_homes_group}"></h3>
-                <th:block th:if="${user.getHomesGroup().size() > 0}">
-                    <div class="add m-2">
-                        <a href="/profile/register-cashier">
-                            <img src="/images/add.png" alt="add" class="icon m-1">
-                            <span th:text="|#{register} #{cashier}|"></span>
-                        </a>
+            <div class="text-center d-flex justify-content-center mt-1 mb-3">
+                <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
+                    <h3 th:text="|#{manage} #{cashiers}|" class="fw-bold"></h3>
+                    <div class="text-center">
+                        <h4 th:if="${user.getCashiers().size() == 0}" th:text="#{no_cashier}"></h4>
+                        <h4 th:if="${user.getHomesGroup().size() == 0}" th:text="#{no_homes_group}"></h4>
+                        <th:block th:if="${user.getHomesGroup().size() > 0}">
+                            <div class="add m-2">
+                                <a href="/profile/register-cashier">
+                                    <img src="/images/add.png" alt="add" class="icon m-1">
+                                    <span th:text="|#{register} #{cashier}|"></span>
+                                </a>
+                            </div>
+                            <div class="add m-2">
+                                <a href="/profile/assign">
+                                    <img src="/images/tick.png" alt="add" class="icon m-1">
+                                    <span th:text="|#{assign} #{homes_group}|"></span>
+                                </a>
+                            </div>
+                            <p th:each="c : ${user.getCashiers()}"
+                               th:text="|${c.getName()} - ${c.getHomesGroup().size()} #{number_single} #{homes_group}|"></p>
+                        </th:block>
                     </div>
-                    <div class="add m-2">
-                        <a href="/profile/assign">
-                            <img src="/images/tick.png" alt="add" class="icon m-1">
-                            <span th:text="|#{assign} #{homes_group}|"></span>
-                        </a>
-                    </div>
-                    <p th:each="c : ${user.getCashiers()}"
-                       th:text="|${c.getName()} - ${c.getHomesGroup().size()} #{number_single} #{homes_group}|"></p>
-                </th:block>
+                </div>
             </div>
         </th:block>
         <!------------------------MANAGER------------------------>
 
         <!------------------------CASHIER------------------------>
         <th:block sec:authorize="hasRole('CASHIER')">
-            <div th:each="hg : ${user.getHomesGroup()}" class="text-center">
-                <form th:action="|/cashier/homesGroup${hg.getId()}|"
-                      th:method="GET">
-                    <input th:value="${now.getMonthValue()}" type="hidden" name="month">
-                    <input th:value="${now.getYear()}" type="hidden" name="year">
-                    <button th:text="${hg.getName()}" type="submit" class="h3"></button>
-                </form>
+            <div class="text-center d-flex justify-content-center mt-3">
+                <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
+                    <h3 th:text="|#{homes} #{cashier}|" class="fw-bold"></h3>
+                    <div th:each="hg : ${user.getHomesGroup()}" class="text-center">
+                        <form th:action="|/cashier/homesGroup${hg.getId()}|"
+                              th:method="GET">
+                            <input th:value="${now.getMonthValue()}" type="hidden" name="month">
+                            <input th:value="${now.getYear()}" type="hidden" name="year">
+                            <div class="add my-3">
+                                <img src="/images/money.png" alt="add" class="icon m-1">
+                                <button th:text="${hg.getName()}" type="submit" class="h4 p-0 bg-transparent border-0 mt-1"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </th:block>
         <!------------------------CASHIER------------------------>

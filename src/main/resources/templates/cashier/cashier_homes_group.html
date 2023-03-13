@@ -74,11 +74,11 @@
         <!------------------------CONTENT------------------------>
         <div class="text-center">
             <div th:if="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
-                <h3 th:text="#{no_homes}"></h3>
+                <h4 th:text="#{no_homes}"></h4>
             </div>
             <th:block th:if="${homesGroup.getHomes().size() > 0}">
                 <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${now.getMonthValue()}&year=${now.getYear()}|">
-                    <h3 th:text="${homesGroup.getName()}" class="m-1"></h3>
+                    <h3 th:text="${homesGroup.getName()}" class="m-1 fw-bold"></h3>
                 </a>
                 <div>
                     <div class="d-inline-flex justify-content-center align-items-center my-2">
@@ -87,7 +87,7 @@
                                 <button th:text="#{years}" class="btn btn-dark years"></button>
                             </a>
                         </div>
-                        <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${monthNumber - 1}&year=${yearNumber}|">
+                        <a th:href="|/cashier/homesGroup${homesGroup.getId()}/?month=${monthNumber - 1}&year=${yearNumber}|">
                             <img src="/images/back.png" alt="back" class="icon">
                         </a>
                         <form th:action="|/cashier/homesGroup${homesGroup.getId()}|"
@@ -99,6 +99,7 @@
                                         th:selected="${index.count} == ${monthNumber}">
                                 </option>
                             </select>
+
                             <select name="year" class="m-1 bg-transparent text-center webkit-appearance-none">
                                 <option th:each="y : ${#numbers.sequence(2010, 2050)}"
                                         th:value="${y}"
@@ -129,7 +130,7 @@
 
                 <div th:if="${currentMonth} != null" class="text-center d-flex justify-content-center">
                     <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
-                        <h3 th:text="|${homesGroup.getName()} #{for} ${monthName} ${yearNumber}|"></h3>
+                        <h3 th:text="|${homesGroup.getName()} #{for} ${monthName} ${yearNumber}|" class="fw-bold"></h3>
                         <table class="table table-hover table-sm table-bordered border-primary">
                             <thead>
                             <tr class="bg-info fw-bold align-middle">
@@ -180,10 +181,10 @@
                     </div>
                     <div class="text-center justify-content-center">
                         <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content bg-light">
-                            <h3 th:text="|#{total} #{for} ${monthName} ${yearNumber}|"></h3>
+                            <h3 th:text="|#{total} #{for} ${monthName} ${yearNumber}|" class="fw-bold"></h3>
                             <div th:if="${currentMonth.getExpenses().size() == 0} and ${currentMonth.getCurrentIncome() == 0}"
                                  class="text-center d-block justify-content-center">
-                                <h3 th:text="|#{no_expenses}/#{incomes}|"></h3>
+                                <h4 th:text="|#{no_expenses}/#{incomes}|"></h4>
                             </div>
                             <table th:if="${currentMonth.getExpenses().size() > 0} or ${currentMonth.getCurrentIncome() > 0}"
                                    class="table table-hover table-sm table-bordered border-primary">
@@ -208,9 +209,9 @@
                             </table>
                         </div>
                         <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-3">
-                            <h3 th:text="#{expenses}"></h3>
+                            <h3 th:text="#{expenses}" class="fw-bold"></h3>
                             <div th:if="${currentMonth.getExpenses().size() == 0}" class="text-center d-block justify-content-center">
-                                <h3 th:text="#{no_expenses}"></h3>
+                                <h4 th:text="#{no_expenses}"></h4>
                             </div>
                             <table th:if="${currentMonth.getExpenses().size() > 0}" class="table table-hover table-sm table-bordered border-primary">
                                 <thead>
@@ -244,9 +245,10 @@
                             <form th:action="@{|/cashier/homesGroup${homesGroup.getId()}/add-expense|}"
                                   th:method="POST"
                                   th:object="${addExpenseDTO}" class="d-grid justify-content-center px-2 py-3">
-                                <h3 th:text="|#{add} #{expense}|"></h3>
+                                <h3 th:text="|#{add} #{expense}|" class="fw-bold"></h3>
                                 <input name="month" th:value="${monthNumber}" type="hidden">
                                 <input name="year" th:value="${yearNumber}" type="hidden">
+
                                 <input th:field="*{name}"
                                        th:errorclass="is-invalid"
                                        th:placeholder="#{expense_example_name}" type="text" name="name" class="mb-3">

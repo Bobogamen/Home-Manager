@@ -15,10 +15,10 @@
         <div class="row line">
             <div class="text-center">
                 <div class="text-center d-flex justify-content-center">
-                    <h3 th:if="${manager.getCashiers().size() == 0}" th:text="#{no_cashier}"></h3>
+                    <h4 th:if="${manager.getCashiers().size() == 0}" th:text="#{no_cashier}"></h4>
                     <th:block th:if="${manager.getCashiers().size() > 0}">
                         <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-5 mx-4">
-                            <h3 th:text="|#{assign} #{homes_groups}|"></h3>
+                            <h3 th:text="|#{assign} #{homes_groups}|" class="fw-bold"></h3>
                             <div th:each="c : ${manager.getCashiers()}" class="card card-resident mb-5">
                                 <div class="card-header">
                                     <h3 th:text="${c.getName()}"></h3>
@@ -46,13 +46,13 @@
                         </div>
                         <div class="text-center d-flex justify-content-center">
                             <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-5 mx-4">
-                                <h3 th:text="|#{assigned} #{homes_groups}|"></h3>
+                                <h3 th:text="|#{assigned} #{homes_groups}|" class="fw-bold"></h3>
                                 <div th:each="c : ${manager.getCashiers()}" class="card card-resident mb-5">
                                     <div class="card-header">
-                                        <h3 th:text="${c.getName()}"></h3>
+                                        <h3 th:text="${c.getName()}" class="fw-bold"></h3>
                                     </div>
                                     <div class="card-body text-center pt-0">
-                                        <p th:if="${c.getHomesGroup().size() == 0}" th:text="#{no_assigned_homes_group}"></p>
+                                        <h4 th:if="${c.getHomesGroup().size() == 0}" th:text="#{no_assigned_homes_group}"></h4>
                                         <table th:if="${c.getHomesGroup().size() > 0}"
                                                class="table table-hover table-sm table-bordered border-primary">
                                             <thead>

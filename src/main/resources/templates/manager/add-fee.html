@@ -15,7 +15,7 @@
         <div class="row line">
             <div class="row justify-content-center">
                 <div class="registrationForm">
-                    <h3 th:text="|#{add-fee} #{in} ${homesGroup.getName()}|" class="pb-4"></h3>
+                    <h3 th:text="|#{add-fee} #{in} ${homesGroup.getName()}|" class="pb-4 fw-bold"></h3>
                     <form th:action="@{|/profile/homesGroup${homesGroup.getId()}/add-fee|}"
                           th:method="POST">
                         <div th:text="#{name}"></div>
@@ -23,7 +23,7 @@
                         <div th:text="|#{value} (#{BGN})|" class="mt-3"></div>
                         <input th:placeholder="#{value_example}"
                                type="number" name="value" id="value" min="0" max="99999999.99" step="0.01" class="field" required/>
-                        <div th:text="#{homes}" class="h3 mt-3"></div>
+                        <div th:text="#{homes}" class="h3 mt-3 fw-bold"></div>
                         <table class="table table-hover table-sm table-bordered border-primary fs-6">
                             <thead>
                             <tr class="bg-info fw-bold align-middle">

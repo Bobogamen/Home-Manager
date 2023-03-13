@@ -3,18 +3,18 @@ package com.home_manager.model.dto;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 public class AddHomesGroupDTO {
 
     @NotEmpty(message = "{not_empty}")
     @Size(min = 2, max = 20, message = "{field_length}")
     private String name;
-
     private int size;
-
     @NotEmpty(message = "{not_empty}")
     @NotNull(message = "{not_empty}")
     private String type;
+    private String backgroundColor;
 
     public AddHomesGroupDTO() {
     }
@@ -41,5 +41,13 @@ public class AddHomesGroupDTO {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public String getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 }

@@ -26,6 +26,7 @@ public class HomesGroupService {
         homesGroup.setName(addHomesGroupDTO.getName());
         homesGroup.setSize(addHomesGroupDTO.getSize());
         homesGroup.setType(addHomesGroupDTO.getType());
+        homesGroup.setBackgroundColor(addHomesGroupDTO.getBackgroundColor());
         homesGroup.addUser(user);
 
         this.homesGroupRepository.save(homesGroup);
@@ -41,6 +42,7 @@ public class HomesGroupService {
         homesGroup.setName(addHomesGroupDTO.getName());
         homesGroup.setType(addHomesGroupDTO.getType());
         homesGroup.setSize(addHomesGroupDTO.getSize());
+        homesGroup.setBackgroundColor(addHomesGroupDTO.getBackgroundColor());
 
         this.homesGroupRepository.save(homesGroup);
     }

@@ -15,33 +15,38 @@
         <div class="row line">
             <div class="row justify-content-center">
                 <div class="registrationForm">
-                    <h3 th:text="|#{add} #{homes_group}|" class="pb-4"></h3>
+                    <h3 th:text="|#{add} #{homes_group}|" class="pb-4 fw-bold"></h3>
                     <form th:action="@{/profile/add-homes_group}"
                           th:method="POST"
                           th:object="${addHomesGroupDTO}">
+
                         <div th:text="#{name}"></div>
-                        <div>
-                            <input th:field="*{name}"
-                                   th:errorclass="is-invalid"
-                                   th:placeholder="#{name_example}" type="text" name="name" id="name" class="field"/>
-                            <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
-                                <p th:each="err : ${#fields.errors('name')}" th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                            </div>
+                        <input th:field="*{name}"
+                               th:errorclass="is-invalid"
+                               th:placeholder="#{name_example}" type="text" name="name" id="name" class="field"/>
+                        <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
+                            <p th:each="err : ${#fields.errors('name')}" th:text="${err}"
+                               class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
                         </div>
 
-                        <div th:text="#{size_label}" class="mt-3"></div>
+                        <div th:text="#{size_label}" class="mt-4"></div>
                         <input th:placeholder="#{size_example}" type="number" name="size" id="size" class="field"/>
 
-                        <div th:text="|#{choose} #{type}|"></div>
-                        <select th:field="*{type}" id="type" class="field mt-3">
+                        <div th:text="|#{choose} #{type}|" class="mt-4"></div>
+                        <select th:field="*{type}" id="type" class="field">
                             <option th:each="t : ${T(com.home_manager.model.enums.HomesGroupEnums).values()}"
-                                    th:text="${t.getValue()}"
                                     th:value="${t.getValue()}"
+                                    th:text="${t.getValue()}"
                                     th:selected="${t.getValue()} == *{type}">
                             </option>
                         </select>
 
-                        <button th:text="#{add}" type="submit" class="button m-3"></button>
+                        <div class="mt-4">
+                            <div th:text="|#{choose} #{background_color}|"></div>
+                            <input th:field="*{backgroundColor}" type="color" id="backgroundColor" value="#000000" class="inputNumber">
+                        </div>
+
+                        <button th:text="#{add}" type="submit" class="button mt-4"></button>
                     </form>
                 </div>
             </div>

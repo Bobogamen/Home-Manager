@@ -35,6 +35,12 @@
                             </option>
                         </select>
 
+                        <div class="mt-4">
+                            <div th:text="|#{choose} #{background_color}|"></div>
+                            <input name="backgroundColor"
+                                   th:value="${homesGroup.getBackgroundColor()}" type="color" id="backgroundColor" class="inputNumber">
+                        </div>
+
                         <button th:text="#{edit}" type="submit" class="button m-3"></button>
                     </form>
                 </div>

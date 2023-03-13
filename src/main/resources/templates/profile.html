@@ -24,7 +24,7 @@
             <div class="justify-content-center d-flex">
                 <div th:each="hg : ${homeGroups}" class="width-fit-content m-auto p-2">
                     <a th:href="|/profile/homesGroup${hg.getId()}|" style="text-decoration: none">
-                        <div class="homes-group">
+                        <div th:style="'background-color: ' + ${hg.getBackgroundColor()}" class="homes-group">
                             <img src="/images/apartment_building.png" alt="apartment_building" class="big-icon m-auto">
                             <span th:text="${hg.getName()}" class="bg-light rounded-2 mt-1 fw-bold fs-4 px-3"></span>
                         </div>

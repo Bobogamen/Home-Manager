@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="${homesGroup.getName()}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+        <!------------------------CONTENT------------------------>
+        <div class="text-center">
+            <div th:if="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
+                <h4 th:text="#{no_homes}"></h4>
+            </div>
+            <th:block th:if="${homesGroup.getHomes().size() > 0}">
+                <div class="d-inline-flex justify-content-center align-items-center my-2">
+                    <h3 th:text="|${T(com.home_manager.utility.MonthsUtility).getMonthName(now.getMonthValue())} ${now.getYear()}|"
+                        class="m-1 fw-bold"></h3>
+                    <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${now.getMonthValue()}&year=${now.getYear()}|">
+                        <img src="/images/back.png" alt="back" class="icon">
+                    </a>
+                </div>
+                <div>
+                    <small th:text="#{currency}" class="badge text-bg-light"></small>
+                    <small th:text="#{BGN}" class="badge text-bg-success"></small>
+                </div>
+                <div th:if="${years.size() == 0}" class="text-center d-flex justify-content-center">
+                    <h4 th:text="#{no_added_month_year}"></h4>
+                </div>
+                <div th:if="${years.size() > 0}" class="text-center d-grid justify-content-center">
+                    <div th:each="y : ${years}"
+                         class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 my-3 height-fit-content">
+                        <div class="d-inline-flex">
+                            <h3 th:text="|${homesGroup.getName()} #{year}|" class="fw-bold"></h3>
+                            <a th:href="|/cashier/homesGroup${homesGroup.getId()}/year${y.getNumber()}|">
+                                <h3 th:text="${y.getNumber()}" class="badge text-bg-danger mx-2 fs-5"></h3>
+                            </a>
+                        </div>
+                        <table class="table table-hover table-sm table-bordered border-primary">
+                            <thead>
+                            <tr class="bg-info fw-bold align-middle">
+                                <td th:text="#{month}"></td>
+                                <td th:text="#{incomes}"></td>
+                                <td th:text="#{previous_month}"></td>
+                                <td th:text="|#{total}|"></td>
+                                <td th:text="#{expense}"></td>
+                                <td th:text="#{difference}"></td>
+                            </tr>
+                            </thead>
+                            <tbody class="fs-6">
+                            <tr th:each="m : ${y.getMonths()}" class="align-middle">
+                                <td>
+                                    <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${m.getNumber()}&year=${m.getYear()}|">
+                                        <span th:text="${m.getMonthName(m.getNumber())}"></span>
+                                    </a>
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(m.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(m.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(m.getTotalIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(m.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="(${m.getTotalDifference() > 0} ?
+                                '+' + ${#numbers.formatDecimal(m.getTotalDifference(), 1, 'WHITESPACE', 2, 'POINT')}
+                                : ${#numbers.formatDecimal(m.getTotalDifference(), 1, 'WHITESPACE', 2, 'POINT')})"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+    <div class="row">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</div>
+</body>
+</html>
+

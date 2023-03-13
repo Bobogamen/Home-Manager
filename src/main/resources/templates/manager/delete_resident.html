@@ -21,25 +21,21 @@
                         <div class="card-body text-center m-3 bg-success border border-dark rounded">
                             <form th:action="@{|/profile/homesGroup${homesGroupId}/home${homeId}/delete-resident${resident.getId()}|}"
                                   th:method="DELETE">
-                                <input th:value="${resident.getFirstName() != ''} ? ${resident.getFirstName()} : ''"
-                                       th:placeholder="${resident.getFirstName() == ''} ? #{first_name} : ''"
-                                       type="text" id="firstName" name="firstName" class="field-fit-content px-1 mb-1">
 
-                                <input th:value="${resident.getMiddleName() != ''} ? ${resident.getMiddleName()} : ''"
-                                       th:placeholder="${resident.getMiddleName() == ''} ? #{middle_name} : ''"
-                                       type="text" id="middleName" name="middleName" class="field-fit-content px-1 mb-1">
+                                <p th:if="${resident.getFirstName() != ''}"
+                                   th:text="${resident.getFirstName()}" class="field-fit-content px-1 mb-1"></p>
 
-                                <input th:value="${resident.getLastName() != ''} ? ${resident.getLastName()} : ''"
-                                       th:placeholder="${resident.getLastName() == ''} ? #{last_name} : ''"
-                                       type="text" id="lastName" name="lastName" class="field-fit-content px-1 mb-1">
+                                <p th:if="${resident.getMiddleName() != ''}"
+                                   th:text="${resident.getMiddleName()}" class="field-fit-content px-1 mb-1"></p>
 
-                                <input th:value="${resident.getEmail() != ''} ? ${resident.getEmail()} : ''"
-                                       th:placeholder="${resident.getEmail() == ''} ? 'email' : ''"
-                                       type="text" id="email" name="email" class="field-fit-content px-1 mb-1">
+                                <p th:if="${resident.getLastName() != ''}"
+                                   th:text="${resident.getLastName()}" class="field-fit-content px-1 mb-1"></p>
 
-                                <input th:value="${resident.getPhoneNumber() != ''} ? ${resident.getPhoneNumber()} : ''"
-                                       th:placeholder="${resident.getPhoneNumber() == ''} ? #{phone_number} : ''"
-                                       type="text" id="phoneNumber" name="phoneNumber" class="field-fit-content px-1 mb-1">
+                                <p th:if="${resident.getEmail() != ''}"
+                                   th:text="${resident.getEmail()}" class="field-fit-content px-1 mb-1"></p>
+
+                                <p th:if="${resident.getPhoneNumber() != ''}"
+                                   th:text="${resident.getPhoneNumber()}" class="field-fit-content px-1 mb-1"></p>
 
                                 <h5 th:text="|#{are_you_sure} #{deletion_is_irreversible}|" class="bg-light mt-5"></h5>
 

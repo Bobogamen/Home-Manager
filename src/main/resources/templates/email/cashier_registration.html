@@ -21,7 +21,13 @@
                     padding: 25px;">
             <p th:text="#{hello}"></p>
             <p th:text="#{cashier_registration_message(${email}, ${manager_name}, ${manager_email})}"></p>
-            <p th:text="#{cashier_registration_password(${reset_url})}"></p>
+            <p th:text="#{cashier_registration_password}"></p>
+            <div style="margin-top: 1rem;
+                        margin-bottom: 1rem;
+                        font-weight: bold">
+                <a th:href="${reset_url}"
+                   th:text="${reset_url}"></a>
+            </div>
             <p th:text="#{questions}"></p>
         </div>
         <footer th:replace="fragments/footer :: footer"></footer>

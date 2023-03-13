@@ -60,7 +60,7 @@
             </div>
             <div th:if="${homesGroup.getHomes().size() > 0}" class="text-center d-flex justify-content-center">
                 <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
-                    <h3 th:text="#{homes}"></h3>
+                    <h3 th:text="#{homes}" class="fw-bold"></h3>
                     <table class="table table-hover table-sm table-bordered border-primary">
                         <thead>
                         <tr class="bg-info fw-bold align-middle">
@@ -101,7 +101,7 @@
                 </div>
                 <div class="text-center d-flex justify-content-center">
                     <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
-                        <h3 th:text="#{fees}"></h3>
+                        <h3 th:text="#{fees}" class="fw-bold"></h3>
                         <div th:if="${fees.size() == 0}" class="text-center d-block justify-content-center">
                             <h3 th:text="#{no_fee}"></h3>
                         </div>

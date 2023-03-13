@@ -77,8 +77,9 @@ public class CashierController {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("cashier/cashier_homes_group");
 
-            this.month = month;
+
             this.year = year;
+            this.month = year;
 
             if (month > 12) {
                 month = 1;
@@ -90,12 +91,12 @@ public class CashierController {
                 year--;
             }
 
+            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             modelAndView.addObject("monthNumber", month);
             modelAndView.addObject("monthName", MonthsUtility.getMonthName(month));
             modelAndView.addObject("yearNumber", year);
             modelAndView.addObject("now", this.now);
 
-            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             modelAndView.addObject("homesGroup", homesGroup);
 
             Month currnetMonth = homesGroup.getMonthByDate(month, year);
@@ -113,7 +114,7 @@ public class CashierController {
 
     @PostMapping("/homesGroup{homesGroupId}/create-month")
     public String createMonth(@PathVariable long homesGroupId, @RequestParam int month, @RequestParam int year,
-                          @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) {
+                              @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) {
 
         if (isAuthorized(homesGroupId, user.getId())) {
             HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
@@ -121,7 +122,7 @@ public class CashierController {
             this.monthService.setHomesToMonth(this.monthService.createMonth(month, year, homesGroup), homesGroup);
 
             redirectAttributes.addAttribute("month", month);
-            redirectAttributes.addAttribute("year",year);
+            redirectAttributes.addAttribute("year", year);
             redirectAttributes.addFlashAttribute("success", Notifications.CREATED_SUCCESSFULLY.getValue());
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -151,8 +152,8 @@ public class CashierController {
     @GetMapping("/homesGroup{homesGroupId}/view-payment")
     @ResponseBody
     public Map<String, List<HomePaymentsDTO>> viewPaymentsByHomeId(@PathVariable long homesGroupId,
-                                                                  @RequestParam long monthId, @RequestParam long monthHomeId,
-                                                                  @AuthenticationPrincipal HomeManagerUserDetails user) {
+                                                                   @RequestParam long monthId, @RequestParam long monthHomeId,
+                                                                   @AuthenticationPrincipal HomeManagerUserDetails user) {
 
         if (isAuthorized(homesGroupId, user.getId())) {
 
@@ -193,7 +194,7 @@ public class CashierController {
 
     @PostMapping("/homesGroup{homesGroupId}/add-expense")
     public String addExpense(@PathVariable long homesGroupId, @RequestParam int month, @RequestParam int year, @Valid AddExpenseDTO addExpenseDTO,
-                             BindingResult bindingResult, @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes){
+                             BindingResult bindingResult, @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) {
 
         if (isAuthorized(homesGroupId, user.getId())) {
 
@@ -219,7 +220,7 @@ public class CashierController {
     }
 
     @GetMapping("/homesGroup{homesGroupId}/edit-expense{expenseId}")
-    public ModelAndView editExpense(@PathVariable long homesGroupId, @PathVariable long expenseId,@AuthenticationPrincipal HomeManagerUserDetails user) {
+    public ModelAndView editExpense(@PathVariable long homesGroupId, @PathVariable long expenseId, @AuthenticationPrincipal HomeManagerUserDetails user) {
 
         if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
@@ -251,16 +252,40 @@ public class CashierController {
     }
 
     @GetMapping("/homesGroup{homesGroupId}/years")
-    public ModelAndView getYear(@PathVariable long homesGroupId) {
+    public ModelAndView getYears(@PathVariable long homesGroupId, @AuthenticationPrincipal HomeManagerUserDetails user) {
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("cashier/year");
+        if (isAuthorized(homesGroupId, user.getId())) {
 
-        HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
-        modelAndView.addObject("homesGroup",  homesGroup);
-        modelAndView.addObject("years", this.monthService.years(homesGroup.getYears()));
-        modelAndView.addObject("now", this.now);
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("cashier/years");
 
-        return modelAndView;
+            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
+            modelAndView.addObject("homesGroup", homesGroup);
+            modelAndView.addObject("years", this.monthService.years(homesGroup.getYears()));
+            modelAndView.addObject("now", this.now);
+
+            return modelAndView;
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @GetMapping("/homesGroup{homesGroupId}/year{yearNumber}")
+    public ModelAndView showYear(@PathVariable int homesGroupId, @PathVariable int yearNumber, @AuthenticationPrincipal HomeManagerUserDetails user) {
+
+        if (isAuthorized(homesGroupId, user.getId())) {
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("cashier/showYear");
+            modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
+            modelAndView.addObject("year", this.monthService.getYear(yearNumber));
+            modelAndView.addObject("now", this.now);
+
+
+
+            return modelAndView;
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
     }
 }

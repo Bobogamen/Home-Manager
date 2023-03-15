@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="#{profile}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+
+        <!------------------------CONTENT------------------------>
+        <div class="text-center">
+            <div class="text-center justify-content-center">
+                <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content bg-light">
+                    <h3 th:text="#{users}" class="fw-bold"></h3>
+                    <table class="table table-hover table-sm table-bordered border-primary">
+                        <thead>
+                        <tr class="bg-info fw-bold align-middle">
+                            <td>id</td>
+                            <td>Registration Date</td>
+                            <td>email</td>
+                            <td>Name</td>
+                            <td>Homes Group count</td>
+                            <td>Cashiers count</td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody class="fs-6">
+                        <tr th:each="u : ${allUser}" class="align-middle">
+                            <td th:text="${u.getId()}"></td>
+                            <td th:text="${#temporals.format(u.getRegisteredOn(), 'dd-MM-yyyy')}"></td>
+                            <td th:text="${u.getEmail()}"></td>
+                            <td th:text="${u.getName()}"></td>
+                            <td th:text="${u.getHomesGroup().size()}"></td>
+                            <td th:text="${u.getCashiers().size()}"></td>
+                            <td>
+                                <a href="#">
+                                    <img src="/images/settings.png" alt="edit" class="icon">
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</div>
+
+</body>
+<script src="/js/utils.js"></script>
+</html>

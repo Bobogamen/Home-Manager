@@ -4,16 +4,22 @@ import com.home_manager.model.dto.*;
 import com.home_manager.model.enums.HomesGroupEnums;
 import com.home_manager.model.enums.Notifications;
 import com.home_manager.model.user.HomeManagerUserDetails;
+import com.home_manager.service.EmailService;
 import com.home_manager.utility.MailUtility;
 import com.home_manager.utility.MonthsUtility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.time.LocalDate;
 
 @SpringBootTest
 class HomeManagerApplicationTests {
+
+    @Autowired
+    private EmailService emailService;
 
     @Test
     void testPasswordResetMailSubject() {
@@ -200,5 +206,18 @@ class HomeManagerApplicationTests {
         Assertions.assertEquals("Боби", user.getName());
         Assertions.assertEquals("b_davidov@abv.bg", user.getEmail());
         Assertions.assertEquals("password", user.getPassword());
+    }
+        @Test
+    void testSendAllEmailTemplates() {
+
+        String sendTo = "Bobogamen@students.softuni.bg";
+        HomeManagerUserDetails manager = new HomeManagerUserDetails(1, "b_davidov@abv.bg", "Борис Илиев",
+                "password", LocalDate.now(), null, null, null);
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+
+        emailService.sendRegistrationEmail(sendTo);
+        emailService.sendCashierRegistrationEmail(sendTo, manager, "appUrl.com");
+        emailService.sendRecoveryPasswordEmail(sendTo, request);
     }
 }

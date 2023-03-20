@@ -124,4 +124,8 @@ public class UserService {
 
         this.userRepository.save(user);
     }
+
+    public List<User> getAllUsers() {
+        return this.userRepository.findAll();
+    }
 }

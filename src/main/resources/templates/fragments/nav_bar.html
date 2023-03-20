@@ -21,7 +21,7 @@
                 </a>
             </th>
             <th sec:authorize="hasRole('ADMIN')" class="col-1">
-                <a th:text="#{admin}" href="#" class="authorize-button"></a>
+                <a th:text="#{admin}" href="/admin" class="authorize-button"></a>
             </th>
             <th sec:authorize="hasRole('MANAGER')" class="col-1">
                 <a th:text="#{manager}" href="/profile" class="authorize-button"></a>

@@ -14,7 +14,7 @@ server:
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${{ MYSQLUSER }}:${{ MYSQLPASSWORD }}@${{ MYSQLHOST }}:${{ MYSQLPORT }}/${{ MYSQLDATABASE }}
+    url: jdbc:mysql://${MYSQLUSER}:${MYSQLPASSWORD}@${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}
     username: ${MYSQLUSER}
     password: ${MYSQLPASSWORD}
   jpa:
@@ -27,10 +27,10 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
   mail:
-    host: smtp.abv.bg
+    host: smtp.gmail.com
     protocol: smtp
     jndi-name: mail/Session
-    username: homgr@abv.bg
+    username: bg.home.manager@gmail.com
     password: ${mail_password}
     port: 465
     default-encoding: UTF-8

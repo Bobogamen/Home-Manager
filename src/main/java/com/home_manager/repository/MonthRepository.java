@@ -12,7 +12,7 @@ public interface MonthRepository extends JpaRepository<Month, Long> {
 
     Month getMonthById(long monthId);
 
-    Month getMonthByNumberAndYear(int month, int year);
+    Month getMonthByNumberAndYearAndHomesGroupId(int number, int year, long homesGroup_id);
 
-    List<Month> getMonthsByYear(int year);
+    List<Month> getMonthsByYearAndHomesGroupId(int year, long homesGroup_id);
 }

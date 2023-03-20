@@ -221,6 +221,7 @@
                                     <td th:text="#{name}"></td>
                                     <td th:text="|#{value}(#{BGN})|"></td>
                                     <td th:text="#{document_number}"></td>
+                                    <td th:text="#{date}"></td>
                                 </tr>
                                 </thead>
                                 <tbody class="fs-6">
@@ -230,12 +231,14 @@
                                     <td th:text="${e.getName()}"></td>
                                     <td th:text="${#numbers.formatDecimal(e.getValue(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                     <td th:text="${e.getDocumentNumber()}"></td>
+                                    <td th:text="${#temporals.format(e.getDocumentDate(), 'dd-MM-yyyy')}"></td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr class="bg-info fw-bold align-middle">
                                     <td th:text="#{total}" colspan="3"></td>
                                     <td th:text="${#numbers.formatDecimal(currentMonth.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                                 </tfoot>
@@ -249,22 +252,44 @@
                                 <input name="month" th:value="${monthNumber}" type="hidden">
                                 <input name="year" th:value="${yearNumber}" type="hidden">
 
-                                <input th:field="*{name}"
-                                       th:errorclass="is-invalid"
-                                       th:placeholder="#{expense_example_name}" type="text" name="name" class="mb-3">
-                                <span th:if="${#fields.hasErrors('name')}"
-                                      th:errors="*{name}" class="notificationRegister bg-danger text-light rounded d-inline-flex p-1 m-1">
-                                </span>
-                                <input th:field="*{value}"
-                                       th:errorclass="is-invalid"
-                                       th:placeholder="#{expense_example_value}" type="number" name="value" min="0" max="999999999" step="0.01" class="mb-3">
-                                <input th:field="*{documentNumber}"
-                                       th:errorclass="is-invalid"
-                                       th:placeholder="#{expense_example_document_number}" type="text" name="documentNumber" class="mb-3">
-                                <span th:if="${#fields.hasErrors('documentNumber')}"
-                                      th:errors="*{documentNumber}" class="notificationRegister bg-danger text-light rounded d-inline-flex p-1 m-1">
-                                </span>
-                                <div class="add m-2">
+                                <div class="d-grid">
+                                    <input th:field="*{name}"
+                                           th:errorclass="is-invalid"
+                                           th:placeholder="#{expense_example_name}" type="text" name="name" class="m-auto"/>
+                                    <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
+                                        <p th:each="err : ${#fields.errors('name')}"
+                                           th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                                    </div>
+                                    <div class="my-3">
+                                        <input th:field="*{value}"
+                                               th:errorclass="is-invalid"
+                                               th:placeholder="#{expense_example_value}" type="number" name="value" min="0" max="999999999" step="0.01"/>
+                                    </div>
+                                    <div th:if="${#fields.hasErrors('value')}" class="notificationRegister">
+                                        <p th:each="err : ${#fields.errors('value')}"
+                                           th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                                    </div>
+                                    <div class="">
+                                        <div class="d-inline-block">
+                                            <input th:field="*{documentNumber}"
+                                                   th:errorclass="is-invalid"
+                                                   th:placeholder="#{expense_example_document_number}" type="text" name="documentNumber"
+                                                   class="float-start w-auto"/>
+                                            <img id="img" src="/images/calendar.png" alt="calendar" class="icon ms-2" onclick="showCalendar()">
+                                            <input th:field="*{documentDate}"
+                                                   id="calendar" type="date" th:max="${now.toString()}" name="documentDate" class="calendar">
+                                        </div>
+                                    </div>
+                                    <div th:if="${#fields.hasErrors('documentNumber')}" class="notificationRegister">
+                                        <p th:each="err : ${#fields.errors('documentNumber')}"
+                                           th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                                    </div>
+                                    <div th:if="${#fields.hasErrors('documentDate')}" class="notificationRegister">
+                                        <p th:each="err : ${#fields.errors('documentDate')}"
+                                           th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                                    </div>
+                                </div>
+                                <div class="add my-2 width-fit-content m-auto">
                                     <button type="submit" class="bg-transparent border-0">
                                         <img src="/images/add-expense.png" alt="add" class="icon m-1">
                                         <span th:text="|#{add} #{expense}|"></span>

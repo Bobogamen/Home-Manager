@@ -25,12 +25,16 @@
                                th:errorclass="is-invalid"
                                th:placeholder="#{name_example}" type="text" name="name" id="name" class="field"/>
                         <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
-                            <p th:each="err : ${#fields.errors('name')}" th:text="${err}"
-                               class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                            <p th:each="err : ${#fields.errors('name')}"
+                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
                         </div>
 
                         <div th:text="#{size_label}" class="mt-4"></div>
                         <input th:placeholder="#{size_example}" type="number" name="size" id="size" class="field"/>
+                        <div th:if="${#fields.hasErrors('size')}" class="notificationRegister">
+                            <p th:each="err : ${#fields.errors('size')}"
+                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                        </div>
 
                         <div th:text="|#{choose} #{type}|" class="mt-4"></div>
                         <select th:field="*{type}" id="type" class="field">
@@ -40,10 +44,18 @@
                                     th:selected="${t.getValue()} == *{type}">
                             </option>
                         </select>
+                        <div th:if="${#fields.hasErrors('type')}" class="notificationRegister">
+                            <p th:each="err : ${#fields.errors('type')}"
+                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                        </div>
 
                         <div class="mt-4">
                             <div th:text="|#{choose} #{background_color}|"></div>
                             <input th:field="*{backgroundColor}" type="color" id="backgroundColor" value="#000000" class="inputNumber">
+                        </div>
+                        <div th:if="${#fields.hasErrors('backgroundColor')}" class="notificationRegister">
+                            <p th:each="err : ${#fields.errors('backgroundColor')}"
+                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
                         </div>
 
                         <button th:text="#{add}" type="submit" class="button mt-4"></button>

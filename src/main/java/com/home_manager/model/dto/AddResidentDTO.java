@@ -1,11 +1,13 @@
 package com.home_manager.model.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class AddResidentDTO {
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     @Size(min = 2, max = 30, message = "{field_length}")
     private String firstName;
 

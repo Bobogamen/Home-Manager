@@ -327,6 +327,11 @@ a:hover {
     cursor: pointer;
 }
 
+.calendar {
+    visibility: hidden;
+    position: absolute;
+}
+
 /* ---------- Utilities END ---------- */
 
 

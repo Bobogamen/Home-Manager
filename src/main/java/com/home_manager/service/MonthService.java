@@ -59,11 +59,11 @@ public class MonthService {
         return month.getHomes().stream().filter(h -> h.getId() == monthHomeId).iterator().next();
     }
 
-    public Month getMonthByMonthNumberAndYear(int month, int year) {
-        return this.monthRepository.getMonthByNumberAndYear(month, year);
+    public Month getMonthByNumberAndYearAndHomesGroupId(int month, int year, long homesGroupId) {
+        return this.monthRepository.getMonthByNumberAndYearAndHomesGroupId(month, year, homesGroupId);
     }
 
-    public void setTotalPaymentForHome(Month month, MonthHomes monthHome, double totalPaid) {
+    public void setTotalPaymentForHome(Month month, MonthHomes monthHome, double totalPaid, long homesGroupId) {
 
         monthHome.setTotalPaid(totalPaid);
         monthHome.setPaidDate(LocalDate.now());
@@ -71,7 +71,7 @@ public class MonthService {
         double monthCurrentIncome = getCurrentIncomeOfMonth(month);
         double monthTotalExpenses = getTotalExpensesOfMonth(month);
 
-        double previousMonthDifference = getPreviousMonthDifference(month);
+        double previousMonthDifference = getPreviousMonthDifference(month, homesGroupId);
 
         month.setCurrentIncome(monthCurrentIncome);
         month.setCurrentDifference(monthCurrentIncome - monthTotalExpenses);
@@ -89,36 +89,36 @@ public class MonthService {
         return month.getExpenses().stream().mapToDouble(Expense::getValue).sum();
     }
 
-    public void calculateTotalExpense(Month currentMonth) {
+    public void calculateTotalExpense(Month currentMonth, long homesGroupId) {
 
         double totalExpenses = getTotalExpensesOfMonth(currentMonth);
 
         currentMonth.setTotalExpenses(totalExpenses);
         currentMonth.setCurrentDifference(currentMonth.getCurrentIncome() - totalExpenses);
         currentMonth.setTotalDifference(currentMonth.getTotalIncome() - totalExpenses);
-        currentMonth.setPreviousMonthDifference(getPreviousMonthDifference(currentMonth));
+        currentMonth.setPreviousMonthDifference(getPreviousMonthDifference(currentMonth, homesGroupId));
 
         this.monthRepository.save(currentMonth);
     }
 
-    public YearDTO getYear(int yearNumber) {
+    public YearDTO getYear(int yearNumber, long homesGroupId) {
         YearDTO year = new YearDTO();
-        year.setMonths(this.monthRepository.getMonthsByYear(yearNumber));
+        year.setMonths(this.monthRepository.getMonthsByYearAndHomesGroupId(yearNumber, homesGroupId));
         year.setNumber(yearNumber);
 
         return year;
     }
 
-    public List<YearDTO> years (List<Integer> yearsList) {
-        return yearsList.stream().map(this::getYear).toList();
+    public List<YearDTO> years (List<Integer> yearsList, long homesGroupId) {
+        return yearsList.stream().map(y -> getYear(y, homesGroupId)).toList();
     }
 
-    private double getPreviousMonthDifference(Month currentMonth) {
+    private double getPreviousMonthDifference(Month currentMonth, long homesGroupId) {
 
         int previousMonthNumber = currentMonth.getNumber() > 1 ? currentMonth.getNumber() - 1 : 12;
         int previousMonthYear = previousMonthNumber == 12 ? currentMonth.getYear() -1 : currentMonth.getYear();
 
-        Month previousMonth = this.monthRepository.getMonthByNumberAndYear(previousMonthNumber, previousMonthYear);
+        Month previousMonth = this.monthRepository.getMonthByNumberAndYearAndHomesGroupId(previousMonthNumber, previousMonthYear, homesGroupId);
 
         if (previousMonth != null) {
             return previousMonth.getTotalDifference();

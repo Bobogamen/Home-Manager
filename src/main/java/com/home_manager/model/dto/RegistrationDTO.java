@@ -4,6 +4,7 @@ import com.home_manager.model.validation.PasswordMatcher;
 import com.home_manager.model.validation.UniqueEmail;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -12,15 +13,18 @@ import javax.validation.constraints.Size;
 public class RegistrationDTO {
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     @Email(message = "{valid_email}")
     @UniqueEmail
     private String email;
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     @Size(min = 2, max = 30, message = "{field_length}")
     private String name;
 
-    @NotEmpty(message = "{password_match}")
+    @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     @Size(min = 5, max = 20, message = "{password_length}")
     private String password;
 

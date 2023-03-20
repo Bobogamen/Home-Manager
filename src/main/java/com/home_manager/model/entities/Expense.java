@@ -23,6 +23,9 @@ public class Expense {
     @Column(nullable = false)
     private String documentNumber;
 
+    @Column(nullable = false)
+    private LocalDate documentDate;
+
     @ManyToOne
     private Month month;
 
@@ -78,4 +81,11 @@ public class Expense {
         this.month = month;
     }
 
+    public LocalDate getDocumentDate() {
+        return documentDate;
+    }
+
+    public void setDocumentDate(LocalDate documentDate) {
+        this.documentDate = documentDate;
+    }
 }

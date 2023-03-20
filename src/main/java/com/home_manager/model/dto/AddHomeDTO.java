@@ -1,17 +1,21 @@
 package com.home_manager.model.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class AddHomeDTO {
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     private String floor;
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     private String name;
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     @Size(min = 2, max = 30, message = "{field_length}")
     private String ownerFirstName;
 
@@ -26,6 +30,7 @@ public class AddHomeDTO {
     private boolean resident = true;
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     @Size(min = 2, max = 30, message = "{field_length}")
     private String residentFirstName;
 

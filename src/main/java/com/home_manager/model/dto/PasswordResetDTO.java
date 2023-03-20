@@ -1,6 +1,8 @@
 package com.home_manager.model.dto;
 
 import com.home_manager.model.validation.PasswordMatcher;
+
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -9,6 +11,7 @@ import javax.validation.constraints.Size;
 public class PasswordResetDTO {
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     @Size(min = 5, max = 20, message = "{password_length}")
     private String password;
 

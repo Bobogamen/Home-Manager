@@ -1,29 +1,31 @@
 package com.home_manager.model.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
 public class AddExpenseDTO {
 
-    private LocalDate addedOn;
-
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     private String name;
 
+    @Positive(message = "{positive_number}")
     private double value;
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     private String documentNumber;
 
+    @PastOrPresent(message = "{not_future_date}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate documentDate;
+
     public AddExpenseDTO() {
-    }
-
-    public LocalDate getAddedOn() {
-        return addedOn;
-    }
-
-    public void setAddedOn(LocalDate addedOn) {
-        this.addedOn = addedOn;
     }
 
     public String getName() {
@@ -48,5 +50,13 @@ public class AddExpenseDTO {
 
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
+    }
+
+    public LocalDate getDocumentDate() {
+        return documentDate;
+    }
+
+    public void setDocumentDate(LocalDate documentDate) {
+        this.documentDate = documentDate;
     }
 }

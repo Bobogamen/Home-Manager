@@ -26,6 +26,12 @@ public class ExpenseService {
         expense.setValue(addExpenseDTO.getValue());
         expense.setDocumentNumber(addExpenseDTO.getDocumentNumber());
 
+        if (addExpenseDTO.getDocumentDate() == null) {
+            expense.setDocumentDate(LocalDate.now());
+        } else {
+            expense.setDocumentDate(addExpenseDTO.getDocumentDate());
+        }
+
         return this.expenseRepository.save(expense);
     }
 

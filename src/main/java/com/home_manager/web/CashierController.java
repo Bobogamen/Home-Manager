@@ -175,10 +175,10 @@ public class CashierController {
             ObjectMapper objectMapper = new ObjectMapper();
             FeePaymentDTO[] feePaymentDTOS = objectMapper.readValue(data, FeePaymentDTO[].class);
 
-            Month currentMonth = this.monthService.getMonthByMonthNumberAndYear(month, year);
+            Month currentMonth = this.monthService.getMonthByNumberAndYearAndHomesGroupId(month, year, homesGroupId);
             MonthHomes monthHomes = currentMonth.getHomeById(monthHomeId);
 
-            this.monthService.setTotalPaymentForHome(currentMonth, monthHomes, this.paymentsService.makePayments(monthHomes, feePaymentDTOS));
+            this.monthService.setTotalPaymentForHome(currentMonth, monthHomes, this.paymentsService.makePayments(monthHomes, feePaymentDTOS), homesGroupId);
 
             redirectAttributes.addFlashAttribute("success", Notifications.PAYMENT_SUCCESSFULLY.getValue());
             return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, month, year);
@@ -207,10 +207,10 @@ public class CashierController {
                 return redirectURL;
             }
 
-            Month currentMonth = this.monthService.getMonthByMonthNumberAndYear(month, year);
+            Month currentMonth = this.monthService.getMonthByNumberAndYearAndHomesGroupId(month, year, homesGroupId);
             currentMonth.setExpenses(this.expenseService.addExpenseToMonth(currentMonth, addExpenseDTO));
 
-            this.monthService.calculateTotalExpense(currentMonth);
+            this.monthService.calculateTotalExpense(currentMonth, homesGroupId);
 
             redirectAttributes.addFlashAttribute("success", Notifications.ADDED_SUCCESSFULLY.getValue());
             return redirectURL;
@@ -241,7 +241,7 @@ public class CashierController {
         if (isAuthorized(homesGroupId, user.getId())) {
 
             Expense expense = this.expenseService.editExpense(name, value, documentNumber, expenseId);
-            this.monthService.calculateTotalExpense(expense.getMonth());
+            this.monthService.calculateTotalExpense(expense.getMonth(), homesGroupId);
 
             redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
             return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, this.month, this.year);
@@ -261,7 +261,7 @@ public class CashierController {
 
             HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
             modelAndView.addObject("homesGroup", homesGroup);
-            modelAndView.addObject("years", this.monthService.years(homesGroup.getYears()));
+            modelAndView.addObject("years", this.monthService.years(homesGroup.getYears(), homesGroupId));
             modelAndView.addObject("now", this.now);
 
             return modelAndView;
@@ -278,7 +278,7 @@ public class CashierController {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("cashier/showYear");
             modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
-            modelAndView.addObject("year", this.monthService.getYear(yearNumber));
+            modelAndView.addObject("year", this.monthService.getYear(yearNumber, homesGroupId));
             modelAndView.addObject("now", this.now);
 
 

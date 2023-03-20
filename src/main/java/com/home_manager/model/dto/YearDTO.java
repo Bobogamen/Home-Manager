@@ -6,10 +6,19 @@ import java.util.List;
 
 public class YearDTO {
 
+    private long homesGroupId;
     private int number;
     private List<Month> months;
 
     public YearDTO() {
+    }
+
+    public long getHomesGroupId() {
+        return homesGroupId;
+    }
+
+    public void setHomesGroupId(long homesGroupId) {
+        this.homesGroupId = homesGroupId;
     }
 
     public int getNumber() {

@@ -1,19 +1,24 @@
 package com.home_manager.model.dto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.time.LocalDate;
+import javax.validation.constraints.*;
 
 public class AddHomesGroupDTO {
 
     @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     @Size(min = 2, max = 20, message = "{field_length}")
     private String name;
+
+    @Positive(message = "{positive_number}")
     private int size;
+
     @NotEmpty(message = "{not_empty}")
-    @NotNull(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
     private String type;
+
+    @NotEmpty(message = "{not_empty}")
+    @NotBlank(message = "{non-whitespace}")
+    @Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")
     private String backgroundColor;
 
     public AddHomesGroupDTO() {

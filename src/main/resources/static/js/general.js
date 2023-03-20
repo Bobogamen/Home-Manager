@@ -24,6 +24,17 @@ function outsideClickClose(event) {
     }
 }
 
+function showCalendar() {
+    const dateInput = document.getElementById("calendar");
+
+    try {
+        dateInput.showPicker();
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 
 
 

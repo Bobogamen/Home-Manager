@@ -26,7 +26,7 @@ public class AdminController {
 
         if (this.request.isUserInRole("ADMIN")) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("admin");
+            modelAndView.setViewName("admin/admin");
             modelAndView.addObject("allUser", this.userService.getAllUsers());
 
             return modelAndView;

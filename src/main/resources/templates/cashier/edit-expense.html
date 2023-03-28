@@ -16,6 +16,7 @@
             <div class="row justify-content-center">
                 <div class="registrationForm">
                     <h3 th:text="|#{edit} #{expense}|" class="fw-bold"></h3>
+                    <h4 th:text="|${expense.getMonth().getHomesGroup().getName()} #{month} ${expense.getMonth().getNumber()} #{year} ${expense.getMonth().getYear()}|"></h4>
                     <form th:action="@{|/cashier/homesGroup${homesGroupId}/edit-expense${expenseId}|}"
                           th:method="POST">
                         <div th:text="#{name}" class="mt-3"></div>
@@ -24,6 +25,8 @@
                         <input th:value="${expense.getValue()}" type="number" min="0" maxlength="999999999" step="0.01" name="value" class="field" required/>
                         <div th:text="#{document_number}" class="mt-3"></div>
                         <input th:value="${expense.getDocumentNumber()}" type="text" name="documentNumber" class="field" required/>
+                        <div th:text="#{date}" class="mt-3"></div>
+                        <input th:value="${expense.getDocumentDate().toString()}" type="date" name="documentDate" class="field" required/>
 
                         <button th:text="#{edit}" type="submit" class="button m-3"></button>
                     </form>

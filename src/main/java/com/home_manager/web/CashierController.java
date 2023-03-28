@@ -67,6 +67,44 @@ public class CashierController {
         return modelAndView;
     }
 
+    @GetMapping("/homesGroup{homesGroupId}/print")
+    public ModelAndView printMonth(@PathVariable long homesGroupId,
+                                   @RequestParam int month,
+                                   @RequestParam int year,
+                                   @AuthenticationPrincipal HomeManagerUserDetails user) {
+
+        if (isAuthorized(homesGroupId, user.getId())) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("cashier/print_month");
+
+            return monthModelAndView(homesGroupId, month, year, modelAndView);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    private ModelAndView monthModelAndView(@PathVariable long homesGroupId,
+                                           @RequestParam int month,
+                                           @RequestParam int year,
+                                           ModelAndView modelAndView) {
+        HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
+        modelAndView.addObject("monthNumber", month);
+        modelAndView.addObject("monthName", MonthsUtility.getMonthName(month));
+        modelAndView.addObject("yearNumber", year);
+        modelAndView.addObject("now", this.now);
+
+        modelAndView.addObject("homesGroup", homesGroup);
+
+        Month currnetMonth = homesGroup.getMonthByDate(month, year);
+
+        if (currnetMonth != null) {
+            modelAndView.addObject("currentMonth", this.monthService.getMonthById(currnetMonth.getId()));
+            modelAndView.addObject("years", homesGroup.getYears());
+        }
+
+        return modelAndView;
+    }
+
     @GetMapping("/homesGroup{homesGroupId}")
     public ModelAndView cashierHomesGroup(@PathVariable long homesGroupId,
                                           @RequestParam int month,
@@ -76,7 +114,6 @@ public class CashierController {
         if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("cashier/cashier_homes_group");
-
 
             this.year = year;
             this.month = year;
@@ -91,22 +128,7 @@ public class CashierController {
                 year--;
             }
 
-            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
-            modelAndView.addObject("monthNumber", month);
-            modelAndView.addObject("monthName", MonthsUtility.getMonthName(month));
-            modelAndView.addObject("yearNumber", year);
-            modelAndView.addObject("now", this.now);
-
-            modelAndView.addObject("homesGroup", homesGroup);
-
-            Month currnetMonth = homesGroup.getMonthByDate(month, year);
-
-            if (currnetMonth != null) {
-                modelAndView.addObject("currentMonth", this.monthService.getMonthById(currnetMonth.getId()));
-                modelAndView.addObject("years", homesGroup.getYears());
-            }
-
-            return modelAndView;
+            return monthModelAndView(homesGroupId, month, year, modelAndView);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -169,7 +191,7 @@ public class CashierController {
 
     @PostMapping("/homesGroup{homesGroupId}/pay")
     public String pay(@PathVariable long homesGroupId, @RequestParam int month, @RequestParam int year, @RequestParam long monthHomeId,
-                      @RequestParam(name = "data") String data, @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) throws Exception {
+                      @RequestParam(name = "data") String data, @RequestParam(name = "paidDate") String date, @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) throws Exception {
 
         if (isAuthorized(homesGroupId, user.getId())) {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -178,7 +200,9 @@ public class CashierController {
             Month currentMonth = this.monthService.getMonthByNumberAndYearAndHomesGroupId(month, year, homesGroupId);
             MonthHomes monthHomes = currentMonth.getHomeById(monthHomeId);
 
-            this.monthService.setTotalPaymentForHome(currentMonth, monthHomes, this.paymentsService.makePayments(monthHomes, feePaymentDTOS), homesGroupId);
+            LocalDate paidDate = LocalDate.parse(date);
+
+            this.monthService.setTotalPaymentForHome(currentMonth, monthHomes, this.paymentsService.makePayments(monthHomes, feePaymentDTOS), paidDate ,homesGroupId);
 
             redirectAttributes.addFlashAttribute("success", Notifications.PAYMENT_SUCCESSFULLY.getValue());
             return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, month, year);
@@ -244,8 +268,8 @@ public class CashierController {
             this.monthService.calculateTotalExpense(expense.getMonth(), homesGroupId);
 
             redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
-            return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, this.month, this.year);
 
+            return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, month, year);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

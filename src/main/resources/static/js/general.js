@@ -24,8 +24,8 @@ function outsideClickClose(event) {
     }
 }
 
-function showCalendar() {
-    const dateInput = document.getElementById("calendar");
+function showCalendar(target) {
+    const dateInput = target.nextElementSibling
 
     try {
         dateInput.showPicker();

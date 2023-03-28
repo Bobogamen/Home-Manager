@@ -40,7 +40,7 @@ public class Month {
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double previousMonthDifference;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private HomesGroup homesGroup;
 
     @LazyCollection(LazyCollectionOption.FALSE)

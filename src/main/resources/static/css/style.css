@@ -332,8 +332,81 @@ a:hover {
     position: absolute;
 }
 
+.fill-screen-width {
+    width: 100vh;
+}
+
+
+
 /* ---------- Utilities END ---------- */
 
+/* ---------- PDF STYLING START ---------- */
+.homes-list {
+    width: 100%;
+    text-align: center;
+    font-size: 11pt;
+}
+
+.homes-list-table > thead > tr > td {
+    border: 1pt solid;
+    padding: 0 6px 0 6px;
+    font-weight: bold;
+}
+
+.homes-list-table > tbody > tr > td {
+    border: 1pt solid;
+    padding: 3px 2px 3px 2px;
+    font-size: 9pt;
+}
+
+.homes-list-table > tfoot > tr > td {
+    border: 1pt solid;
+    padding: 0 5px 0 5px;
+    font-weight: bold;
+    width: fit-content;
+}
+
+.receipt-border {
+    width: 1100px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 11pt;
+}
+
+.receipt-div {
+    border: 1px solid;
+    padding: 1pt;
+    margin: 2pt 2pt 2pt 2pt;
+    width: fit-content;
+}
+
+.table-receipt{
+    width: 352px;
+    height: 122px;
+    padding: 0;
+    margin: 0;
+    border: 1pt solid;
+}
+
+.table-receipt > thead > tr > td {
+    border: 1pt solid;
+    font-weight: bold;
+}
+
+.table-receipt > tbody > tr > td {
+    border: 1pt solid;
+}
+
+.table-receipt > tfoot {
+    font-weight: bold;
+}
+
+.page-break-after {
+    page-break-after: always;
+}
+/* ---------- PDF STYLING END ---------- */
 
 
 

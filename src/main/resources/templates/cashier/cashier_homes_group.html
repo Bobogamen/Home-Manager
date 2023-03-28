@@ -25,7 +25,7 @@
                         <table class="table-fee m-auto">
                             <thead>
                             <tr>
-                                <td th:text="#{name}" class="bg-info border-rounded"></td>
+                                <td th:text="#{fee}" class="bg-info border-rounded"></td>
                                 <td th:text="#{BGN}" class="bg-info border-rounded"></td>
                                 <td th:text="#{number_single}" class="bg-info border-rounded"></td>
                                 <td th:text="#{total}" class="bg-info border-rounded"></td>
@@ -58,7 +58,12 @@
                             <input name="year" th:value="${yearNumber}" type="hidden">
                             <input id="monthHomeId" name="monthHomeId" value="" type="hidden">
                             <input name="data" value="" type="hidden">
-                            <button th:text="#{pay}" type="submit" class="button mt-4" onclick="pay(this)"></button>
+                            <div class="mt-5">
+                                <button th:text="#{pay}" type="submit" class="button" onclick="pay(this)"></button>
+                                <img src="/images/calendar.png" alt="calendar" class="icon" onclick="showCalendar(this)">
+                                <input th:value="${now.toString()}"
+                                       th:max="${now.toString()}" type="date" name="paidDate" class="calendar">
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -130,7 +135,12 @@
 
                 <div th:if="${currentMonth} != null" class="text-center d-flex justify-content-center">
                     <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
-                        <h3 th:text="|${homesGroup.getName()} #{for} ${monthName} ${yearNumber}|" class="fw-bold"></h3>
+                        <div class="d-inline-flex mt-1 mb-2">
+                            <h3 th:text="|${homesGroup.getName()} #{for} ${monthName} ${yearNumber}|" class="fw-bold m-0"></h3>
+                            <a th:href="|/cashier/homesGroup${homesGroup.getId()}/print?month=${monthNumber}&year=${yearNumber}|">
+                                <img alt="printer" class="icon ms-3 pointer mt-1" src="/images/print.png">
+                            </a>
+                        </div>
                         <table class="table table-hover table-sm table-bordered border-primary">
                             <thead>
                             <tr class="bg-info fw-bold align-middle">
@@ -275,9 +285,9 @@
                                                    th:errorclass="is-invalid"
                                                    th:placeholder="#{expense_example_document_number}" type="text" name="documentNumber"
                                                    class="float-start w-auto"/>
-                                            <img id="img" src="/images/calendar.png" alt="calendar" class="icon ms-2" onclick="showCalendar()">
+                                            <img id="img" src="/images/calendar.png" alt="calendar" class="icon ms-2" onclick="showCalendar(this)">
                                             <input th:field="*{documentDate}"
-                                                   id="calendar" type="date" th:max="${now.toString()}" name="documentDate" class="calendar">
+                                                   th:max="${now.toString()}" type="date" name="documentDate" class="calendar">
                                         </div>
                                     </div>
                                     <div th:if="${#fields.hasErrors('documentNumber')}" class="notificationRegister">

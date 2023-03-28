@@ -4,7 +4,6 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -162,5 +161,9 @@ public class HomesGroup {
         });
 
         return years;
+    }
+
+    public double getTotalForPay() {
+       return this.homes.stream().mapToDouble(Home::getTotalForMonth).sum();
     }
 }

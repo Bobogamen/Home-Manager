@@ -63,10 +63,15 @@ public class MonthService {
         return this.monthRepository.getMonthByNumberAndYearAndHomesGroupId(month, year, homesGroupId);
     }
 
-    public void setTotalPaymentForHome(Month month, MonthHomes monthHome, double totalPaid, long homesGroupId) {
+    public void setTotalPaymentForHome(Month month, MonthHomes monthHome, double totalPaid, LocalDate paidDate, long homesGroupId) {
 
         monthHome.setTotalPaid(totalPaid);
-        monthHome.setPaidDate(LocalDate.now());
+
+        if (paidDate == null) {
+            monthHome.setPaidDate(LocalDate.now());
+        } else {
+            monthHome.setPaidDate(paidDate);
+        }
 
         double monthCurrentIncome = getCurrentIncomeOfMonth(month);
         double monthTotalExpenses = getTotalExpensesOfMonth(month);

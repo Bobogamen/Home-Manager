@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title th:text="${homesGroup.getName()}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+        <!------------------------CONTENT------------------------>
+        <div th:with="homes=${homesGroup.getHomes()}" class="text-center">
+            <div th:if="${homesGroup.getHomes().size() == 0}" class="text-center d-flex justify-content-center">
+                <h4 th:text="#{no_homes}"></h4>
+            </div>
+            <th:block th:if="${homesGroup.getHomes().size() > 0}">
+                <div class="d-inline-flex">
+                    <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${now.getMonthValue()}&year=${now.getYear()}|">
+                        <h3 th:text="${homesGroup.getName()}" class="m-1 fw-bold"></h3>
+                    </a>
+                    <img alt="pdf" class="icon ms-3 pointer mt-1" src="/images/pdf.png" onclick="doPDF('homes_list')">
+                </div>
+                <div th:if="${currentMonth} == null">
+                    <p th:text="|#{current} #{month} #{no_created}|"></p>
+                </div>
+                <div th:if="${currentMonth} != null" class="text-center d-flex justify-content-center">
+                    <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
+                        <div style="width: 680px;">
+                            <div id="homes_list" class="homes-list">
+                                <div class="d-inline-flex mt-1 mb-2">
+                                    <h3 th:text="|${homesGroup.getName()} #{for} ${monthName} ${yearNumber}|" class="fw-bold m-0"></h3>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <table class="homes-list-table">
+                                        <thead>
+                                        <tr class="bg-info">
+                                            <td th:text="#{floor_short}"></td>
+                                            <td th:text="#{apartment}"></td>
+                                            <td th:text="#{owner}"></td>
+                                            <td th:text="#{residents}"></td>
+                                            <td th:text="|#{total}(#{BGN})|"></td>
+                                            <td th:text="#{paid_date}"></td>
+                                            <td th:text="#{signature}"></td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="h : ${homes}">
+                                            <td th:text="${h.getFloor()}"></td>
+                                            <td th:text="${h.getName()}"></td>
+                                            <td th:text="|${h.getOwner().getFirstName()} ${h.getOwner().getLastName()}|"></td>
+                                            <td th:text="${h.getResidents().size()}"></td>
+                                            <td th:text="${h.getTotalForMonth()}" class="opacity-50"></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr class="bg-info">
+                                            <td th:text="|#{total} ${#numbers.formatDecimal(homesGroup.getTotalForPay(), 1, 'WHITESPACE', 2, 'POINT')}|"
+                                                colspan="5" class="text-end px-3"></td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${currentMonth} != null" class="text-center d-flex justify-content-center mt-4">
+                    <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
+                        <div class="d-inline-flex mt-1 mb-2">
+                            <h3 th:text="|#{receipts}|" class="fw-bold m-0"></h3>
+                            <img alt="pdf" class="icon ms-3 pointer mt-1" src="/images/pdf.png" onclick="doPDF('receipts')">
+                        </div>
+                        <div id="receipts" class="row receipt-border">
+                            <div th:each="home, index : ${homes}"
+                                 th:class="${index.count % 9 == 0} ? 'page-break-after receipt-div' : 'receipt-div'">
+                                <h6 class="m-0 p-0">
+                                    <span th:text="|#{floor} |"></span><span th:text="${home.getFloor()}" class="badge border border-dark text-black"></span>
+                                    <span th:text="|#{apartment} |"></span><span th:text="${home.getName()}" class="badge border border-dark text-black"></span>
+                                </h6>
+                                <h5 th:text="|${monthName} ${yearNumber}|" class="fw-bold m-0 p-0"></h5>
+                                <table class="table-receipt">
+                                    <thead>
+                                    <tr>
+                                        <td th:text="#{fee}" class="bg-info"></td>
+                                        <td th:text="#{BGN}" class="bg-info"></td>
+                                        <td th:text="#{number_single}" class="bg-info"></td>
+                                        <td th:text="#{total}" class="bg-info"></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="f : ${home.getFees()}">
+                                        <td th:text="${f.getFee().getName()}"></td>
+                                        <td th:text="${#numbers.formatDecimal(f.getFee().getValue(), 1, 'WHITESPACE', 2, 'POINT')}" class=""></td>
+                                        <td>
+                                            <select onchange="receiptCalculateTotal(this)"
+                                                    class="bg-transparent text-center m-0 p-0 border-0 webkit-appearance-none">
+                                                <option th:each="n : ${#numbers.sequence(0, 50)}"
+                                                        th:value="${n}"
+                                                        th:text="${n}"
+                                                        th:selected="${f.getTimes()} == ${n}">
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td th:text="${#numbers.formatDecimal(f.getFee().getValue() * f.getTimes(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td th:text="|#{total} ${home.getTotalForMonth()}#{BGN}|" colspan="4" class="bg-info text-end pe-2"></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+    <div class="row">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</div>
+<script src="/js/utils.js"></script>
+<script src="/js/receipt.js"></script>
+<script src="/js/html2pdf.bundle.min.js"></script>
+</body>
+</html>
+

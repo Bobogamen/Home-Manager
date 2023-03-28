@@ -108,7 +108,7 @@ function fillMonthHomeId(monthHomeId) {
 }
 
 function pay(target) {
-    target.parentElement[4].value = collectDataFromRows()
+    target.form.children[4].value = collectDataFromRows()
 }
 
 async function viewPayments(target) {

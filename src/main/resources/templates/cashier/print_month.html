@@ -25,7 +25,7 @@
                     <img alt="pdf" class="icon ms-3 pointer mt-1" src="/images/pdf.png" onclick="doPDF('homes_list')">
                 </div>
                 <div th:if="${currentMonth} == null">
-                    <p th:text="|#{current} #{month} #{no_created}|"></p>
+                    <p th:text="|#{the_current} #{month} #{no_created}|"></p>
                 </div>
                 <div th:if="${currentMonth} != null" class="text-center d-flex justify-content-center">
                     <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">

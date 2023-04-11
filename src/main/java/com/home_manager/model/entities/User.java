@@ -3,9 +3,7 @@ package com.home_manager.model.entities;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -32,7 +30,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles")
-    private Set<Role> role;
+    private List<Role> role;
 
     @ManyToMany(mappedBy = "users",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<HomesGroup> homesGroup;
@@ -41,7 +39,7 @@ public class User {
     private List<User> cashiers;
 
     public User() {
-        this.role = new HashSet<>();
+        this.role = new ArrayList<>();
         this.homesGroup = new ArrayList<>();
         this.cashiers = new ArrayList<>();
     }
@@ -78,8 +76,8 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRole() {
-        return role;
+    public List<Role> getRole() {
+        return role.stream().toList();
     }
 
     public void setRole(Role role) {
@@ -106,7 +104,7 @@ public class User {
         this.resetPasswordToken = resetPasswordToken;
     }
 
-    public void setRole(Set<Role> role) {
+    public void setRole(List<Role> role) {
         this.role = role;
     }
 

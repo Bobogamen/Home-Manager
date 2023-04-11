@@ -24,6 +24,8 @@
                             <td>Registration Date</td>
                             <td>email</td>
                             <td>Name</td>
+                            <td>Roles</td>
+                            <td>Manager</td>
                             <td>Homes Group count</td>
                             <td>Cashiers count</td>
                             <td></td>
@@ -35,6 +37,12 @@
                             <td th:text="${#temporals.format(u.getRegisteredOn(), 'dd-MM-yyyy')}"></td>
                             <td th:text="${u.getEmail()}"></td>
                             <td th:text="${u.getName()}"></td>
+                            <td>
+                                <th:block th:each="r : ${u.getRole()}">
+                                    <span th:text="${r.getName()}"></span>
+                                </th:block>
+                            </td>
+                            <td th:text="${u.get}"></td>
                             <td th:text="${u.getHomesGroup().size()}"></td>
                             <td th:text="${u.getCashiers().size()}"></td>
                             <td>

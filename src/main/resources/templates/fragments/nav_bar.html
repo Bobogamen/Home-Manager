@@ -5,58 +5,58 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <title>Home Manager</title>
 </head>
 <body>
-<nav class="text-center">
-    <table class="col-12">
-        <thead>
-        <tr class="row-cols-auto align-middle text-center">
-            <th class="col-1 text-start">
-                <a sec:authorize="isAnonymous()" href="/">
-                    <img src="/images/home-page/logo.png" alt="logo" style="max-height: 80px">
-                </a>
-                <a sec:authorize="isAuthenticated()" href="/profile">
-                    <img src="/images/home-page/logo.png" alt="logo" style="max-height: 80px">
-                </a>
-            </th>
-            <th sec:authorize="hasRole('ADMIN')" class="col-1">
-                <a th:text="#{admin}" href="/admin" class="authorize-button"></a>
-            </th>
-            <th sec:authorize="hasRole('MANAGER')" class="col-1">
-                <a th:text="#{manager}" href="/profile" class="authorize-button"></a>
-            </th>
-            <th sec:authorize="hasRole('CASHIER')" class="col-1">
-                <a th:text="#{cashier}" href="/cashier" class="authorize-button"></a>
-            </th>
-            <th sec:authorize="isAnonymous()" class="col-12">
-                <div>
+<nav class="justify-content-between d-flex align-items-center">
+    <div>
+        <a sec:authorize="isAnonymous()" href="/">
+            <img src="/images/home-page/logo.png" alt="logo" style="max-height: 80px">
+        </a>
+        <a sec:authorize="isAuthenticated()" href="/profile">
+            <img src="/images/home-page/logo.png" alt="logo" style="max-height: 80px">
+        </a>
+    </div>
+    <div sec:authorize="hasRole('ADMIN')">
+        <a th:text="#{admin}" href="/admin" class="authorize-button"></a>
+    </div>
+    <div sec:authorize="hasRole('MANAGER')">
+        <a th:text="#{manager}" href="/profile" class="authorize-button"></a>
+    </div>
+    <div sec:authorize="hasRole('CASHIER')">
+        <a th:text="#{cashier}" href="/cashier" class="authorize-button"></a>
+    </div>
+    <div sec:authorize="isAnonymous()">
+        <a th:text="#{registration}" href="/register" class="button"></a>
+    </div>
+    <div sec:authorize="isAnonymous()" class="dropdown">
+        <button th:text="#{login}" class="button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+        <div class="dropdown-menu text-center bg-info">
+            <div class="p-2">
                 <form th:action="@{/}" th:method="POST">
-                    <label for="username"></label>
-                    <input type="text" placeholder="Email" name="username" id="username" class="loginForm">
-                    <label for="password"></label>
+                    <input type="text" placeholder="Email" name="username" id="username" class="loginForm my-3">
                     <input type="password" th:placeholder="#{enter_password}" name="password" id="password" class="loginForm">
-                    <button th:text="#{login}" type="submit" class="button"></button>
+                    <div class="mt-3">
+                        <input type="checkbox" name="remember-me" id="remember-me" class="width-fit-content">
+                        <label th:text="#{remember_me}" for="remember-me"></label>
+                        <button th:text="#{login}" type="submit" class="button"></button>
+                    </div>
                 </form>
-                </div>
-                <div class="mt-1">
-                    <a th:text="#{forgot_password}" href="/forgot-password" class="button" style="font-size: 8pt"></a>
-                </div>
-            </th>
-            <th sec:authorize="isAnonymous()" class="col-1">
-                <a th:text="#{registration}" href="/register" class="button"></a>
-            </th>
-            <th sec:authorize="isAuthenticated()" class="col-1 text-end">
-                <a href="/profile/edit" th:text="${#authentication.principal.name}" class="button me-2"></a>
-            </th>
-            <th sec:authorize="isAuthenticated()" class="col-1 text-start">
-                <form th:action="@{/logout}" th:method="POST">
-                    <button th:text="#{logout}" type="submit" class="button"></button>
-                </form>
-            </th>
-        </tr>
-        </thead>
-    </table>
+            </div>
+            <div class="mt-3">
+                <a th:text="|#{forgot_password}?|" href="/forgot-password" class="button p-1 mt-2" style="font-size: 8pt"></a>
+            </div>
+        </div>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <a href="/profile/edit" th:text="${#authentication.principal.name}" class="button me-2"></a>
+    </div>
+    <div sec:authorize="isAuthenticated()" class="col-1 text-start">
+        <form th:action="@{/logout}" th:method="POST">
+            <button th:text="#{logout}" type="submit" class="button"></button>
+        </form>
+    </div>
 </nav>
 </body>
 </html>

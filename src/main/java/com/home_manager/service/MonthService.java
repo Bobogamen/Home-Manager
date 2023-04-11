@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MonthService {
@@ -28,6 +29,7 @@ public class MonthService {
         Month newMonth = new Month();
         newMonth.setNumber(month);
         newMonth.setYear(year);
+        newMonth.setCompleted(false);
         newMonth.setCurrentIncome(0.00);
         newMonth.setTotalIncome(0.00);
         newMonth.setTotalExpenses(0.00);
@@ -67,11 +69,7 @@ public class MonthService {
 
         monthHome.setTotalPaid(totalPaid);
 
-        if (paidDate == null) {
-            monthHome.setPaidDate(LocalDate.now());
-        } else {
-            monthHome.setPaidDate(paidDate);
-        }
+        monthHome.setPaidDate(Objects.requireNonNullElseGet(paidDate, LocalDate::now));
 
         double monthCurrentIncome = getCurrentIncomeOfMonth(month);
         double monthTotalExpenses = getTotalExpensesOfMonth(month);
@@ -130,5 +128,10 @@ public class MonthService {
         }
 
         return 0.00;
+    }
+
+    public void completeMonth(Month month) {
+        month.setCompleted(true);
+        this.monthRepository.save(month);
     }
 }

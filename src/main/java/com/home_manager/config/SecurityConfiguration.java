@@ -39,12 +39,16 @@ public class SecurityConfiguration {
                 defaultSuccessUrl("/profile").
                 failureForwardUrl("/login-fail").
         and().
+                rememberMe().
+                rememberMeParameter("remember-me").
+                tokenValiditySeconds(7 * 24 * 60 * 60).
+                key("home-manager_remember_me").
+        and().
                 logout().
                 logoutUrl("/logout").
                 logoutSuccessUrl("/").
                 invalidateHttpSession(true).
                 deleteCookies("JSESSIONID");
-
         return http.build();
     }
 

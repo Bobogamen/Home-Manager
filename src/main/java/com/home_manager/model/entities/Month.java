@@ -40,6 +40,9 @@ public class Month {
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double previousMonthDifference;
 
+    @Column(nullable = false)
+    private boolean completed;
+
     @ManyToOne
     private HomesGroup homesGroup;
 
@@ -82,6 +85,14 @@ public class Month {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public double getCurrentIncome() {

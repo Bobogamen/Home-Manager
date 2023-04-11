@@ -269,10 +269,24 @@ public class CashierController {
 
             redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
 
-            return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, month, year);
+            return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, this.month, this.year);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
+    }
+
+    @PostMapping("/homesGroup{homesGroupId}/completeMonth")
+    public String completeMonth(@PathVariable long homesGroupId, @RequestParam(name = "month") int month, @RequestParam(name = "year") int year,
+                                @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) {
+
+        if (isAuthorized(homesGroupId, user.getId())) {
+            this.monthService.completeMonth(this.monthService.getMonthByNumberAndYearAndHomesGroupId(month, year, homesGroupId));
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        redirectAttributes.addFlashAttribute("success", Notifications.MONTH_COMPLETION.getValue());
+        return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, month, year);
     }
 
     @GetMapping("/homesGroup{homesGroupId}/years")

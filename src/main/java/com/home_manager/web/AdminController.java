@@ -3,13 +3,17 @@ package com.home_manager.web;
 import com.home_manager.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -21,7 +25,7 @@ public class AdminController {
         this.request = request;
     }
 
-    @GetMapping("/admin")
+    @GetMapping("")
     public ModelAndView admin() {
 
         if (this.request.isUserInRole("ADMIN")) {

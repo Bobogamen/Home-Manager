@@ -21,9 +21,6 @@ public class I18NConfiguration implements WebMvcConfigurer {
         SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
         sessionLocaleResolver.setDefaultLocale(Locale.US);
 
-//        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-//        cookieLocaleResolver.setCookieName("lang");
-
         return sessionLocaleResolver;
     }
 

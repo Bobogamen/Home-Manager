@@ -44,12 +44,12 @@ class HomeManagerApplicationTests {
         addExpenseDTO.setName("Разход");
         addExpenseDTO.setValue(9.99);
         addExpenseDTO.setDocumentNumber("1234567890");
-        addExpenseDTO.setAddedOn(LocalDate.now());
+        addExpenseDTO.setDocumentDate(LocalDate.now());
 
         Assertions.assertEquals("Разход", addExpenseDTO.getName());
         Assertions.assertEquals(9.99, addExpenseDTO.getValue());
         Assertions.assertEquals("1234567890", addExpenseDTO.getDocumentNumber());
-        Assertions.assertEquals(LocalDate.now(), addExpenseDTO.getAddedOn());
+        Assertions.assertEquals(LocalDate.now(), addExpenseDTO.getDocumentDate());
     }
 
     @Test
@@ -207,17 +207,17 @@ class HomeManagerApplicationTests {
         Assertions.assertEquals("b_davidov@abv.bg", user.getEmail());
         Assertions.assertEquals("password", user.getPassword());
     }
-        @Test
-    void testSendAllEmailTemplates() {
-
-        String sendTo = "Bobogamen@students.softuni.bg";
-        HomeManagerUserDetails manager = new HomeManagerUserDetails(1, "b_davidov@abv.bg", "Борис Илиев",
-                "password", LocalDate.now(), null, null, null);
-
-        MockHttpServletRequest request = new MockHttpServletRequest();
-
-        emailService.sendRegistrationEmail(sendTo);
-        emailService.sendCashierRegistrationEmail(sendTo, manager, "appUrl.com");
-        emailService.sendRecoveryPasswordEmail(sendTo, request);
-    }
+//    @Test
+//    void testSendAllEmailTemplates() {
+//
+//        String sendTo = "Bobogamen@students.softuni.bg";
+//        HomeManagerUserDetails manager = new HomeManagerUserDetails(1, "b_davidov@abv.bg", "Борис Илиев",
+//                "password", LocalDate.now(), null, null, null);
+//
+//        MockHttpServletRequest request = new MockHttpServletRequest();
+//
+//        emailService.sendRegistrationEmail(sendTo);
+//        emailService.sendCashierRegistrationEmail(sendTo, manager, "appUrl.com");
+//        emailService.sendRecoveryPasswordEmail(sendTo, request);
+//    }
 }

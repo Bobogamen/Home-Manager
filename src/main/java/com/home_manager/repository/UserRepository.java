@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User getUserByResetPasswordToken(String token);
 
-    @Query("SELECT u.resetPasswordToken FROM User u WHERE u.email =:email")
+    @Query("SELECT u.resetPasswordToken FROM User u WHERE u.email = :email")
     String getResetPasswordTokenByEmail(@Param("email") String email);
 
     List<User> findAllByResetPasswordTokenNotNull();

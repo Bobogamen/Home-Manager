@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <title th:text="|#{edit} #{profile}|"></title>
+
+</head>
+<body>
+<main class="w-100">
+    <div class="container-fluid">
+        <section th:replace="fragments/notification :: section"></section>
+        <nav th:replace="fragments/nav_bar :: nav"></nav>
+        <div class="row line">
+            <div class="row justify-content-center">
+                <div class="d-grid justify-content-center align-items-center mt-4">
+                    <h3 th:text="|#{edit} #{name}|" class="text-center"></h3>
+                    <th:block th:object="${registrationDTO}">
+                        <div class="registrationForm mb-3">
+                            <form th:action="@{/profile/edit-name}"
+                                  th:method="POST">
+                                <label for="name">
+                                    <input th:value="${user.getName()}" type="text" name="name" id="name" class="field mt-3">
+                                </label>
+                                <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
+                                    <p th:each="err : ${#fields.errors('name')}"
+                                       th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                                </div>
+                                <button th:text="#{change}" type="submit" class="button m-3"></button>
+                            </form>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+</main>
+</body>
+</html>

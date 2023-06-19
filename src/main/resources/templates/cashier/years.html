@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="${homesGroup.getName()}"></title>
 </head>
 <body>
@@ -46,10 +47,13 @@
                             <tr class="bg-info fw-bold align-middle">
                                 <td th:text="#{month}"></td>
                                 <td th:text="#{incomes}"></td>
-                                <td th:text="#{previous_month}"></td>
-                                <td th:text="|#{total}|"></td>
-                                <td th:text="#{expense}"></td>
+                                <td th:text="#{expenses}"></td>
                                 <td th:text="#{difference}"></td>
+                                <td th:text="#{previous_month}"></td>
+                                <td class="w-25">
+                                    <h4 th:text="#{total}" class="fw-bold"></h4>
+                                    <h6 th:text="|(#{difference}+#{previous_month})|" style="font-size: 0.8rem"></h6>
+                                </td>
                             </tr>
                             </thead>
                             <tbody class="fs-6">
@@ -59,10 +63,17 @@
                                         <span th:text="${m.getMonthName(m.getNumber())}"></span>
                                     </a>
                                 </td>
-                                <td th:text="${#numbers.formatDecimal(m.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
-                                <td th:text="${#numbers.formatDecimal(m.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
-                                <td th:text="${#numbers.formatDecimal(m.getTotalIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(m.getIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td th:text="${#numbers.formatDecimal(m.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+
+                                <td th:text="(${m.getCurrentDifference() > 0} ?
+                                '+' + ${#numbers.formatDecimal(m.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')}
+                                : ${#numbers.formatDecimal(m.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')})"></td>
+
+                                <td th:text="(${m.getPreviousMonthDifference() > 0} ?
+                                '+' + ${#numbers.formatDecimal(m.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}
+                                : ${#numbers.formatDecimal(m.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')})"></td>
+
                                 <td th:text="(${m.getTotalDifference() > 0} ?
                                 '+' + ${#numbers.formatDecimal(m.getTotalDifference(), 1, 'WHITESPACE', 2, 'POINT')}
                                 : ${#numbers.formatDecimal(m.getTotalDifference(), 1, 'WHITESPACE', 2, 'POINT')})"></td>

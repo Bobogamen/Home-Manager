@@ -162,25 +162,47 @@ public class ProfileController {
         }
     }
 
-    @GetMapping("/edit")
-    public ModelAndView edit(@AuthenticationPrincipal HomeManagerUserDetails user) {
+    @GetMapping("/edit-name")
+    public ModelAndView editName(@AuthenticationPrincipal HomeManagerUserDetails user) {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("user", this.userService.getUserById(user.getId()));
-        modelAndView.setViewName("edit_profile");
+        modelAndView.setViewName("edit_name");
 
         return modelAndView;
     }
 
     @PostMapping("/edit-name")
-    public String editName(@AuthenticationPrincipal HomeManagerUserDetails user, String name, RedirectAttributes redirectAttributes) {
+    public String editName(@Valid RegistrationDTO registrationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                           @AuthenticationPrincipal HomeManagerUserDetails user) {
 
-        this.userService.editUserName(user.getId(), name);
-        user.setName(name);
+        if (bindingResult.hasFieldErrors("name")) {
+            redirectAttributes.addFlashAttribute("registrationDTO", registrationDTO);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.registrationDTO", bindingResult);
+
+            return "redirect:/profile/edit-name";
+        }
+
+        this.userService.editUserName(user.getId(), registrationDTO.getName());
+        user.setName(registrationDTO.getName());
 
         redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
 
+        if (user.isCashier()) {
+            return "redirect:/cashier";
+        }
+
         return "redirect:/profile";
+    }
+
+    @GetMapping("/change-password")
+    public ModelAndView changePassword(@AuthenticationPrincipal HomeManagerUserDetails user) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("user", this.userService.getUserById(user.getId()));
+        modelAndView.setViewName("change_password");
+
+        return modelAndView;
     }
 
     @PostMapping("/change-password")
@@ -191,13 +213,13 @@ public class ProfileController {
             redirectAttributes.addFlashAttribute("registrationDTO", registrationDTO);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.registrationDTO", bindingResult);
 
-            return "redirect:/profile/edit";
+            return "redirect:/profile/change-password";
         }
 
         this.userService.changePasswordByUserId(user.getId(), registrationDTO.getPassword());
         redirectAttributes.addFlashAttribute("success", Notifications.PASSWORD_CHANGED_SUCCESSFULLY.getValue());
 
-        if (this.request.isUserInRole("CASHIER")) {
+        if (user.isCashier()) {
             return "redirect:/cashier";
         }
 

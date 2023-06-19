@@ -1,6 +1,10 @@
 package com.home_manager.model.dto;
 
+import com.home_manager.model.validation.StartPeriod;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.*;
+import java.time.LocalDate;
 
 public class AddHomesGroupDTO {
 
@@ -10,11 +14,18 @@ public class AddHomesGroupDTO {
     private String name;
 
     @Positive(message = "{positive_number}")
-    private int size;
+    @NotNull(message = "{not_empty}")
+    private Integer size;
 
     @NotEmpty(message = "{not_empty}")
     @NotBlank(message = "{non-whitespace}")
     private String type;
+
+    @NotNull(message = "{not_empty}")
+    @PastOrPresent(message = "{not_future_date_or_before_2018}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @StartPeriod
+    private LocalDate startPeriod;
 
     @NotEmpty(message = "{not_empty}")
     @NotBlank(message = "{non-whitespace}")
@@ -32,6 +43,14 @@ public class AddHomesGroupDTO {
         this.name = name;
     }
 
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
     public String getType() {
         return type;
     }
@@ -40,12 +59,12 @@ public class AddHomesGroupDTO {
         this.type = type;
     }
 
-    public int getSize() {
-        return size;
+    public LocalDate getStartPeriod() {
+        return startPeriod;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setStartPeriod(LocalDate startPeriod) {
+        this.startPeriod = startPeriod;
     }
 
     public String getBackgroundColor() {

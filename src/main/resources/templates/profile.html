@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="#{profile}"></title>
 </head>
 <body>
@@ -21,7 +22,7 @@
                 </a>
             </div>
             <h3 th:if="${homeGroups.size() == 0}" th:text="#{no_homes_group}"></h3>
-            <div class="justify-content-center d-flex">
+            <div class="row justify-content-md-center">
                 <div th:each="hg : ${homeGroups}" class="width-fit-content m-auto p-2">
                     <a th:href="|/profile/homesGroup${hg.getId()}|" style="text-decoration: none">
                         <div th:style="'background-color: ' + ${hg.getBackgroundColor()}" class="homes-group">

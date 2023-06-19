@@ -2,10 +2,7 @@ package com.home_manager.model.dto;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 public class AddExpenseDTO {
@@ -21,6 +18,7 @@ public class AddExpenseDTO {
     @NotBlank(message = "{non-whitespace}")
     private String documentNumber;
 
+    @NotNull(message = "{not_valid_date}")
     @PastOrPresent(message = "{not_future_date}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate documentDate;

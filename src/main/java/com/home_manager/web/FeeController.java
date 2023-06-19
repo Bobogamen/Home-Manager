@@ -1,5 +1,6 @@
 package com.home_manager.web;
 
+import com.home_manager.model.dto.AddFeeDTO;
 import com.home_manager.model.entities.Fee;
 import com.home_manager.model.entities.Home;
 import com.home_manager.model.entities.HomesGroup;
@@ -12,15 +13,15 @@ import com.home_manager.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/profile/homesGroup{homesGroupId}")
@@ -53,34 +54,48 @@ public class FeeController {
         return modelAndView;
     }
 
+    @ModelAttribute("addFeeDTO")
+    private AddFeeDTO addFeeDTO() {
+        return new AddFeeDTO();
+    }
+
     @PostMapping("/add-fee")
-    private String addFee(@PathVariable long homesGroupId, @RequestParam Map<String, String> inputs,
-                          RedirectAttributes redirectAttributes, @AuthenticationPrincipal HomeManagerUserDetails user) {
+    private String addFee(@PathVariable long homesGroupId, @Valid AddFeeDTO addFeeDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                          @RequestParam(name = "homes") Map<String, String> homes, @AuthenticationPrincipal HomeManagerUserDetails user) {
 
-        inputs.remove("_csrf");
-        String name = inputs.remove("name");
-        double value = Double.parseDouble(inputs.remove("value"));
+        if(homes.isEmpty()) {
+            redirectAttributes.addFlashAttribute("addFeeDTO", addFeeDTO);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addFeeDTO", bindingResult);
 
-        if (inputs.size() == 0) {
+            return "redirect:/profile/homesGroup{homesGroupId}/add-fee";
+        }
+
+
+
+//        inputs.remove("_csrf");
+//        String name = inputs.remove("name");
+//        double value = Double.parseDouble(inputs.remove("value"));
+
+        if (homes.size() == 0) {
             redirectAttributes.addFlashAttribute("fail", Notifications.CHOOSE_AT_LEAST_ONE_HOME.getValue());
             return "redirect:/profile/homesGroup{homesGroupId}/add-fee";
         }
 
         if (isAuthorized(homesGroupId, user.getId())) {
 
-            List<Long> homes = inputs.entrySet().stream().map( entry -> {
-                if (entry.getValue().equals("true")) {
-                    return Long.parseLong(entry.getKey());
-                }
+//            List<Long> homes = inputs.entrySet().stream().map( entry -> {
+//                if (entry.getValue().equals("true")) {
+//                    return Long.parseLong(entry.getKey());
+//                }
+//
+//                return null;
+//            }).filter(Objects::nonNull).toList();
 
-                return null;
-            }).filter(Objects::nonNull).toList();
-
-            Fee fee = this.feeService.addFee(name, value, this.homesGroupService.getHomesGroupById(homesGroupId));
-            homes.forEach(h -> this.homeService.setFeeToHome(h, fee));
-
-            redirectAttributes.addFlashAttribute("success",
-                    inputs.size() == 1 ? Notifications.FEE_ADD_FOR_HOME.getValue() : Notifications.FEE_ADD_FOR_HOMES.getValue());
+//            Fee fee = this.feeService.addFee(name, value, this.homesGroupService.getHomesGroupById(homesGroupId));
+//            homes.forEach(h -> this.homeService.setFeeToHome(h, fee));
+//
+//            redirectAttributes.addFlashAttribute("success",
+//                    inputs.size() == 1 ? Notifications.FEE_ADD_FOR_HOME.getValue() : Notifications.FEE_ADD_FOR_HOMES.getValue());
             return "redirect:/profile/homesGroup{homesGroupId}";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);

@@ -14,6 +14,7 @@ import com.home_manager.service.HomeService;
 import com.home_manager.service.HomesGroupService;
 import com.home_manager.service.ResidentService;
 import com.home_manager.service.UserService;
+import com.home_manager.utility.MonthsUtility;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -64,7 +65,6 @@ public class HomesGroupController {
 
             double total = homesGroup.getHomes().stream().mapToDouble(Home::getTotalForMonth).sum();
             modelAndView.addObject("total", total);
-//            modelAndView.addObject("total", new DecimalFormat("#.##").format(total));
 
             return modelAndView;
         } else {
@@ -162,7 +162,11 @@ public class HomesGroupController {
         if (isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("manager/edit-homes_group");
-            modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
+
+            HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
+            modelAndView.addObject("homesGroup", homesGroup);
+
+            modelAndView.addObject("monthName", MonthsUtility.getMonthName(homesGroup.getStartPeriod().getMonthValue()));
 
             return modelAndView;
         } else {
@@ -184,13 +188,13 @@ public class HomesGroupController {
                 redirectAttributes.addFlashAttribute("addHomesGroupDTO", addHomesGroupDTO);
                 redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addHomesGroupDTO", bindingResult);
 
-                return "redirect:/edit/homesGroups{homesGroupId}";
+                return "redirect:/profile/homesGroup{homesGroupId}/edit";
             }
 
             this.homesGroupService.editHomesGroup(addHomesGroupDTO, homesGroupId);
 
             redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
-            return "redirect:/profile/homesGroup{homesGroupId}";
+            return "redirect:/profile/homesGroup{homesGroupId}/edit";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

@@ -5,7 +5,6 @@ import com.home_manager.model.dto.HomePaymentsDTO;
 import com.home_manager.model.entities.MonthHomes;
 import com.home_manager.model.entities.Payment;
 import com.home_manager.repository.FeeRepository;
-import com.home_manager.repository.MonthRepository;
 import com.home_manager.repository.PaymentsRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +16,10 @@ public class PaymentsService {
 
     private final PaymentsRepository paymentsRepository;
     private final FeeRepository feeRepository;
-    private final MonthRepository monthRepository;
 
-    public PaymentsService(PaymentsRepository paymentsRepository, FeeRepository feeRepository, MonthRepository monthRepository) {
+    public PaymentsService(PaymentsRepository paymentsRepository, FeeRepository feeRepository) {
         this.paymentsRepository = paymentsRepository;
         this.feeRepository = feeRepository;
-        this.monthRepository = monthRepository;
     }
 
     public List<HomePaymentsDTO> getPaymentsByHome(MonthHomes monthHome) {
@@ -39,7 +36,7 @@ public class PaymentsService {
         }).toList();
     }
 
-    public double makePayments(MonthHomes monthHome, FeePaymentDTO[] feePaymentDTOS) throws Exception {
+    public double makePayments(MonthHomes monthHome, FeePaymentDTO[] feePaymentDTOS) {
         List<Payment> payments = new ArrayList<>();
 
         for (FeePaymentDTO feePaymentDTO : feePaymentDTOS) {

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="${homesGroup.getName()}"></title>
 </head>
 <body>
@@ -56,7 +57,7 @@
                                         <span th:text="${m.getMonthName(m.getNumber())}"></span>
                                     </a>
                                 </td>
-                                <td th:text="${#numbers.formatDecimal(m.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(m.getIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td th:text="${#numbers.formatDecimal(m.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td th:text="${#numbers.formatDecimal(m.getTotalIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td th:text="${#numbers.formatDecimal(m.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}"></td>

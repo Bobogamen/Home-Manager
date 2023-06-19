@@ -4,6 +4,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,21 +15,33 @@ public class HomesGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String type;
+
     @Column(nullable = false)
     private String backgroundColor;
+
+    @Column(nullable = false)
     private int size;
+
+    @Column(nullable = false, columnDefinition = "DATE")
+    private LocalDate startPeriod;
+
     @OneToMany(mappedBy = "homesGroup", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Home> homes;
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "homesGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Fee> fees;
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "homesGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Month> months;
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> users;
@@ -77,6 +90,14 @@ public class HomesGroup {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public LocalDate getStartPeriod() {
+        return startPeriod;
+    }
+
+    public void setStartPeriod(LocalDate startPeriod) {
+        this.startPeriod = startPeriod;
     }
 
     public List<Home> getHomes() {

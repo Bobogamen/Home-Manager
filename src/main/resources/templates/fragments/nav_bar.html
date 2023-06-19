@@ -49,8 +49,12 @@
             </div>
         </div>
     </div>
-    <div sec:authorize="isAuthenticated()">
-        <a href="/profile/edit" th:text="${#authentication.principal.name}" class="button me-2"></a>
+    <div sec:authorize="isAuthenticated()" class="dropdown">
+        <button th:text="${#authentication.principal.name}" class="button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+        <div class="dropdown-menu text-center bg-info">
+            <a th:text="|#{change} #{name}|" class="dropdown-item" href="/profile/edit-name"></a>
+            <a th:text="|#{change} #{password}|" class="dropdown-item" href="/profile/change-password"></a>
+        </div>
     </div>
     <div sec:authorize="isAuthenticated()" class="col-1 text-start">
         <form th:action="@{/logout}" th:method="POST">

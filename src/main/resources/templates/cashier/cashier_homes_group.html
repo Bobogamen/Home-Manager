@@ -93,30 +93,30 @@
                                 <button th:text="#{years}" class="btn btn-dark years"></button>
                             </a>
                         </div>
-                        <a th:href="|/cashier/homesGroup${homesGroup.getId()}/?month=${monthNumber - 1}&year=${yearNumber}|">
-                            <img src="/images/back.png" alt="back" class="icon">
-                        </a>
                         <form th:action="|/cashier/homesGroup${homesGroup.getId()}|"
                               th:method="GET" onchange="this.submit()">
                             <select name="month" class="m-1 bg-transparent text-center webkit-appearance-none">
-                                <option th:each="m, index : ${T(com.home_manager.model.enums.Months).values()}"
+                                <option th:if="${yearNumber == now.getYear()}"
+                                        th:each="m, index : ${monthList}"
                                         th:value="${index.count}"
-                                        th:text="${m.getValue()}"
+                                        th:text="${m.value}"
+                                        th:selected="${index.count} == ${monthNumber}">
+                                </option>
+                                <option th:if="${yearNumber != now.getYear()}"
+                                        th:each="m, index : ${T(com.home_manager.model.enums.Months).values()}"
+                                        th:value="${index.count}"
+                                        th:text="${m.value}"
                                         th:selected="${index.count} == ${monthNumber}">
                                 </option>
                             </select>
-
                             <select name="year" class="m-1 bg-transparent text-center webkit-appearance-none">
-                                <option th:each="y : ${#numbers.sequence(2010, 2050)}"
+                                <option th:each="y : ${#numbers.sequence(2018, now.getYear())}"
                                         th:value="${y}"
                                         th:text="${y}"
                                         th:selected="${y} == ${yearNumber}">
                                 </option>
                             </select>
                         </form>
-                        <a th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${monthNumber + 1}&year=${yearNumber}|">
-                            <img src="/images/forward.png" alt="forward" class="icon">
-                        </a>
                     </div>
                 </div>
                 <div th:if="${currentMonth} == null">
@@ -183,7 +183,7 @@
                             <tfoot>
                             <tr class="bg-info fw-bold align-middle">
                                 <td th:text="#{total}" colspan="3"></td>
-                                <td th:text="${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(currentMonth.getIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -193,16 +193,16 @@
                     <div class="text-center justify-content-center">
                         <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content bg-light">
                             <h3 th:text="|#{total} #{for} ${monthName} ${yearNumber}|" class="fw-bold"></h3>
-                            <div th:if="${currentMonth.getExpenses().size() == 0} and ${currentMonth.getCurrentIncome() == 0}"
+                            <div th:if="${currentMonth.getExpenses().size() == 0} and ${currentMonth.getIncome() == 0}"
                                  class="text-center d-block justify-content-center">
                                 <h4 th:text="|#{no_expenses}/#{incomes}|"></h4>
                             </div>
-                            <table th:if="${currentMonth.getExpenses().size() > 0} or ${currentMonth.getCurrentIncome() > 0}"
+                            <table th:if="${currentMonth.getExpenses().size() > 0} or ${currentMonth.getIncome() > 0}"
                                    class="table table-hover table-sm table-bordered border-primary">
                                 <tbody class="fs-6">
                                 <tr class="align-middle">
-                                    <td th:text="|#{current} #{month}|"></td>
-                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
+                                    <td th:text="#{incomes}"></td>
+                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getIncome(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
                                 </tr>
                                 <tr class="align-middle">
                                     <td th:text="#{expenses}"></td>
@@ -211,13 +211,22 @@
                                 </tbody>
                                 <tfoot>
                                 <tr class="bg-info fw-bold align-middle">
-                                    <td th:text="|#{difference} #{current} #{month}|"></td>
+                                    <td th:text="|#{difference} (#{incomes} + #{expenses})|"></td>
                                     <td th:text="(${currentMonth.getCurrentDifference()} > 0 ?
                                 '+' + ${#numbers.formatDecimal(currentMonth.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')}
                                 : ${#numbers.formatDecimal(currentMonth.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')}) + #{BGN}"></td>
                                 </tr>
                                 <tr class="align-middle">
-                                    <td th:text="#{previous_month}"></td>
+                                    <td>
+                                        <div>
+                                            <span th:text="|#{from} #{previous_month}|"></span>
+                                            <a th:if="${previousMonth != null}"
+                                               th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${previousMonth.getNumber()}&year=${previousMonth.getYear()}|"
+                                               th:text="|${previousMonth.getNumber()}/${previousMonth.getYear()}|"></a>
+                                        </div>
+
+
+                                    </td>
                                     <td th:text="|${#numbers.formatDecimal(currentMonth.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
                                 </tr>
                                 <tr class="bg-warning fw-bold align-middle">

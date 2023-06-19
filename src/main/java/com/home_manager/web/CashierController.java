@@ -37,8 +37,6 @@ public class CashierController {
     private final PaymentsService paymentsService;
     private final ExpenseService expenseService;
     private final LocalDate now;
-    private int month;
-    private int year;
 
     public CashierController(UserService userService, HomesGroupService homesGroupService, MonthService monthService, PaymentsService paymentsService, ExpenseService expenseService) {
         this.userService = userService;
@@ -47,16 +45,18 @@ public class CashierController {
         this.paymentsService = paymentsService;
         this.expenseService = expenseService;
         this.now = LocalDate.now();
-        this.month = this.now.getMonthValue();
-        this.year = this.now.getYear();
     }
 
     private boolean isAuthorized(long homesGroupId, long userId) {
         return this.userService.isOwner(homesGroupId, userId);
     }
 
+    private boolean futureCheck(int month, int year) {
+        return month > this.now.getMonthValue() || year > this.now.getYear();
+    }
+
     @GetMapping("")
-    public ModelAndView cashier(@AuthenticationPrincipal HomeManagerUserDetails user) {
+    public ModelAndView cashier(@AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("cashier");
@@ -91,6 +91,7 @@ public class CashierController {
         modelAndView.addObject("monthNumber", month);
         modelAndView.addObject("monthName", MonthsUtility.getMonthName(month));
         modelAndView.addObject("yearNumber", year);
+        modelAndView.addObject("monthList", this.monthService.getMonthsValues());
         modelAndView.addObject("now", this.now);
 
         modelAndView.addObject("homesGroup", homesGroup);
@@ -98,7 +99,11 @@ public class CashierController {
         Month currnetMonth = homesGroup.getMonthByDate(month, year);
 
         if (currnetMonth != null) {
-            modelAndView.addObject("currentMonth", this.monthService.getMonthById(currnetMonth.getId()));
+
+            currnetMonth = this.monthService.getMonthById(currnetMonth.getId());
+
+            modelAndView.addObject("currentMonth", currnetMonth);
+            modelAndView.addObject("previousMonth", currnetMonth.getPreviousMonth());
             modelAndView.addObject("years", homesGroup.getYears());
         }
 
@@ -106,17 +111,12 @@ public class CashierController {
     }
 
     @GetMapping("/homesGroup{homesGroupId}")
-    public ModelAndView cashierHomesGroup(@PathVariable long homesGroupId,
-                                          @RequestParam int month,
-                                          @RequestParam int year,
+    public ModelAndView cashierHomesGroup(@PathVariable long homesGroupId, @RequestParam int month, @RequestParam int year,
                                           @AuthenticationPrincipal HomeManagerUserDetails user) {
 
-        if (isAuthorized(homesGroupId, user.getId())) {
+        if (futureCheck(month, year) || isAuthorized(homesGroupId, user.getId())) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("cashier/cashier_homes_group");
-
-            this.year = year;
-            this.month = year;
 
             if (month > 12) {
                 month = 1;
@@ -129,6 +129,7 @@ public class CashierController {
             }
 
             return monthModelAndView(homesGroupId, month, year, modelAndView);
+
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -138,7 +139,7 @@ public class CashierController {
     public String createMonth(@PathVariable long homesGroupId, @RequestParam int month, @RequestParam int year,
                               @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) {
 
-        if (isAuthorized(homesGroupId, user.getId())) {
+        if (futureCheck(month, year) || isAuthorized(homesGroupId, user.getId())) {
             HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
 
             this.monthService.setHomesToMonth(this.monthService.createMonth(month, year, homesGroup), homesGroup);
@@ -202,7 +203,7 @@ public class CashierController {
 
             LocalDate paidDate = LocalDate.parse(date);
 
-            this.monthService.setTotalPaymentForHome(currentMonth, monthHomes, this.paymentsService.makePayments(monthHomes, feePaymentDTOS), paidDate ,homesGroupId);
+            this.monthService.setTotalPaymentForHome(currentMonth, monthHomes, this.paymentsService.makePayments(monthHomes, feePaymentDTOS), paidDate);
 
             redirectAttributes.addFlashAttribute("success", Notifications.PAYMENT_SUCCESSFULLY.getValue());
             return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, month, year);
@@ -234,7 +235,7 @@ public class CashierController {
             Month currentMonth = this.monthService.getMonthByNumberAndYearAndHomesGroupId(month, year, homesGroupId);
             currentMonth.setExpenses(this.expenseService.addExpenseToMonth(currentMonth, addExpenseDTO));
 
-            this.monthService.calculateTotalExpense(currentMonth, homesGroupId);
+            this.monthService.calculateTotalExpense(currentMonth);
 
             redirectAttributes.addFlashAttribute("success", Notifications.ADDED_SUCCESSFULLY.getValue());
             return redirectURL;
@@ -263,13 +264,12 @@ public class CashierController {
                               @AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) {
 
         if (isAuthorized(homesGroupId, user.getId())) {
-
             Expense expense = this.expenseService.editExpense(name, value, documentNumber, expenseId);
-            this.monthService.calculateTotalExpense(expense.getMonth(), homesGroupId);
+            this.monthService.calculateTotalExpense(expense.getMonth());
 
             redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
 
-            return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, this.month, this.year);
+            return "redirect:" + String.format("/cashier/homesGroup%d?month=%d&year=%d", homesGroupId, expense.getMonth().getNumber(), expense.getMonth().getYear());
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -318,7 +318,6 @@ public class CashierController {
             modelAndView.addObject("homesGroup", this.homesGroupService.getHomesGroupById(homesGroupId));
             modelAndView.addObject("year", this.monthService.getYear(yearNumber, homesGroupId));
             modelAndView.addObject("now", this.now);
-
 
 
             return modelAndView;

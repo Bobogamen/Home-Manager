@@ -97,6 +97,10 @@ public class HomeManagerUserDetails implements UserDetails {
         return cashiers;
     }
 
+    public boolean isCashier() {
+        return authorities.stream().allMatch(r -> r.getAuthority().equals("ROLE_CASHIER"));
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;

@@ -43,9 +43,6 @@ function changeValueAttribute(target) {
     }
 }
 
-document.onload((e) => console.log('Loaded!'))
-
-
 
 
 

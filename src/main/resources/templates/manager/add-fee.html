@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="#{add-fee}"></title>
 </head>
 <body>
@@ -17,13 +18,26 @@
                 <div class="registrationForm">
                     <h3 th:text="|#{add-fee} #{in} ${homesGroup.getName()}|" class="pb-4 fw-bold"></h3>
                     <form th:action="@{|/profile/homesGroup${homesGroup.getId()}/add-fee|}"
-                          th:method="POST">
+                          th:method="POST"
+                          th:object="${addFeeDTO}">
                         <div th:text="#{name}"></div>
-                        <input th:placeholder="#{fee_name_example}" type="text" name="name" id="name" minlength="2" max="30" class="field" required/>
+                        <input th:field="*{name}"
+                               th:placeholder="#{fee_name_example}" type="text" name="name" id="name" class="field" required/>
+                        <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
+                            <p th:each="err : ${#fields.errors('name')}"
+                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                        </div>
+
                         <div th:text="|#{value} (#{BGN})|" class="mt-3"></div>
-                        <input th:placeholder="#{value_example}"
+                        <input th:field="*{value}"
+                               th:placeholder="#{value_example}"
                                type="number" name="value" id="value" min="0" max="99999999.99" step="0.01" class="field" required/>
                         <div th:text="#{homes}" class="h3 mt-3 fw-bold"></div>
+                        <div th:if="${#fields.hasErrors('value')}" class="notificationRegister">
+                            <p th:each="err : ${#fields.errors('value')}"
+                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                        </div>
+
                         <table class="table table-hover table-sm table-bordered border-primary fs-6">
                             <thead>
                             <tr class="bg-info fw-bold align-middle">
@@ -41,8 +55,8 @@
                                 <td th:text="${h.getName()}"></td>
                                 <td th:text="|${h.getOwner().getFirstName()} ${h.getOwner().getLastName()}|"></td>
                                 <td>
-                                    <input th:name="${h.getId()}"
-                                           value="false" type="checkbox" class="inputCheckBox" onclick="changeValueAttribute(this)">
+<!--                                    <input type="checkbox" name="homes" th:id="${h.getId()}" value="false" class="inputCheckBox" onclick="changeValueAttribute(this)">-->
+                                    <input th:id="${h.getId()}" type="checkbox" name="homes" value="false" class="inputCheckBox">
                                 </td>
                             </tr>
                             </tbody>

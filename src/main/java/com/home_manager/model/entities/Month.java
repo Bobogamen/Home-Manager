@@ -23,10 +23,7 @@ public class Month {
     private int year;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
-    private double currentIncome;
-
-    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
-    private double totalIncome;
+    private double income;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double totalExpenses;
@@ -42,6 +39,9 @@ public class Month {
 
     @Column(nullable = false)
     private boolean completed;
+
+    @OneToOne
+    private Month previousMonth;
 
     @ManyToOne
     private HomesGroup homesGroup;
@@ -95,20 +95,20 @@ public class Month {
         this.completed = completed;
     }
 
-    public double getCurrentIncome() {
-        return currentIncome;
+    public Month getPreviousMonth() {
+        return previousMonth;
     }
 
-    public void setCurrentIncome(double currentIncome) {
-        this.currentIncome = currentIncome;
+    public void setPreviousMonth(Month previousMonth) {
+        this.previousMonth = previousMonth;
     }
 
-    public double getTotalIncome() {
-        return this.totalIncome;
+    public double getIncome() {
+        return income;
     }
 
-    public void setTotalIncome(double totalIncome) {
-        this.totalIncome = totalIncome;
+    public void setIncome(double income) {
+        this.income = income;
     }
 
     public double getTotalExpenses() {

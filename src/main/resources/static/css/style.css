@@ -28,6 +28,13 @@ body {
     border-radius: 0.7rem;
 }
 
+.card-info-warning {
+    background-color: #D4F3EEFF;
+    width: 20rem;
+    border: solid black 0.12rem;
+    border-radius: 0.7rem;
+}
+
 .card-resident {
     width: 34rem;
 }

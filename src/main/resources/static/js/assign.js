@@ -1,21 +1,63 @@
+let cashiersGroupsAssigned = {}
+document.querySelectorAll('.cashier').forEach(c => getCashiersAssignedGroups(c))
+
 function showButton(target) {
 
     let button = target.form.querySelector('button');
-    button.style.display = 'block'
+    if (button.style.display !== 'block') {
+        button.style.display = 'block'
+    }
 
-    uncheckOthers(target.form)
+    let skipCashierName = target.form.parentElement.previousElementSibling.children[0].textContent
+
+    uncheckOthers(skipCashierName)
     hideAllOthersButtons(button)
 }
 
-function  uncheckOthers(form) {
-    let forms = Array.from(document.querySelectorAll('form'))
-    forms.shift();
+function  uncheckOthers(skipCashierName) {
+    let cashiers = document.querySelectorAll('.cashier');
 
-    forms.forEach(f => {
-        if (f !== form) {
-            f.querySelectorAll('input').forEach(i => i.checked = false)
+    cashiers.forEach(c => checkInputs(c, skipCashierName))
+
+
+    // let forms = Array.from(document.querySelectorAll('form'))
+    // forms.shift();
+    //
+    // forms.forEach(f => {
+    //     if (f !== form) {
+    //         f.querySelectorAll('input').forEach(i => {
+    //
+    //             i.checked = false
+    //         })
+    //     }
+    // })
+}
+
+function checkInputs(cashier, skipCashierName) {
+    let name = getCashierName(cashier)
+
+    if (name !== skipCashierName) {
+        let rows = cashier.querySelector('table').tBodies[0].children
+
+        let cashierGroups = cashiersGroupsAssigned[name];
+
+        if (cashierGroups.length !== 0) {
+            for (let tr of rows) {
+                let rowName = tr.firstElementChild.textContent;
+
+                for (let groupName of cashierGroups) {
+                    let input = tr.children[1].firstElementChild
+
+                    if (rowName === groupName) {
+                        input.checked = true;
+                        break;
+                    } else {
+                        input.checked = false;
+                    }
+                }
+            }
         }
-    })
+    }
 }
 
 function hideAllOthersButtons(button) {
@@ -31,3 +73,21 @@ function hideAllEditTimesButtons() {
 function uncheckAll() {
     document.querySelectorAll('.inputCheckBox').forEach(i => i.checked = false)
 }
+
+function getCashierName(cashier) {
+    return cashier.children[0].children[0].textContent;
+}
+
+function getCashiersAssignedGroups(cashier) {
+    let name = getCashierName(cashier)
+    let groups = []
+        cashier.children[1].children[0].children[1].querySelectorAll('input').forEach(i => {
+        if (i.checked) {
+            groups.push(i.parentElement.previousElementSibling.textContent);
+        }
+    })
+
+    cashiersGroupsAssigned[name] = groups
+}
+
+

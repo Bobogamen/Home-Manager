@@ -5,10 +5,13 @@ import com.home_manager.model.entities.Expense;
 import com.home_manager.model.entities.HomesGroup;
 import com.home_manager.model.entities.Month;
 import com.home_manager.model.entities.MonthHomes;
+import com.home_manager.model.enums.Months;
 import com.home_manager.repository.MonthRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayDeque;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,13 +33,14 @@ public class MonthService {
         newMonth.setNumber(month);
         newMonth.setYear(year);
         newMonth.setCompleted(false);
-        newMonth.setCurrentIncome(0.00);
-        newMonth.setTotalIncome(0.00);
+        newMonth.setIncome(0.00);
         newMonth.setTotalExpenses(0.00);
         newMonth.setCurrentDifference(0.00);
         newMonth.setTotalDifference(0.00);
         newMonth.setPreviousMonthDifference(0.00);
         newMonth.setHomesGroup(homesGroup);
+
+        newMonth.setPreviousMonth(findPreviousMonth(newMonth));
 
         return this.monthRepository.save(newMonth);
     }
@@ -65,24 +69,67 @@ public class MonthService {
         return this.monthRepository.getMonthByNumberAndYearAndHomesGroupId(month, year, homesGroupId);
     }
 
-    public void setTotalPaymentForHome(Month month, MonthHomes monthHome, double totalPaid, LocalDate paidDate, long homesGroupId) {
-
+    public void setTotalPaymentForHome(Month month, MonthHomes monthHome, double totalPaid, LocalDate paidDate) {
         monthHome.setTotalPaid(totalPaid);
-
         monthHome.setPaidDate(Objects.requireNonNullElseGet(paidDate, LocalDate::now));
 
+        calculateMonth(month);
+
+        this.monthRepository.save(month);
+    }
+
+    public void calculateTotalExpense(Month month) {
+        calculateMonth(month);
+
+        this.monthRepository.save(month);
+    }
+
+    private void calculateMonth(Month month) {
         double monthCurrentIncome = getCurrentIncomeOfMonth(month);
         double monthTotalExpenses = getTotalExpensesOfMonth(month);
 
-        double previousMonthDifference = getPreviousMonthDifference(month, homesGroupId);
-
-        month.setCurrentIncome(monthCurrentIncome);
+        month.setIncome(monthCurrentIncome);
+        month.setTotalExpenses(monthTotalExpenses);
         month.setCurrentDifference(monthCurrentIncome - monthTotalExpenses);
-        month.setTotalIncome(monthCurrentIncome + previousMonthDifference);
-        month.setTotalDifference(month.getTotalIncome() - monthTotalExpenses);
-        month.setPreviousMonthDifference(previousMonthDifference);
 
-        this.monthRepository.save(month);
+        if (month.getPreviousMonth() != null) {
+            month.setPreviousMonthDifference(month.getPreviousMonth().getTotalDifference());
+            month.setTotalDifference(month.getCurrentDifference() + month.getPreviousMonthDifference());
+
+        } else {
+            Month previousMonth = findPreviousMonth(month);
+            if (previousMonth == null) {
+                month.setTotalDifference(month.getCurrentDifference());
+            } else {
+                month.setPreviousMonth(previousMonth);
+                month.setPreviousMonthDifference(previousMonth.getTotalDifference());
+                month.setTotalDifference(month.getCurrentDifference() + month.getPreviousMonthDifference());
+            }
+        }
+    }
+
+    private Month findPreviousMonth(Month month) {
+
+        Month previousMonth = null;
+
+        new ArrayDeque<>(12);
+        ArrayDeque<Month> listPreviousMonths;
+        listPreviousMonths = this.monthRepository.findPreviousMonths(month.getYear(), month.getHomesGroup().getId());
+
+        while (!listPreviousMonths.isEmpty()) {
+
+            Month currentMonth = listPreviousMonths.pop();
+            if (currentMonth.getYear() == month.getYear()) {
+                if (currentMonth.getNumber() < month.getNumber()) {
+                    previousMonth = currentMonth;
+                    break;
+                }
+            }
+
+            return previousMonth;
+        }
+
+        return null;
     }
 
     private double getCurrentIncomeOfMonth(Month month) {
@@ -92,21 +139,10 @@ public class MonthService {
         return month.getExpenses().stream().mapToDouble(Expense::getValue).sum();
     }
 
-    public void calculateTotalExpense(Month currentMonth, long homesGroupId) {
-
-        double totalExpenses = getTotalExpensesOfMonth(currentMonth);
-
-        currentMonth.setTotalExpenses(totalExpenses);
-        currentMonth.setCurrentDifference(currentMonth.getCurrentIncome() - totalExpenses);
-        currentMonth.setTotalDifference(currentMonth.getTotalIncome() - totalExpenses);
-        currentMonth.setPreviousMonthDifference(getPreviousMonthDifference(currentMonth, homesGroupId));
-
-        this.monthRepository.save(currentMonth);
-    }
-
     public YearDTO getYear(int yearNumber, long homesGroupId) {
         YearDTO year = new YearDTO();
-        year.setMonths(this.monthRepository.getMonthsByYearAndHomesGroupId(yearNumber, homesGroupId));
+        year.setMonths(this.monthRepository.getMonthsByYearAndHomesGroupId(yearNumber, homesGroupId).
+                stream().sorted(Comparator.comparingInt(Month::getNumber)).toList());
         year.setNumber(yearNumber);
 
         return year;
@@ -116,22 +152,18 @@ public class MonthService {
         return yearsList.stream().map(y -> getYear(y, homesGroupId)).toList();
     }
 
-    private double getPreviousMonthDifference(Month currentMonth, long homesGroupId) {
-
-        int previousMonthNumber = currentMonth.getNumber() > 1 ? currentMonth.getNumber() - 1 : 12;
-        int previousMonthYear = previousMonthNumber == 12 ? currentMonth.getYear() -1 : currentMonth.getYear();
-
-        Month previousMonth = this.monthRepository.getMonthByNumberAndYearAndHomesGroupId(previousMonthNumber, previousMonthYear, homesGroupId);
-
-        if (previousMonth != null) {
-            return previousMonth.getTotalDifference();
-        }
-
-        return 0.00;
-    }
-
     public void completeMonth(Month month) {
         month.setCompleted(true);
         this.monthRepository.save(month);
+    }
+
+    public Months[] getMonthsValues() {
+
+        int monthValue = LocalDate.now().getMonthValue();
+        Months[] months = new Months[monthValue];
+
+        System.arraycopy(Months.values(), 0, months, 0, monthValue);
+
+        return months;
     }
 }

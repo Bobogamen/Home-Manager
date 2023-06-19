@@ -19,13 +19,13 @@ public class HomesGroupService {
         this.homesGroupRepository = homesGroupRepository;
     }
 
-
     public void addHomesGroup(AddHomesGroupDTO addHomesGroupDTO, User user) {
 
         HomesGroup homesGroup = new HomesGroup();
         homesGroup.setName(addHomesGroupDTO.getName());
-        homesGroup.setSize(addHomesGroupDTO.getSize());
         homesGroup.setType(addHomesGroupDTO.getType());
+        homesGroup.setSize(addHomesGroupDTO.getSize());
+        homesGroup.setStartPeriod(addHomesGroupDTO.getStartPeriod());
         homesGroup.setBackgroundColor(addHomesGroupDTO.getBackgroundColor());
         homesGroup.addUser(user);
 

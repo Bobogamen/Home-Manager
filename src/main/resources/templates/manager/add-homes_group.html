@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="|#{add} #{homes_group}|"></title>
 </head>
 <body>
@@ -30,7 +31,9 @@
                         </div>
 
                         <div th:text="#{size_label}" class="mt-4"></div>
-                        <input th:placeholder="#{size_example}" type="number" name="size" id="size" class="field"/>
+                        <input th:field="*{size}"
+                               th:errorclass="is-invalid"
+                               th:placeholder="#{size_example}" type="number" name="size" id="size" class="field"/>
                         <div th:if="${#fields.hasErrors('size')}" class="notificationRegister">
                             <p th:each="err : ${#fields.errors('size')}"
                                th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
@@ -46,6 +49,23 @@
                         </select>
                         <div th:if="${#fields.hasErrors('type')}" class="notificationRegister">
                             <p th:each="err : ${#fields.errors('type')}"
+                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                        </div>
+
+                        <div class="mt-4">
+                            <span th:text="|#{choose} #{start_period}|"></span>
+                            <span th:text="'&#9432;'" class="text-danger h3 fw-bold pointer" onmouseover="showWarning()" onmouseout="hideWarning()"></span>
+                            <span th:text="'&#9888;'" class="text-danger h2 fw-bold pointer" onmouseover="showInfo()" onmouseout="hideInfo()"></span>
+                            <p th:text="#{warning_start_period}" id="warning" class="card-info-warning position-absolute start-0 end-0 m-auto h6" style="display: none; white-space: pre-line">
+                            </p>
+                            <p th:utext="#{info_start_period}"  id="info" class="card-info-warning position-absolute start-0 end-0 m-auto h6" style="display: none; white-space: pre-line">
+                            </p>
+                        </div>
+                        <input th:max="${#dates.format(#dates.createNow(), 'YYYY-MM-dd')}"
+                               type="date" name="startPeriod" id="startPeriod" class="field">
+
+                        <div th:if="${#fields.hasErrors('startPeriod')}" class="notificationRegister">
+                            <p th:each="err : ${#fields.errors('startPeriod')}"
                                th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
                         </div>
 
@@ -69,4 +89,5 @@
     </div>
 </main>
 </body>
+<script src="/js/showHide.js"></script>
 </html>

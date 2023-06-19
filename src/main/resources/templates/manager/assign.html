@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="#{assign}"></title>
 </head>
 <body>
@@ -19,7 +20,7 @@
                     <th:block th:if="${manager.getCashiers().size() > 0}">
                         <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-5 mx-4">
                             <h3 th:text="|#{assign} #{homes_groups}|" class="fw-bold"></h3>
-                            <div th:each="c : ${manager.getCashiers()}" class="card card-resident mb-5">
+                            <div th:each="c : ${manager.getCashiers()}" class="card card-resident mb-5 cashier">
                                 <div class="card-header">
                                     <h3 th:text="${c.getName()}"></h3>
                                 </div>

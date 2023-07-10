@@ -23,34 +23,36 @@ public class EmailService {
     private final UserService userService;
     private final MailProperties mailProperties;
     private final TemplateEngine templateEngine;
+    private final HttpServletRequest request;
 
 
-    public EmailService(JavaMailSender javaMailSender, UserService userService, MailProperties mailProperties, TemplateEngine templateEngine) {
+    public EmailService(JavaMailSender javaMailSender, UserService userService, MailProperties mailProperties, TemplateEngine templateEngine, HttpServletRequest request) {
         this.javaMailSender = javaMailSender;
         this.userService = userService;
         this.mailProperties = mailProperties;
         this.templateEngine = templateEngine;
-    }
-
-    public void sendRecoveryPasswordEmail(String email, HttpServletRequest request) {
-
-        String subject = MailUtility.passwordResetMailSubject();
-        String resetPasswordUrl = MailUtility.resetPasswordUrl(request, this.userService.getResetPasswordTokenByEmail(email));
-        String content = generateEmailContent(email, null, "forgot_password", resetPasswordUrl);
-
-        sendMessage(email, subject, content);
+        this.request = request;
     }
 
     public void sendRegistrationEmail(String email) {
         String subject = MailUtility.registrationMailSubject();
-        String content = generateEmailContent(email, null, "registration", null);
+        String content = generateEmailContent(email, null, "registration", null, MailUtility.appUrl(request));
 
         sendMessage(email, subject, content);
     }
 
-    public void sendCashierRegistrationEmail(String email, HomeManagerUserDetails manager, String baseUrl) {
+    public void sendRecoveryPasswordEmail(String email) {
+
+        String subject = MailUtility.passwordResetMailSubject();
+        String resetPasswordUrl = MailUtility.resetPasswordUrl(request, this.userService.getResetPasswordTokenByEmail(email));
+        String content = generateEmailContent(email, null, "forgot_password", resetPasswordUrl, MailUtility.appUrl(request));
+
+        sendMessage(email, subject, content);
+    }
+
+    public void sendCashierRegistrationEmail(String email, HomeManagerUserDetails manager) {
         String subject = MailUtility.registrationMailSubject();
-        String content = generateEmailContent(email, manager, "cashier", baseUrl);
+        String content = generateEmailContent(email, manager, "cashier", null, MailUtility.appUrl(request));
 
         sendMessage(email, subject, content);
     }
@@ -80,11 +82,12 @@ public class EmailService {
         }
     }
 
-    private String generateEmailContent(String email, HomeManagerUserDetails manager, String content, String resetUrl) {
+    private String generateEmailContent(String email, HomeManagerUserDetails manager, String content, String resetUrl, String appUrl) {
 
         Context context = new Context();
         context.setVariable("email", email);
         context.setVariable("reset_url", resetUrl);
+        context.setVariable("app_url", appUrl);
 
         if (manager != null) {
             context.setVariable("manager_name", manager.getName());

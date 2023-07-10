@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="|#{add} #{homes_group}|"></title>
 </head>
 <body>
@@ -22,6 +22,7 @@
                           th:object="${addHomesGroupDTO}">
 
                         <div th:text="#{name}"></div>
+                        <label for="name"></label>
                         <input th:field="*{name}"
                                th:errorclass="is-invalid"
                                th:placeholder="#{name_example}" type="text" name="name" id="name" class="field"/>
@@ -31,6 +32,7 @@
                         </div>
 
                         <div th:text="#{size_label}" class="mt-4"></div>
+                        <label for="size"></label>
                         <input th:field="*{size}"
                                th:errorclass="is-invalid"
                                th:placeholder="#{size_example}" type="number" name="size" id="size" class="field"/>
@@ -40,6 +42,7 @@
                         </div>
 
                         <div th:text="|#{choose} #{type}|" class="mt-4"></div>
+                        <label for="type"></label>
                         <select th:field="*{type}" id="type" class="field">
                             <option th:each="t : ${T(com.home_manager.model.enums.HomesGroupEnums).values()}"
                                     th:value="${t.getValue()}"
@@ -61,6 +64,8 @@
                             <p th:utext="#{info_start_period}"  id="info" class="card-info-warning position-absolute start-0 end-0 m-auto h6" style="display: none; white-space: pre-line">
                             </p>
                         </div>
+
+                        <label for="startPeriod"></label>
                         <input th:max="${#dates.format(#dates.createNow(), 'YYYY-MM-dd')}"
                                type="date" name="startPeriod" id="startPeriod" class="field">
 
@@ -71,6 +76,7 @@
 
                         <div class="mt-4">
                             <div th:text="|#{choose} #{background_color}|"></div>
+                            <label for="backgroundColor"></label>
                             <input th:field="*{backgroundColor}" type="color" id="backgroundColor" value="#000000" class="inputNumber">
                         </div>
                         <div th:if="${#fields.hasErrors('backgroundColor')}" class="notificationRegister">
@@ -89,5 +95,5 @@
     </div>
 </main>
 </body>
-<script src="/js/showHide.js"></script>
+<script type="text/javascript" src="/js/showHide.js"></script>
 </html>

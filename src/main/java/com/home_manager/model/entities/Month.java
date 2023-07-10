@@ -23,7 +23,7 @@ public class Month {
     private int year;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
-    private double income;
+    private double currentIncome;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double totalExpenses;
@@ -103,12 +103,12 @@ public class Month {
         this.previousMonth = previousMonth;
     }
 
-    public double getIncome() {
-        return income;
+    public double getCurrentIncome() {
+        return currentIncome;
     }
 
-    public void setIncome(double income) {
-        this.income = income;
+    public void setCurrentIncome(double currentIncome) {
+        this.currentIncome = currentIncome;
     }
 
     public double getTotalExpenses() {

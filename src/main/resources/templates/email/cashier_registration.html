@@ -10,7 +10,9 @@
 <body>
 <div style="text-align: center;
             font-family: Verdana, serif;">
-    <img src="cid:logo" width="200" height="200" alt="logo"/>
+    <a th:href="${app_url}">
+        <img src="cid:logo" width="200" height="200" alt="logo"/>
+    </a>
     <h1 th:text="#{registration_confirmed}" style="color: green;"></h1>
     <div>
         <div style="text-align: justify;
@@ -25,7 +27,7 @@
             <div style="margin-top: 1rem;
                         margin-bottom: 1rem;
                         font-weight: bold">
-                <a th:href="${reset_url}" th:text="${reset_url}"></a>
+                <a th:href="${app_url}" th:text="#{home_manager}"></a>
             </div>
             <p th:text="#{questions}"></p>
         </div>

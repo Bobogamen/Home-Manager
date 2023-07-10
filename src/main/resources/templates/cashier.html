@@ -47,7 +47,9 @@
         <th:block sec:authorize="hasRole('CASHIER')">
             <div class="text-center d-flex justify-content-center mt-3">
                 <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
-                    <h3 th:text="|#{homes} #{cashier}|" class="fw-bold"></h3>
+                    <h3 th:text="|#{homes_groups} #{cashier}|" class="fw-bold"></h3>
+                    <h4 th:if="${user.getHomesGroup().size() == 0}" th:text="#{no_assigned_homes_group}"></h4>
+
                     <div th:each="hg : ${user.getHomesGroup()}" class="text-center">
                         <form th:action="|/cashier/homesGroup${hg.getId()}|"
                               th:method="GET">

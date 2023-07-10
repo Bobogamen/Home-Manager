@@ -56,7 +56,7 @@ public class CashierController {
     }
 
     @GetMapping("")
-    public ModelAndView cashier(@AuthenticationPrincipal HomeManagerUserDetails user, RedirectAttributes redirectAttributes) {
+    public ModelAndView cashier(@AuthenticationPrincipal HomeManagerUserDetails user) {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("cashier");
@@ -91,9 +91,8 @@ public class CashierController {
         modelAndView.addObject("monthNumber", month);
         modelAndView.addObject("monthName", MonthsUtility.getMonthName(month));
         modelAndView.addObject("yearNumber", year);
-        modelAndView.addObject("monthList", this.monthService.getMonthsValues());
+        modelAndView.addObject("monthsList", this.monthService.getMonthsList(year, this.now.getYear(), homesGroup.getStartPeriod()));
         modelAndView.addObject("now", this.now);
-
         modelAndView.addObject("homesGroup", homesGroup);
 
         Month currnetMonth = homesGroup.getMonthByDate(month, year);
@@ -142,7 +141,7 @@ public class CashierController {
         if (futureCheck(month, year) || isAuthorized(homesGroupId, user.getId())) {
             HomesGroup homesGroup = this.homesGroupService.getHomesGroupById(homesGroupId);
 
-            this.monthService.setHomesToMonth(this.monthService.createMonth(month, year, homesGroup), homesGroup);
+            this.monthService.setHomesToMonth(this.monthService.createMonth(month, year, homesGroup, this.monthService.getPreviousMonth(month, year, homesGroup)), homesGroup);
 
             redirectAttributes.addAttribute("month", month);
             redirectAttributes.addAttribute("year", year);

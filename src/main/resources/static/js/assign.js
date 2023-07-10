@@ -18,19 +18,6 @@ function  uncheckOthers(skipCashierName) {
     let cashiers = document.querySelectorAll('.cashier');
 
     cashiers.forEach(c => checkInputs(c, skipCashierName))
-
-
-    // let forms = Array.from(document.querySelectorAll('form'))
-    // forms.shift();
-    //
-    // forms.forEach(f => {
-    //     if (f !== form) {
-    //         f.querySelectorAll('input').forEach(i => {
-    //
-    //             i.checked = false
-    //         })
-    //     }
-    // })
 }
 
 function checkInputs(cashier, skipCashierName) {

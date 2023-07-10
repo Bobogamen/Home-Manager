@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -37,7 +37,9 @@
                                 <td class="border-rounded"></td>
                                 <td class="border-rounded"></td>
                                 <td class="border-rounded">
-                                    <select onchange="calculateRowTotal(this)" class="bg-transparent text-center m-0 p-0 border-0 webkit-appearance-none">
+                                    <label for="number"></label>
+                                    <select onchange="calculateRowTotal(this)" id="number"
+                                            class="bg-transparent text-center m-0 p-0 border-0 webkit-appearance-none">
                                         <option th:each="n : ${#numbers.sequence(0, 50)}"
                                                 th:value="${n}"
                                                 th:text="${n}">
@@ -62,8 +64,9 @@
                             <div class="mt-5">
                                 <button th:text="#{pay}" type="submit" class="button" onclick="pay(this)"></button>
                                 <img src="/images/calendar.png" alt="calendar" class="icon" onclick="showCalendar(this)">
+                                <label for="paidDate"> </label>
                                 <input th:value="${now.toString()}"
-                                       th:max="${now.toString()}" type="date" name="paidDate" class="calendar">
+                                       th:max="${now.toString()}" type="date" name="paidDate" id="paidDate" class="calendar">
                             </div>
                         </form>
                     </div>
@@ -95,21 +98,16 @@
                         </div>
                         <form th:action="|/cashier/homesGroup${homesGroup.getId()}|"
                               th:method="GET" onchange="this.submit()">
-                            <select name="month" class="m-1 bg-transparent text-center webkit-appearance-none">
-                                <option th:if="${yearNumber == now.getYear()}"
-                                        th:each="m, index : ${monthList}"
-                                        th:value="${index.count}"
-                                        th:text="${m.value}"
-                                        th:selected="${index.count} == ${monthNumber}">
-                                </option>
-                                <option th:if="${yearNumber != now.getYear()}"
-                                        th:each="m, index : ${T(com.home_manager.model.enums.Months).values()}"
+                            <label for="month"></label>
+                            <select name="month" id="month" class="m-1 bg-transparent text-center webkit-appearance-none">
+                                <option th:each="m, index : ${monthsList}"
                                         th:value="${index.count}"
                                         th:text="${m.value}"
                                         th:selected="${index.count} == ${monthNumber}">
                                 </option>
                             </select>
-                            <select name="year" class="m-1 bg-transparent text-center webkit-appearance-none">
+                            <label for="year"></label>
+                            <select name="year" id="year" class="m-1 bg-transparent text-center webkit-appearance-none">
                                 <option th:each="y : ${#numbers.sequence(2018, now.getYear())}"
                                         th:value="${y}"
                                         th:text="${y}"
@@ -183,7 +181,7 @@
                             <tfoot>
                             <tr class="bg-info fw-bold align-middle">
                                 <td th:text="#{total}" colspan="3"></td>
-                                <td th:text="${#numbers.formatDecimal(currentMonth.getIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -193,16 +191,16 @@
                     <div class="text-center justify-content-center">
                         <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content bg-light">
                             <h3 th:text="|#{total} #{for} ${monthName} ${yearNumber}|" class="fw-bold"></h3>
-                            <div th:if="${currentMonth.getExpenses().size() == 0} and ${currentMonth.getIncome() == 0}"
+                            <div th:if="${currentMonth.getExpenses().size() == 0} and ${currentMonth.getCurrentIncome() == 0}"
                                  class="text-center d-block justify-content-center">
                                 <h4 th:text="|#{no_expenses}/#{incomes}|"></h4>
                             </div>
-                            <table th:if="${currentMonth.getExpenses().size() > 0} or ${currentMonth.getIncome() > 0}"
+                            <table th:if="${currentMonth.getExpenses().size() > 0} or ${currentMonth.getCurrentIncome() > 0}"
                                    class="table table-hover table-sm table-bordered border-primary">
                                 <tbody class="fs-6">
                                 <tr class="align-middle">
                                     <td th:text="#{incomes}"></td>
-                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getIncome(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
+                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
                                 </tr>
                                 <tr class="align-middle">
                                     <td th:text="#{expenses}"></td>
@@ -264,7 +262,8 @@
                             <div th:if="${currentMonth.getExpenses().size() == 0}" class="text-center d-block justify-content-center">
                                 <h4 th:text="#{no_expenses}"></h4>
                             </div>
-                            <table th:if="${currentMonth.getExpenses().size() > 0}" class="table table-hover table-sm table-bordered border-primary">
+                            <table th:if="${currentMonth.getExpenses().size() > 0}"
+                                   class="table table-hover table-sm table-bordered border-primary">
                                 <thead>
                                 <tr class="bg-info fw-bold align-middle">
                                     <td>#</td>
@@ -305,17 +304,20 @@
                                     <input name="year" th:value="${yearNumber}" type="hidden">
 
                                     <div class="d-grid">
+                                        <label for="name"></label>
                                         <input th:field="*{name}"
                                                th:errorclass="is-invalid"
-                                               th:placeholder="#{expense_example_name}" type="text" name="name" class="m-auto"/>
+                                               th:placeholder="#{expense_example_name}" type="text" name="name" id="name" class="m-auto"/>
                                         <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
                                             <p th:each="err : ${#fields.errors('name')}"
                                                th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
                                         </div>
                                         <div class="my-3">
+                                            <label for="value"></label>
                                             <input th:field="*{value}"
                                                    th:errorclass="is-invalid"
-                                                   th:placeholder="#{expense_example_value}" type="number" name="value" min="0" max="999999999" step="0.01"/>
+                                                   th:placeholder="#{expense_example_value}" type="number" name="value" id="value" min="0"
+                                                   max="999999999" step="0.01"/>
                                         </div>
                                         <div th:if="${#fields.hasErrors('value')}" class="notificationRegister">
                                             <p th:each="err : ${#fields.errors('value')}"
@@ -323,13 +325,16 @@
                                         </div>
                                         <div class="">
                                             <div class="d-inline-block">
+                                                <label for="documentNumber"></label>
                                                 <input th:field="*{documentNumber}"
                                                        th:errorclass="is-invalid"
                                                        th:placeholder="#{expense_example_document_number}" type="text" name="documentNumber"
-                                                       class="float-start w-auto"/>
-                                                <img id="img" src="/images/calendar.png" alt="calendar" class="icon ms-2" onclick="showCalendar(this)">
+                                                       id="documentNumber" class="float-start w-auto"/>
+                                                <img id="img" src="/images/calendar.png" alt="calendar" class="icon ms-2"
+                                                     onclick="showCalendar(this)">
+                                                <label for="documentDate"></label>
                                                 <input th:field="*{documentDate}"
-                                                       th:max="${now.toString()}" type="date" name="documentDate" class="calendar">
+                                                       th:max="${now.toString()}" type="date" name="documentDate" id="documentDate" class="calendar">
                                             </div>
                                         </div>
                                         <div th:if="${#fields.hasErrors('documentNumber')}" class="notificationRegister">

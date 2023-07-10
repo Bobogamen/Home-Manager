@@ -19,7 +19,7 @@ public class HomesGroupService {
         this.homesGroupRepository = homesGroupRepository;
     }
 
-    public void addHomesGroup(AddHomesGroupDTO addHomesGroupDTO, User user) {
+    public HomesGroup addHomesGroup(AddHomesGroupDTO addHomesGroupDTO, User user) {
 
         HomesGroup homesGroup = new HomesGroup();
         homesGroup.setName(addHomesGroupDTO.getName());
@@ -29,7 +29,7 @@ public class HomesGroupService {
         homesGroup.setBackgroundColor(addHomesGroupDTO.getBackgroundColor());
         homesGroup.addUser(user);
 
-        this.homesGroupRepository.save(homesGroup);
+        return this.homesGroupRepository.save(homesGroup);
     }
 
     public HomesGroup getHomesGroupById(long id) {

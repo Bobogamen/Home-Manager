@@ -2,12 +2,13 @@ package com.home_manager.web;
 
 import com.home_manager.model.dto.AddHomesGroupDTO;
 import com.home_manager.model.dto.RegistrationDTO;
+import com.home_manager.model.entities.HomesGroup;
 import com.home_manager.model.enums.Notifications;
 import com.home_manager.model.user.HomeManagerUserDetails;
 import com.home_manager.service.EmailService;
 import com.home_manager.service.HomesGroupService;
+import com.home_manager.service.MonthService;
 import com.home_manager.service.UserService;
-import com.home_manager.utility.MailUtility;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -25,12 +26,14 @@ public class ProfileController {
 
     private final UserService userService;
     private final HomesGroupService homesGroupService;
+    private final MonthService monthService;
     private final HttpServletRequest request;
     private final EmailService emailService;
 
-    public ProfileController(UserService userService, HomesGroupService homesGroupService, EmailService emailService, HttpServletRequest request) {
+    public ProfileController(UserService userService, HomesGroupService homesGroupService, MonthService monthService, EmailService emailService, HttpServletRequest request) {
         this.userService = userService;
         this.homesGroupService = homesGroupService;
+        this.monthService = monthService;
         this.emailService = emailService;
         this.request = request;
     }
@@ -79,7 +82,8 @@ public class ProfileController {
                 return "redirect:/profile/add-homes_group";
             }
 
-            this.homesGroupService.addHomesGroup(addHomesGroupDTO, this.userService.getUserById(user.getId()));
+            HomesGroup newHomesGroup = this.homesGroupService.addHomesGroup(addHomesGroupDTO, this.userService.getUserById(user.getId()));
+            this.monthService.initialMonthsGeneration(newHomesGroup);
 
             redirectAttributes.addFlashAttribute("success", "Група " + addHomesGroupDTO.getName() + " e добавена");
 
@@ -119,7 +123,7 @@ public class ProfileController {
             }
 
             this.userService.registerCashier(registrationDTO, user.getId());
-            this.emailService.sendCashierRegistrationEmail(registrationDTO.getEmail(), user, MailUtility.appUrl(request));
+            this.emailService.sendCashierRegistrationEmail(registrationDTO.getEmail(), user);
 
             redirectAttributes.addFlashAttribute("success", Notifications.CASHIER_REGISTRATION_SUCCESSFULLY.getValue());
         }

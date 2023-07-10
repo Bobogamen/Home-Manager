@@ -10,7 +10,10 @@
 <body>
 <div style="text-align: center;
             font-family: Verdana, serif;">
-    <img src="cid:logo" width="200" height="200" alt="logo"/>
+
+    <a th:href="${app_url}">
+        <img src="cid:logo" width="200" height="200" alt="logo"/>
+    </a>
     <h1 th:text="#{registration_confirmed}" style="color: green;"></h1>
     <div>
         <div style="text-align: justify;
@@ -22,6 +25,12 @@
             <p th:text="#{hello}"></p>
             <p th:text="#{registration_message(${email})}"></p>
             <p th:text="#{questions}"></p>
+
+            <div style="margin-top: 1rem;
+                        margin-bottom: 1rem;
+                        font-weight: bold">
+                <a th:href="${app_url}" th:text="#{home_manager}"></a>
+            </div>
         </div>
         <footer th:replace="fragments/footer :: footer"></footer>
     </div>

@@ -1,5 +1,6 @@
 package com.home_manager.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.home_manager.utility.MonthsUtility;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -37,6 +38,7 @@ public class Month {
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double previousMonthDifference;
 
+    @JsonIgnore
     @Column(nullable = false)
     private boolean completed;
 

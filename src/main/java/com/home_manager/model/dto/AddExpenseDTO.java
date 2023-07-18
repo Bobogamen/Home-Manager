@@ -12,7 +12,7 @@ public class AddExpenseDTO {
     private String name;
 
     @Positive(message = "{positive_number}")
-    private double value;
+    private Double value;
 
     @NotEmpty(message = "{not_empty}")
     @NotBlank(message = "{non-whitespace}")
@@ -34,11 +34,11 @@ public class AddExpenseDTO {
         this.name = name;
     }
 
-    public double getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 

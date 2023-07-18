@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -100,10 +102,10 @@
                               th:method="GET" onchange="this.submit()">
                             <label for="month"></label>
                             <select name="month" id="month" class="m-1 bg-transparent text-center webkit-appearance-none">
-                                <option th:each="m, index : ${monthsList}"
-                                        th:value="${index.count}"
+                                <option th:each="m  : ${monthsList}"
+                                        th:value="${m.ordinal() + 1}"
                                         th:text="${m.value}"
-                                        th:selected="${index.count} == ${monthNumber}">
+                                        th:selected="${m.ordinal() + 1} == ${monthNumber}">
                                 </option>
                             </select>
                             <label for="year"></label>
@@ -117,213 +119,230 @@
                         </form>
                     </div>
                 </div>
-                <div th:if="${currentMonth} == null">
-                    <p th:text="|#{the_current} #{month} #{no_created}|"></p>
-                </div>
-                <div th:if="${currentMonth == null}" class="add m-2">
-                    <form th:action="|/cashier/homesGroup${homesGroupId}/create-month|"
-                          th:method="POST">
-                        <input th:value="${monthNumber}" type="hidden" name="month">
-                        <input th:value="${yearNumber}" type="hidden" name="year">
-                        <button type="submit" class="bg-transparent border-0">
-                            <img src="/images/add_month.png" alt="add" class="icon m-1">
-                            <span th:text="|#{create} #{month}|"></span>
-                        </button>
-                    </form>
-                </div>
 
-                <div th:if="${currentMonth} != null" class="text-center d-flex justify-content-center">
-                    <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
-                        <div class="d-inline-flex mt-1 mb-2">
-                            <h3 th:text="|${homesGroup.getName()} #{for} ${monthName} ${yearNumber}|" class="fw-bold m-0"></h3>
-                            <a th:href="|/cashier/homesGroup${homesGroup.getId()}/print?month=${monthNumber}&year=${yearNumber}|">
-                                <img alt="printer" class="icon ms-3 pointer mt-1" src="/images/print.png">
-                            </a>
-                        </div>
-                        <table class="table table-hover table-sm table-bordered border-primary">
-                            <thead>
-                            <tr class="bg-info fw-bold align-middle">
-                                <td th:text="#{floor}"></td>
-                                <td th:text="#{apartment}"></td>
-                                <td th:text="#{owner}"></td>
-                                <td th:text="|#{total}(#{BGN})|"></td>
-                                <td th:text="#{paid_date}"></td>
-                                <td th:text="#{signature}"></td>
-                            </tr>
-                            </thead>
-                            <tbody class="fs-6">
-                            <tr th:each="h : ${currentMonth.getHomes()}" class="align-middle">
-                                <td th:text="${h.getHome().getFloor()}"></td>
-                                <td th:text="${h.getHome().getName()}"></td>
-                                <td th:text="|${h.getHome().getOwner().getFirstName()} ${h.getHome().getOwner().getLastName()}|"></td>
-                                <td th:text="${h.getTotalPaid()}"></td>
-                                <td>
-                                    <button th:if="${h.getPaidDate() == null}"
-                                            th:text="#{pay}"
-                                            th:id="${homesGroup.getId()}"
-                                            th:name="${h.getMonth().getId()}"
-                                            th:value="${h.getId()}"
-                                            class="button py-1" onclick="getPayment(this)"></button>
-                                    <button th:if="${h.getPaidDate() != null}"
-                                            th:text="${#temporals.format(h.getPaidDate(), 'dd-MM-yyyy')}"
-                                            th:id="${homesGroup.getId()}"
-                                            th:name="${h.getMonth().getId()}"
-                                            th:value="${h.getId()}"
-                                            class="button py-0 px-1 m-0" onclick="viewPayments(this)"></button>
-                                </td>
-                                <td>
-                                    <div th:if="${h.getPaidDate() != null}">
-                                        <img src="/images/tick.png" alt="tick" class="icon">
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            <tr class="bg-info fw-bold align-middle">
-                                <td th:text="#{total}" colspan="3"></td>
-                                <td th:text="${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            </tfoot>
-                        </table>
+                <th:block th:if="${currentMonth == null}">
+                    <div th:if="${currentMonth} == null">
+                        <p th:text="|#{the_current} #{month} #{no_created}|"></p>
                     </div>
-                    <div class="text-center justify-content-center">
-                        <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content bg-light">
-                            <h3 th:text="|#{total} #{for} ${monthName} ${yearNumber}|" class="fw-bold"></h3>
-                            <div th:if="${currentMonth.getExpenses().size() == 0} and ${currentMonth.getCurrentIncome() == 0}"
-                                 class="text-center d-block justify-content-center">
-                                <h4 th:text="|#{no_expenses}/#{incomes}|"></h4>
-                            </div>
-                            <table th:if="${currentMonth.getExpenses().size() > 0} or ${currentMonth.getCurrentIncome() > 0}"
-                                   class="table table-hover table-sm table-bordered border-primary">
-                                <tbody class="fs-6">
-                                <tr class="align-middle">
-                                    <td th:text="#{incomes}"></td>
-                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
-                                </tr>
-                                <tr class="align-middle">
-                                    <td th:text="#{expenses}"></td>
-                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
-                                </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr class="bg-info fw-bold align-middle">
-                                    <td th:text="|#{difference} (#{incomes} + #{expenses})|"></td>
-                                    <td th:text="(${currentMonth.getCurrentDifference()} > 0 ?
-                                '+' + ${#numbers.formatDecimal(currentMonth.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')}
-                                : ${#numbers.formatDecimal(currentMonth.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')}) + #{BGN}"></td>
-                                </tr>
-                                <tr class="align-middle">
-                                    <td>
-                                        <div>
-                                            <span th:text="|#{from} #{previous_month}|"></span>
-                                            <a th:if="${previousMonth != null}"
-                                               th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${previousMonth.getNumber()}&year=${previousMonth.getYear()}|"
-                                               th:text="|${previousMonth.getNumber()}/${previousMonth.getYear()}|"></a>
-                                        </div>
 
+                    <div class="add m-2">
+                        <form th:action="|/cashier/homesGroup${homesGroupId}/create-month|"
+                              th:method="POST">
+                            <input th:value="${monthNumber}" type="hidden" name="month">
+                            <input th:value="${yearNumber}" type="hidden" name="year">
+                            <button type="submit" class="bg-transparent border-0">
+                                <img src="/images/add_month.png" alt="add" class="icon m-1">
+                                <span th:text="|#{create} #{month}|"></span>
+                            </button>
+                        </form>
+                    </div>
+                </th:block>
 
-                                    </td>
-                                    <td th:text="|${#numbers.formatDecimal(currentMonth.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
-                                </tr>
-                                <tr class="bg-warning fw-bold align-middle">
-                                    <td th:text="|#{total} #{for} #{the_current} #{month}|"></td>
-                                    <td th:text="(${currentMonth.getCurrentDifference() + currentMonth.getPreviousMonthDifference()} > 0 ?
-                                '+' + ${#numbers.formatDecimal(currentMonth.getCurrentDifference() + currentMonth.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}
-                                : ${#numbers.formatDecimal(currentMonth.getCurrentDifference() + currentMonth.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}) + #{BGN}"></td>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-3">
-                            <div class="d-flex justify-content-between">
-                                <h3 th:text="#{expenses}" class="fw-bold p-0 m-auto"></h3>
-                                <div th:if="${!currentMonth.isCompleted()}" class="dropdown">
-                                    <button type="button" class="bg-transparent border-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="/images/close.png" alt="close" class="icon">
-                                    </button>
-                                    <div class="dropdown-menu text-center bg-warning">
-                                        <div class="p-2">
-                                            <form th:action="@{|/cashier/homesGroup${homesGroup.getId()}/completeMonth|}"
-                                                  th:method="POST">
-                                                <h4 th:text="|#{warning}!|"></h4>
-                                                <input name="month" th:value="${monthNumber}" type="hidden">
-                                                <input name="year" th:value="${yearNumber}" type="hidden">
-                                                <h5 th:text="#{completing_month}" class="field"></h5>
-                                                <div class="mt-3">
-                                                    <button th:text="#{complete}" type="submit" class="button"></button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                <th:block th:if="${currentMonth != null}">
+                    <div th:if="${currentMonth.isCompleted()}">
+                        <h4 th:text="#{month_is_completed}"
+                            class="fw-bold bg-danger border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content m-3 mx-auto width-fit-content"></h4>
+                    </div>
+
+                    <div class="text-center d-flex justify-content-center">
+                        <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content">
+                            <div class="d-inline-flex mt-1 mb-2">
+                                <h3 th:text="|${homesGroup.getName()} #{for} ${monthName} ${yearNumber}|" class="fw-bold m-0"></h3>
+                                <a th:href="|/cashier/homesGroup${homesGroup.getId()}/print?month=${monthNumber}&year=${yearNumber}|">
+                                    <img alt="printer" class="icon ms-3 pointer mt-1" src="/images/print.png">
+                                </a>
                             </div>
-                            <div th:if="${currentMonth.getExpenses().size() == 0}" class="text-center d-block justify-content-center">
-                                <h4 th:text="#{no_expenses}"></h4>
-                            </div>
-                            <table th:if="${currentMonth.getExpenses().size() > 0}"
-                                   class="table table-hover table-sm table-bordered border-primary">
+                            <table class="table table-hover table-sm table-bordered border-primary">
                                 <thead>
                                 <tr class="bg-info fw-bold align-middle">
-                                    <td>#</td>
-                                    <td th:text="#{creation}"></td>
-                                    <td th:text="#{name}"></td>
-                                    <td th:text="|#{value}(#{BGN})|"></td>
-                                    <td th:text="#{document_number}"></td>
-                                    <td th:text="#{date}"></td>
+                                    <td th:text="#{floor}"></td>
+                                    <td th:text="#{apartment}"></td>
+                                    <td th:text="#{owner}"></td>
+                                    <td th:text="|#{total}(#{BGN})|"></td>
+                                    <td th:text="#{paid_date}"></td>
+                                    <td th:text="#{signature}"></td>
                                 </tr>
                                 </thead>
                                 <tbody class="fs-6">
-                                <tr th:each="e,index : ${currentMonth.getExpenses()}" class="align-middle">
-                                    <td th:text="${index.count}"></td>
-                                    <td th:text="${#temporals.format(e.getAddedOn(), 'dd-MM-yyyy')}"></td>
-                                    <td th:text="${e.getName()}"></td>
-                                    <td th:text="${#numbers.formatDecimal(e.getValue(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
-                                    <td th:text="${e.getDocumentNumber()}"></td>
-                                    <td th:text="${#temporals.format(e.getDocumentDate(), 'dd-MM-yyyy')}"></td>
+                                <tr th:each="h : ${currentMonth.getHomes()}" class="align-middle">
+                                    <td th:text="${h.getHome().getFloor()}"></td>
+                                    <td th:text="${h.getHome().getName()}"></td>
+                                    <td th:text="|${h.getHome().getOwner().getFirstName()} ${h.getHome().getOwner().getLastName()}|"></td>
+                                    <td th:text="${h.getTotalPaid()}"></td>
+                                    <td>
+                                        <button th:if="${h.getPaidDate() == null}"
+                                                th:text="#{pay}"
+                                                th:id="${homesGroup.getId()}"
+                                                th:name="${h.getMonth().getId()}"
+                                                th:value="${h.getId()}"
+                                                class="button py-1" onclick="getPayment(this)"></button>
+                                        <button th:if="${h.getPaidDate() != null}"
+                                                th:text="${#temporals.format(h.getPaidDate(), 'dd-MM-yyyy')}"
+                                                th:id="${homesGroup.getId()}"
+                                                th:name="${h.getMonth().getId()}"
+                                                th:value="${h.getId()}"
+                                                class="button py-0 px-1 m-0" onclick="viewPayments(this)"></button>
+                                    </td>
+                                    <td>
+                                        <div th:if="${h.getPaidDate() != null}">
+                                            <img src="/images/tick.png" alt="tick" class="icon">
+                                        </div>
+                                    </td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr class="bg-info fw-bold align-middle">
                                     <td th:text="#{total}" colspan="3"></td>
-                                    <td th:text="${#numbers.formatDecimal(currentMonth.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                    <td th:text="${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
                                 </tfoot>
                             </table>
                         </div>
-                        <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content m-3 mx-auto width-fit-content">
-                            <div th:if="${!currentMonth.isCompleted()}">
-                                <form th:action="@{|/cashier/homesGroup${homesGroup.getId()}/add-expense|}"
-                                      th:method="POST"
-                                      th:object="${addExpenseDTO}" class="d-grid justify-content-center px-2 py-3">
-                                    <h3 th:text="|#{add} #{expense}|" class="fw-bold"></h3>
-                                    <input name="month" th:value="${monthNumber}" type="hidden">
-                                    <input name="year" th:value="${yearNumber}" type="hidden">
+                        <div class="text-center justify-content-center">
+                            <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content bg-light">
+                                <h3 th:text="|#{total} #{for} ${monthName} ${yearNumber}|" class="fw-bold"></h3>
+                                <div th:if="${currentMonth.getExpenses().size() == 0} and ${currentMonth.getCurrentIncome() == 0}"
+                                     class="text-center d-block justify-content-center">
+                                    <h4 th:text="|#{no_expenses}/#{incomes}|"></h4>
+                                </div>
+                                <table th:if="${currentMonth.getExpenses().size() > 0} or ${currentMonth.getCurrentIncome() > 0}"
+                                       class="table table-hover table-sm table-bordered border-primary">
+                                    <tbody class="fs-6">
+                                    <tr class="align-middle">
+                                        <td th:text="#{incomes}"></td>
+                                        <td th:text="|${#numbers.formatDecimal(currentMonth.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
+                                    </tr>
+                                    <tr class="align-middle">
+                                        <td th:text="#{expenses}"></td>
+                                        <td th:text="|${#numbers.formatDecimal(currentMonth.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr class="bg-info fw-bold align-middle">
+                                        <td th:text="|#{difference} (#{incomes} + #{expenses})|"></td>
+                                        <td th:text="(${currentMonth.getCurrentDifference()} > 0 ?
+                                '+' + ${#numbers.formatDecimal(currentMonth.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')}
+                                : ${#numbers.formatDecimal(currentMonth.getCurrentDifference(), 1, 'WHITESPACE', 2, 'POINT')}) + #{BGN}"></td>
+                                    </tr>
+                                    <tr class="align-middle">
+                                        <td>
+                                            <div>
+                                                <span th:text="|#{from} #{previous_month}|"></span>
+                                                <a th:if="${previousMonth != null}"
+                                                   th:href="|/cashier/homesGroup${homesGroup.getId()}?month=${previousMonth.getNumber()}&year=${previousMonth.getYear()}|"
+                                                   th:text="|${previousMonth.getNumber()}/${previousMonth.getYear()}|"></a>
+                                            </div>
 
-                                    <div class="d-grid">
+
+                                        </td>
+                                        <td th:text="|${#numbers.formatDecimal(currentMonth.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}#{BGN}|"></td>
+                                    </tr>
+                                    <tr class="bg-warning fw-bold align-middle">
+                                        <td th:text="|#{total} #{for} #{the_current} #{month}|"></td>
+                                        <td th:text="(${currentMonth.getCurrentDifference() + currentMonth.getPreviousMonthDifference()} > 0 ?
+                                '+' + ${#numbers.formatDecimal(currentMonth.getCurrentDifference() + currentMonth.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}
+                                : ${#numbers.formatDecimal(currentMonth.getCurrentDifference() + currentMonth.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}) + #{BGN}"></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-3">
+                                <div class="d-flex justify-content-between">
+                                    <h3 th:text="#{expenses}" class="fw-bold p-0 m-auto"></h3>
+                                    <div th:if="${!currentMonth.isCompleted()}" class="dropdown">
+                                        <button type="button" class="bg-transparent border-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src="/images/close.png" alt="close" class="icon">
+                                        </button>
+                                        <div class="dropdown-menu text-center bg-warning">
+                                            <div class="p-2">
+                                                <form th:action="@{|/cashier/homesGroup${homesGroup.getId()}/completeMonth|}"
+                                                      th:method="POST">
+                                                    <h4 th:text="|#{warning}!|"></h4>
+                                                    <input name="month" th:value="${monthNumber}" type="hidden">
+                                                    <input name="year" th:value="${yearNumber}" type="hidden">
+                                                    <h5 th:text="#{completing_month_payments}" class="field"></h5>
+                                                    <h5 th:text="#{completing_month}" class="field"></h5>
+                                                    <div class="mt-3">
+                                                        <button th:text="#{complete}" type="submit" class="button"></button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:if="${currentMonth.getExpenses().size() == 0}" class="text-center d-block justify-content-center">
+                                    <h4 th:text="#{no_expenses}"></h4>
+                                </div>
+                                <table th:if="${currentMonth.getExpenses().size() > 0}"
+                                       class="table table-hover table-sm table-bordered border-primary">
+                                    <thead>
+                                    <tr class="bg-info fw-bold align-middle">
+                                        <td>#</td>
+                                        <td th:text="#{creation}"></td>
+                                        <td th:text="#{name}"></td>
+                                        <td th:text="|#{value}(#{BGN})|"></td>
+                                        <td th:text="#{document_number}"></td>
+                                        <td th:text="#{date}"></td>
+                                        <td sec:authorize="(hasRole('ADMIN')) || (hasRole('MANAGER'))"></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="fs-6">
+                                    <tr th:each="e,index : ${currentMonth.getExpenses()}" class="align-middle">
+                                        <td th:text="${index.count}"></td>
+                                        <td th:text="${#temporals.format(e.getAddedOn(), 'dd-MM-yyyy')}"></td>
+                                        <td th:text="${e.getName()}"></td>
+                                        <td th:text="${#numbers.formatDecimal(e.getValue(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                        <td th:text="${e.getDocumentNumber()}"></td>
+                                        <td th:text="${#temporals.format(e.getDocumentDate(), 'dd-MM-yyyy')}"></td>
+                                        <td>
+                                            <div sec:authorize="(hasRole('ADMIN')) || (hasRole('MANAGER')) && ${!currentMonth.isCompleted()}">
+                                                <a th:href="|/cashier/homesGroup${homesGroup.getId()}/edit-expense${e.getId()}|">
+                                                    <img src="/images/edit.png" alt="edit" class="icon">
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr class="bg-info fw-bold align-middle">
+                                        <td th:text="#{total}" colspan="3"></td>
+                                        <td th:text="${#numbers.formatDecimal(currentMonth.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div th:if="${!currentMonth.isCompleted()}"
+                                 class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content m-3 mx-auto width-fit-content">
+                                <div>
+                                    <form th:action="@{|/cashier/homesGroup${homesGroup.getId()}/add-expense|}"
+                                          th:method="POST"
+                                          th:object="${addExpenseDTO}" class="d-grid justify-content-center px-2 py-3">
+                                        <h3 th:text="|#{add} #{expense}|" class="fw-bold"></h3>
+                                        <input name="month" th:value="${monthNumber}" type="hidden">
+                                        <input name="year" th:value="${yearNumber}" type="hidden">
+
                                         <label for="name"></label>
                                         <input th:field="*{name}"
                                                th:errorclass="is-invalid"
-                                               th:placeholder="#{expense_example_name}" type="text" name="name" id="name" class="m-auto"/>
+                                               th:placeholder="#{expense_example_name}" type="text" name="name" id="name" class="m-auto w-100 mb-3"/>
                                         <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
                                             <p th:each="err : ${#fields.errors('name')}"
                                                th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
                                         </div>
-                                        <div class="my-3">
-                                            <label for="value"></label>
-                                            <input th:field="*{value}"
-                                                   th:errorclass="is-invalid"
-                                                   th:placeholder="#{expense_example_value}" type="number" name="value" id="value" min="0"
-                                                   max="999999999" step="0.01"/>
-                                        </div>
+                                        <label for="value"></label>
+                                        <input th:field="*{value}"
+                                               th:errorclass="is-invalid"
+                                               th:placeholder="#{expense_example_value}" type="number" name="value" id="value" min="0"
+                                               max="999999999" step="0.01" class="m-auto w-100 mb-3"/>
                                         <div th:if="${#fields.hasErrors('value')}" class="notificationRegister">
                                             <p th:each="err : ${#fields.errors('value')}"
                                                th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
                                         </div>
-                                        <div class="">
+                                        <div class="m-auto w-100">
                                             <div class="d-inline-block">
                                                 <label for="documentNumber"></label>
                                                 <input th:field="*{documentNumber}"
@@ -336,30 +355,27 @@
                                                 <input th:field="*{documentDate}"
                                                        th:max="${now.toString()}" type="date" name="documentDate" id="documentDate" class="calendar">
                                             </div>
+                                            <div th:if="${#fields.hasErrors('documentNumber')}" class="notificationRegister">
+                                                <p th:each="err : ${#fields.errors('documentNumber')}"
+                                                   th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                                            </div>
+                                            <div th:if="${#fields.hasErrors('documentDate')}" class="notificationRegister">
+                                                <p th:each="err : ${#fields.errors('documentDate')}"
+                                                   th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                                            </div>
                                         </div>
-                                        <div th:if="${#fields.hasErrors('documentNumber')}" class="notificationRegister">
-                                            <p th:each="err : ${#fields.errors('documentNumber')}"
-                                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                                        <div class="add my-2 width-fit-content m-auto mt-3">
+                                            <button type="submit" class="bg-transparent border-0">
+                                                <img src="/images/add-expense.png" alt="add" class="icon m-1">
+                                                <span th:text="|#{add} #{expense}|"></span>
+                                            </button>
                                         </div>
-                                        <div th:if="${#fields.hasErrors('documentDate')}" class="notificationRegister">
-                                            <p th:each="err : ${#fields.errors('documentDate')}"
-                                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                                        </div>
-                                    </div>
-                                    <div class="add my-2 width-fit-content m-auto">
-                                        <button type="submit" class="bg-transparent border-0">
-                                            <img src="/images/add-expense.png" alt="add" class="icon m-1">
-                                            <span th:text="|#{add} #{expense}|"></span>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div th:if="${currentMonth.isCompleted()}">
-                                <h4 th:text="#{month_is_completed}" class="fw-bold"></h4>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </th:block>
             </th:block>
         </div>
     </div>

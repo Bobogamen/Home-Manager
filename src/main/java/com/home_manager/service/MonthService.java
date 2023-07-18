@@ -65,6 +65,10 @@ public class MonthService {
         return this.monthRepository.getMonthByNumberAndYearAndHomesGroupId(month, year, homesGroupId);
     }
 
+    public boolean isCompleted(Month month) {
+        return month.getHomes().stream().allMatch(m -> m.getMonth().isCompleted());
+    }
+
     public void setTotalPaymentForHome(Month month, MonthHomes monthHome, double totalPaid, LocalDate paidDate) {
         monthHome.setTotalPaid(totalPaid);
         monthHome.setPaidDate(Objects.requireNonNullElseGet(paidDate, LocalDate::now));

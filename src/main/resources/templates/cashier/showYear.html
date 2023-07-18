@@ -59,7 +59,7 @@
                                 </td>
                                 <td th:text="${#numbers.formatDecimal(m.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td th:text="${#numbers.formatDecimal(m.getPreviousMonthDifference(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
-                                <td th:text="${#numbers.formatDecimal(m.getTotalIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(m.getCurrentIncome(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td th:text="${#numbers.formatDecimal(m.getTotalExpenses(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                 <td th:text="(${m.getTotalDifference() > 0} ?
                                 '+' + ${#numbers.formatDecimal(m.getTotalDifference(), 1, 'WHITESPACE', 2, 'POINT')}

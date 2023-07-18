@@ -24,6 +24,7 @@ public enum Notifications {
     ADDED_SUCCESSFULLY,
     RESIDENT_DELETED_SUCCESSFULLY,
     MONTH_COMPLETION,
+    MONTH_COMPLETE_NOT_ALL_PAYMENTS,
     CANNOT_BE_IN_FUTURE;
 
     private Properties properties;

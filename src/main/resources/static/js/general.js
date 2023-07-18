@@ -28,7 +28,7 @@ function showCalendar(target) {
     const dateInput = target.nextElementSibling
 
     try {
-        dateInput.showPicker();
+        dateInput.nextElementSibling.showPicker();
     } catch (error) {
         console.log(error)
     }

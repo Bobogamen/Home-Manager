@@ -1,0 +1,18 @@
+#loader {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 10px solid grey;
+    border-radius: 50%;
+    border-top: 10px solid blue;
+    width: 100px;
+    height: 100px;
+    animation: spinIndicator 1s linear infinite;
+}
+@keyframes spinIndicator {
+    100% {
+        transform: rotate(360deg);
+    }
+}

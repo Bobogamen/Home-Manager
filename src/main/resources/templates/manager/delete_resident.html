@@ -3,54 +3,54 @@
       xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="|#{delete} #{resident}|"></title>
-
 </head>
 <body>
-<main class="w-100">
-    <div class="container-fluid">
-        <section th:replace="fragments/notification :: section"></section>
-        <nav th:replace="fragments/nav_bar :: nav"></nav>
-        <div class="row line">
-            <div class="row justify-content-center">
-                <div class="d-grid justify-content-center align-items-center mt-4">
-                    <h3 th:text="|#{delete} #{resident} #{in} #{apartment} ${resident.getHome().getName()}|" class="text-center"></h3>
-                    <div class="card m-auto">
-                        <div class="card-body text-center m-3 bg-success border border-dark rounded">
-                            <form th:action="@{|/profile/homesGroup${homesGroupId}/home${homeId}/delete-resident${resident.getId()}|}"
-                                  th:method="DELETE">
+<div id="loader"></div>
+<div id="main" class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+        <div class="row justify-content-center">
+            <div class="d-grid justify-content-center align-items-center mt-4">
+                <h3 th:text="|#{delete} #{resident} #{in} #{apartment} ${resident.getHome().getName()} #{in} ${resident.getHome().getHomesGroup().getName()}|" class="text-center"></h3>
+                <div class="card m-auto">
+                    <div class="card-body text-center m-3 bg-success border border-dark rounded">
+                        <form th:action="@{|/profile/homesGroup${homesGroupId}/home${homeId}/delete-resident${resident.getId()}|}"
+                              th:method="DELETE">
 
-                                <p th:if="${resident.getFirstName() != ''}"
-                                   th:text="${resident.getFirstName()}" class="field-fit-content px-1 mb-1"></p>
+                            <p th:if="${resident.getFirstName() != ''}"
+                               th:text="${resident.getFirstName()}" class="field-fit-content px-1 mb-1"></p>
 
-                                <p th:if="${resident.getMiddleName() != ''}"
-                                   th:text="${resident.getMiddleName()}" class="field-fit-content px-1 mb-1"></p>
+                            <p th:if="${resident.getMiddleName() != ''}"
+                               th:text="${resident.getMiddleName()}" class="field-fit-content px-1 mb-1"></p>
 
-                                <p th:if="${resident.getLastName() != ''}"
-                                   th:text="${resident.getLastName()}" class="field-fit-content px-1 mb-1"></p>
+                            <p th:if="${resident.getLastName() != ''}"
+                               th:text="${resident.getLastName()}" class="field-fit-content px-1 mb-1"></p>
 
-                                <p th:if="${resident.getEmail() != ''}"
-                                   th:text="${resident.getEmail()}" class="field-fit-content px-1 mb-1"></p>
+                            <p th:if="${resident.getEmail() != ''}"
+                               th:text="${resident.getEmail()}" class="field-fit-content px-1 mb-1"></p>
 
-                                <p th:if="${resident.getPhoneNumber() != ''}"
-                                   th:text="${resident.getPhoneNumber()}" class="field-fit-content px-1 mb-1"></p>
+                            <p th:if="${resident.getPhoneNumber() != ''}"
+                               th:text="${resident.getPhoneNumber()}" class="field-fit-content px-1 mb-1"></p>
 
-                                <h5 th:text="|#{are_you_sure} #{deletion_is_irreversible}|" class="bg-light mt-5"></h5>
+                            <h5 th:text="|#{are_you_sure} #{deletion_is_irreversible}|" class="bg-light mt-5"></h5>
 
-                                <button th:text="#{delete}" type="submit" class="btn btn-danger mt-5"></button>
-                            </form>
-                        </div>
+                            <button th:text="#{delete}" type="submit" class="btn btn-danger mt-5"></button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <footer th:replace="fragments/footer :: footer"></footer>
-        </div>
     </div>
-</main>
+    <div class="row">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</div>
 </body>
 </html>

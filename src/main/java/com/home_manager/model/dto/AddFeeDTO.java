@@ -11,7 +11,7 @@ public class AddFeeDTO {
     private String name;
 
     @Positive(message = "{positive_number}")
-    private double value;
+    private Double value;
 
     public AddFeeDTO() {
     }
@@ -24,7 +24,7 @@ public class AddFeeDTO {
         this.name = name;
     }
 
-    public double getValue() {
+    public Double getValue() {
         return value;
     }
 

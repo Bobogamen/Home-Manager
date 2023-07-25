@@ -39,7 +39,7 @@ public class Month {
     private double previousMonthDifference;
 
     @JsonIgnore
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BOOLEAN")
     private boolean completed;
 
     @OneToOne

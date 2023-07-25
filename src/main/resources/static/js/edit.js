@@ -1,20 +1,20 @@
+let formDiv = document.querySelector('.edit-times');
+let form = formDiv.querySelector('form');
+let basicUrl = form.action;
+
 function editResident(target) {
     clearAll();
 
     let buttonDiv = target.querySelector('span')
 
-    target.parentElement.parentElement.querySelectorAll('button').forEach(b => {
-        if (b.id === buttonDiv.children[0].id) {
+    document.querySelector('.card-body').querySelectorAll('button').forEach(b => {
+        if (b.id === buttonDiv.querySelector('button').id) {
             buttonDiv.className = 'd-inline float-end';
         } else {
             b.parentElement.className = 'd-none';
         }
     });
 }
-
-let formDiv = document.querySelector('.edit-times');
-let form = formDiv.querySelector('form');
-let basicUrl = form.action;
 
 function editFeeTimes(target) {
     clearAll();

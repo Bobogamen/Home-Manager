@@ -7,7 +7,6 @@ import com.home_manager.model.enums.Notifications;
 import com.home_manager.model.user.HomeManagerUserDetails;
 import com.home_manager.service.EmailService;
 import com.home_manager.service.HomesGroupService;
-import com.home_manager.service.MonthService;
 import com.home_manager.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -26,14 +25,12 @@ public class ProfileController {
 
     private final UserService userService;
     private final HomesGroupService homesGroupService;
-    private final MonthService monthService;
     private final HttpServletRequest request;
     private final EmailService emailService;
 
-    public ProfileController(UserService userService, HomesGroupService homesGroupService, MonthService monthService, EmailService emailService, HttpServletRequest request) {
+    public ProfileController(UserService userService, HomesGroupService homesGroupService, EmailService emailService, HttpServletRequest request) {
         this.userService = userService;
         this.homesGroupService = homesGroupService;
-        this.monthService = monthService;
         this.emailService = emailService;
         this.request = request;
     }
@@ -83,7 +80,7 @@ public class ProfileController {
             }
 
             HomesGroup newHomesGroup = this.homesGroupService.addHomesGroup(addHomesGroupDTO, this.userService.getUserById(user.getId()));
-            this.monthService.initialMonthsGeneration(newHomesGroup);
+//            this.monthService.initialMonthsGeneration(newHomesGroup);
 
             redirectAttributes.addFlashAttribute("success", "Група " + addHomesGroupDTO.getName() + " e добавена");
 

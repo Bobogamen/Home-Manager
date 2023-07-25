@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="${homesGroup.getName()}"></title>
 </head>
 <body>
@@ -78,7 +79,8 @@
     </div>
 </div>
 
-<div class="container-fluid">
+<div id="loader"></div>
+<div id="main" class="container-fluid">
     <section th:replace="fragments/notification :: section"></section>
     <nav th:replace="fragments/nav_bar :: nav"></nav>
     <div class="row line">
@@ -98,8 +100,12 @@
                                 <button th:text="#{years}" class="btn btn-dark years"></button>
                             </a>
                         </div>
+                        <a th:if="${!(monthNumber == homesGroup.getStartPeriod().getMonthValue() && yearNumber == homesGroup.getStartPeriod().getYear())}"
+                           th:href="|/cashier/homesGroup${homesGroup.getId()}/previous-month?month=${monthNumber}&year=${yearNumber}|">
+                            <img src="/images/back.png" alt="back" class="icon">
+                        </a>
                         <form th:action="|/cashier/homesGroup${homesGroup.getId()}|"
-                              th:method="GET" onchange="this.submit()">
+                              th:method="GET" onchange="this.submit()" class="d-flex">
                             <label for="month"></label>
                             <select name="month" id="month" class="m-1 bg-transparent text-center webkit-appearance-none">
                                 <option th:each="m  : ${monthsList}"
@@ -117,6 +123,10 @@
                                 </option>
                             </select>
                         </form>
+                        <a th:if="${!(monthNumber == now.getMonthValue() && yearNumber == now.getYear())}"
+                           th:href="|/cashier/homesGroup${homesGroup.getId()}/next-month?month=${monthNumber}&year=${yearNumber}|">
+                            <img src="/images/forward.png" alt="back" class="icon">
+                        </a>
                     </div>
                 </div>
 
@@ -285,7 +295,6 @@
                                         <td th:text="|#{value}(#{BGN})|"></td>
                                         <td th:text="#{document_number}"></td>
                                         <td th:text="#{date}"></td>
-                                        <td sec:authorize="(hasRole('ADMIN')) || (hasRole('MANAGER'))"></td>
                                     </tr>
                                     </thead>
                                     <tbody class="fs-6">
@@ -296,13 +305,6 @@
                                         <td th:text="${#numbers.formatDecimal(e.getValue(), 1, 'WHITESPACE', 2, 'POINT')}"></td>
                                         <td th:text="${e.getDocumentNumber()}"></td>
                                         <td th:text="${#temporals.format(e.getDocumentDate(), 'dd-MM-yyyy')}"></td>
-                                        <td>
-                                            <div sec:authorize="(hasRole('ADMIN')) || (hasRole('MANAGER')) && ${!currentMonth.isCompleted()}">
-                                                <a th:href="|/cashier/homesGroup${homesGroup.getId()}/edit-expense${e.getId()}|">
-                                                    <img src="/images/edit.png" alt="edit" class="icon">
-                                                </a>
-                                            </div>
-                                        </td>
                                     </tr>
                                     </tbody>
                                     <tfoot>

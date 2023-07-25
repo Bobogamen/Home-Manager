@@ -3,86 +3,87 @@
       xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="#{assign}"></title>
 </head>
 <body>
-<main class="w-100">
-    <div class="container-fluid">
-        <section th:replace="fragments/notification :: section"></section>
-        <nav th:replace="fragments/nav_bar :: nav"></nav>
-        <div class="row line">
-            <div class="text-center">
-                <div class="text-center d-flex justify-content-center">
-                    <h4 th:if="${manager.getCashiers().size() == 0}" th:text="#{no_cashier}"></h4>
-                    <th:block th:if="${manager.getCashiers().size() > 0}">
-                        <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-5 mx-4">
-                            <h3 th:text="|#{assign} #{homes_groups}|" class="fw-bold"></h3>
-                            <div th:each="c : ${manager.getCashiers()}" class="card card-resident mb-5 cashier">
+<div id="loader"></div>
+<div id="main" class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+        <div class="text-center">
+            <div class="text-center d-flex justify-content-center">
+                <h4 th:if="${manager.getCashiers().size() == 0}" th:text="#{no_cashier}"></h4>
+                <th:block th:if="${manager.getCashiers().size() > 0}">
+                    <div class="border border-3 border-primary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-5 mx-4">
+                        <h3 th:text="|#{assign} #{homes_groups}|" class="fw-bold"></h3>
+                        <div th:each="c : ${manager.getCashiers()}" class="card card-resident mb-5 cashier">
+                            <div class="card-header">
+                                <h3 th:text="${c.getName()}"></h3>
+                            </div>
+                            <div class="card-body text-center pt-0">
+                                <form th:action="@{|/profile/assign${c.getId()}|}" th:method="POST">
+                                    <table class="table table-hover table-sm table-bordered border-primary fs-6 text-center">
+                                        <tbody>
+                                        <tr th:each="hg : ${manager.getHomesGroup()}" class="align-middle">
+                                            <td th:text="${hg.getName()}"></td>
+                                            <td>
+                                                <input th:value="${hg.getId()}" th:checked="${c.hasThisHomesGroup(hg)}"
+                                                       name="homesGroup" type="checkbox" class="inputCheckBox"
+                                                       onclick="showButton(this)">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="submit" class="edit-times bg-transparent border-0 my-0 top-0 m-2 mt-1">
+                                        <img src="/images/tick.png" alt="tick" class="icon">
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center d-flex justify-content-center">
+                        <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-5 mx-4">
+                            <h3 th:text="|#{assigned} #{homes_groups}|" class="fw-bold"></h3>
+                            <div th:each="c : ${manager.getCashiers()}" class="card card-resident mb-5">
                                 <div class="card-header">
-                                    <h3 th:text="${c.getName()}"></h3>
+                                    <h3 th:text="${c.getName()}" class="fw-bold"></h3>
                                 </div>
                                 <div class="card-body text-center pt-0">
-                                    <form th:action="@{|/profile/assign${c.getId()}|}" th:method="POST">
-                                        <table class="table table-hover table-sm table-bordered border-primary fs-6 text-center">
-                                            <tbody>
-                                            <tr th:each="hg : ${manager.getHomesGroup()}" class="align-middle">
-                                                <td th:text="${hg.getName()}"></td>
-                                                <td>
-                                                    <input th:value="${hg.getId()}" th:checked="${c.hasThisHomesGroup(hg)}"
-                                                           name="homesGroup" type="checkbox" class="inputCheckBox"
-                                                           onclick="showButton(this)">
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <button type="submit" class="edit-times bg-transparent border-0 my-0 top-0 m-2 mt-1">
-                                            <img src="/images/tick.png" alt="tick" class="icon">
-                                        </button>
-                                    </form>
+                                    <h4 th:if="${c.getHomesGroup().size() == 0}" th:text="#{no_assigned_homes_group}"></h4>
+                                    <table th:if="${c.getHomesGroup().size() > 0}"
+                                           class="table table-hover table-sm table-bordered border-primary">
+                                        <thead>
+                                        <tr class="bg-info fw-bold align-middle">
+                                            <td th:text="#{name}"></td>
+                                            <td th:text="|#{homes} (#{number_short})|"></td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="hg : ${c.getHomesGroup()}" class="align-middle">
+                                            <td th:text="${hg.getName()}"></td>
+                                            <td th:text="${hg.getHomes().size()}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-center d-flex justify-content-center">
-                            <div class="border border-3 border-secondary border-opacity-50 rounded-5 shadow-lg px-4 py-1 mx-1 height-fit-content mt-5 mx-4">
-                                <h3 th:text="|#{assigned} #{homes_groups}|" class="fw-bold"></h3>
-                                <div th:each="c : ${manager.getCashiers()}" class="card card-resident mb-5">
-                                    <div class="card-header">
-                                        <h3 th:text="${c.getName()}" class="fw-bold"></h3>
-                                    </div>
-                                    <div class="card-body text-center pt-0">
-                                        <h4 th:if="${c.getHomesGroup().size() == 0}" th:text="#{no_assigned_homes_group}"></h4>
-                                        <table th:if="${c.getHomesGroup().size() > 0}"
-                                               class="table table-hover table-sm table-bordered border-primary">
-                                            <thead>
-                                            <tr class="bg-info fw-bold align-middle">
-                                                <td th:text="#{name}"></td>
-                                                <td th:text="|#{homes} (#{number_short})|"></td>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr th:each="hg : ${c.getHomesGroup()}" class="align-middle">
-                                                <td th:text="${hg.getName()}"></td>
-                                                <td th:text="${hg.getHomes().size()}"></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </th:block>
-                </div>
+                    </div>
+                </th:block>
             </div>
         </div>
-        <div class="row">
-            <footer th:replace="fragments/footer :: footer"></footer>
-        </div>
     </div>
-</main>
-<script src="/js/utils.js"></script>
-<script src="/js/assign.js"></script>
+    <div class="row">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</div>
+<script type="text/javascript" src="/js/utils.js"></script>
+<script type="text/javascript" src="/js/assign.js"></script>
 </body>
 </html>

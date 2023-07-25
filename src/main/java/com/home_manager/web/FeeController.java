@@ -21,7 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/profile/homesGroup{homesGroupId}")
@@ -61,46 +63,46 @@ public class FeeController {
 
     @PostMapping("/add-fee")
     private String addFee(@PathVariable long homesGroupId, @Valid AddFeeDTO addFeeDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                          @RequestParam(name = "homes") Map<String, String> homes, @AuthenticationPrincipal HomeManagerUserDetails user) {
+                          @RequestParam Map<String, String> inputs, @AuthenticationPrincipal HomeManagerUserDetails user) {
 
-        if(homes.isEmpty()) {
-            redirectAttributes.addFlashAttribute("addFeeDTO", addFeeDTO);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addFeeDTO", bindingResult);
-
-            return "redirect:/profile/homesGroup{homesGroupId}/add-fee";
-        }
-
-
-
-//        inputs.remove("_csrf");
-//        String name = inputs.remove("name");
-//        double value = Double.parseDouble(inputs.remove("value"));
-
-        if (homes.size() == 0) {
-            redirectAttributes.addFlashAttribute("fail", Notifications.CHOOSE_AT_LEAST_ONE_HOME.getValue());
-            return "redirect:/profile/homesGroup{homesGroupId}/add-fee";
-        }
+        inputs.remove("_csrf");
+        String name = inputs.remove("name");
+        double value = Double.parseDouble(inputs.remove("value"));
 
         if (isAuthorized(homesGroupId, user.getId())) {
+            if (bindingResult.hasErrors()) {
+                redirectAttributes.addFlashAttribute("addFeeDTO", addFeeDTO);
+                redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addFeeDTO", bindingResult);
 
-//            List<Long> homes = inputs.entrySet().stream().map( entry -> {
-//                if (entry.getValue().equals("true")) {
-//                    return Long.parseLong(entry.getKey());
-//                }
-//
-//                return null;
-//            }).filter(Objects::nonNull).toList();
+                return "redirect:/profile/homesGroup{homesGroupId}/add-fee";
+            } else if (inputs.size() == 0) {
+                redirectAttributes.addFlashAttribute("addFeeDTO", addFeeDTO);
+                redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addFeeDTO", bindingResult);
+                redirectAttributes.addFlashAttribute("fail", Notifications.CHOOSE_AT_LEAST_ONE_HOME.getValue());
 
-//            Fee fee = this.feeService.addFee(name, value, this.homesGroupService.getHomesGroupById(homesGroupId));
-//            homes.forEach(h -> this.homeService.setFeeToHome(h, fee));
-//
-//            redirectAttributes.addFlashAttribute("success",
-//                    inputs.size() == 1 ? Notifications.FEE_ADD_FOR_HOME.getValue() : Notifications.FEE_ADD_FOR_HOMES.getValue());
+                return "redirect:/profile/homesGroup{homesGroupId}/add-fee";
+            }
+
+            List<Long> homes = inputs.entrySet().stream().map(entry -> {
+                if (entry.getValue().equals("true")) {
+                    return Long.parseLong(entry.getKey());
+                }
+
+                return null;
+            }).filter(Objects::nonNull).toList();
+
+            Fee fee = this.feeService.addFee(name, value, this.homesGroupService.getHomesGroupById(homesGroupId));
+            homes.forEach(h -> this.homeService.setFeeToHome(h, fee));
+
+            redirectAttributes.addFlashAttribute("success",
+                    inputs.size() == 1 ? Notifications.FEE_ADD_FOR_HOME.getValue() : Notifications.FEE_ADD_FOR_HOMES.getValue());
             return "redirect:/profile/homesGroup{homesGroupId}";
         } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
+
+}
+
 
     @GetMapping("/edit-fee{feeId}")
     public ModelAndView editFee(@PathVariable long homesGroupId, @PathVariable long feeId, @AuthenticationPrincipal HomeManagerUserDetails user) {
@@ -126,14 +128,13 @@ public class FeeController {
 
     @PostMapping("/edit-fee{feeId}")
     public String editFee(@PathVariable long homesGroupId, @PathVariable long feeId, @AuthenticationPrincipal HomeManagerUserDetails user,
-                          @RequestParam Map<String, String> inputs,
-                          RedirectAttributes redirectAttributes) {
-
-        inputs.remove("_csrf");
-        String name = inputs.remove("name");
-        double value = Double.parseDouble(inputs.remove("value"));
+                          @RequestParam Map<String, String> inputs, RedirectAttributes redirectAttributes) {
 
         if (isAuthorized(homesGroupId, user.getId())) {
+
+            inputs.remove("_csrf");
+            String name = inputs.remove("name");
+            double value = Double.parseDouble(inputs.remove("value"));
 
             Fee fee = this.feeService.changeFee(feeId, name, value);
 
@@ -149,7 +150,5 @@ public class FeeController {
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-
-
     }
 }

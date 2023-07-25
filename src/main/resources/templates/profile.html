@@ -2,13 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="#{profile}"></title>
 </head>
 <body>
-<div class="container-fluid">
+<div id="loader"></div>
+<div id="main" class="container-fluid">
     <section th:replace="fragments/notification :: section"></section>
     <nav th:replace="fragments/nav_bar :: nav"></nav>
     <div class="row line">
@@ -38,7 +41,6 @@
         <footer th:replace="fragments/footer :: footer"></footer>
     </div>
 </div>
-
+<script type="text/javascript" src="/js/utils.js"></script>
 </body>
-<script src="/js/utils.js"></script>
 </html>

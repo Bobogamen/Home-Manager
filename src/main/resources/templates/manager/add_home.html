@@ -3,113 +3,114 @@
       xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="|#{add} #{home}|"></title>
 </head>
 <body>
-<main class="w-100">
-    <div class="container-fluid">
-        <section th:replace="fragments/notification :: section"></section>
-        <nav th:replace="fragments/nav_bar :: nav"></nav>
-        <div class="row line">
-            <div class="row justify-content-center">
-                <div class="registrationForm">
-                    <h3 th:text="|#{add} #{home} #{for} ${homesGroup.getName()}|" class="fw-bold"></h3>
-                    <form th:action="@{|/profile/homesGroup${homesGroup.getId()}/add-home|}"
-                          th:method="POST"
-                          th:object="${addHomeDTO}">
-                        <div class="add-home">
-                            <h4 th:text="#{home}" class="fw-bold"></h4>
-                            <div>
-                                <input th:field="*{floor}"
-                                       th:errorclass="is-invalid"
-                                       th:placeholder="#{floor}" type="text" name="floor" id="floor" class="add-field">
-                                <div th:if="${#fields.hasErrors('floor')}" class="notificationRegister">
-                                    <p th:each="err : ${#fields.errors('floor')}" th:text="${err}"
-                                       class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                                </div>
-                            </div>
-                            <div>
-                                <input th:field="*{name}"
-                                       th:errorclass="is-invalid"
-                                       th:placeholder="|#{name}/#{number}|" type="text" name="name" id="name" class="add-field">
-                                <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
-                                    <p th:each="err : ${#fields.errors('name')}" th:text="${err}"
-                                       class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                                </div>
+<div id="loader"></div>
+<div id="main" class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+        <div class="row justify-content-center">
+            <div class="registrationForm">
+                <h3 th:text="|#{add} #{home} #{for} ${homesGroup.getName()}|" class="fw-bold"></h3>
+                <form th:action="@{|/profile/homesGroup${homesGroup.getId()}/add-home|}"
+                      th:method="POST"
+                      th:object="${addHomeDTO}">
+                    <div class="add-home">
+                        <h4 th:text="#{home}" class="fw-bold"></h4>
+                        <div>
+                            <input th:field="*{floor}"
+                                   th:errorclass="is-invalid"
+                                   th:placeholder="#{floor}" type="text" name="floor" id="floor" class="add-field">
+                            <div th:if="${#fields.hasErrors('floor')}" class="notificationRegister">
+                                <p th:each="err : ${#fields.errors('floor')}" th:text="${err}"
+                                   class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
                             </div>
                         </div>
-                        <div class="add-owner">
-                            <h4 th:text="#{owner}" class="fw-bold"></h4>
-                            <div>
-                                <input th:field="*{ownerFirstName}"
-                                       th:errorclass="is-invalid"
-                                       th:placeholder="#{first_name}" type="text" name="ownerFirstName" id="ownerFirstName" class="add-field">
-                                <div th:if="${#fields.hasErrors('ownerFirstName')}" class="notificationRegister">
-                                    <p th:each="err : ${#fields.errors('ownerFirstName')}" th:text="${err}"
-                                       class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                                </div>
-                            </div>
-                            <div>
-                                <input th:field="*{ownerMiddleName}"
-                                       th:placeholder="#{middle_name}" type="text" name="ownerMiddleName" id="ownerMiddleName" class="add-field">
-                            </div>
-                            <div>
-                                <input th:field="*{ownerLastName}"
-                                       th:placeholder="#{last_name}" type="text" name="ownerLastName" id="ownerLastName" class="add-field">
-                            </div>
-                            <div>
-                                <input th:field="*{ownerEmail}" type="email" placeholder="email" name="ownerEmail" id="ownerEmail" class="add-field">
-                            </div>
-                            <div>
-                                <input th:field="*{ownerPhoneNumber}"
-                                       th:errorclass="is-invalid"
-                                       th:placeholder="#{phone_number}" type="tel" name="ownerPhoneNumber" id="ownerPhoneNumber" class="add-field">
-                            </div>
-                            <label th:text="#{resident}" for="resident"></label>
-                            <input th:field="*{resident}"
-                                   type="checkbox" name="resident" id="resident" style="width: 1rem"/>
-                        </div>
-                        <div th:style="${residentValue} == false ? 'display: block' : 'display: none'" class="add-resident">
-                            <h4 th:text="#{resident}" class="fw-bold"></h4>
-                            <div>
-                                <input th:field="*{residentFirstName}"
-                                       th:errorclass="is-invalid"
-                                       th:placeholder="#{first_name}" type="text" name="residentFirstName" id="residentFirstName" class="add-field">
-                                <div th:if="${#fields.hasErrors('residentFirstName')}" class="notificationRegister">
-                                    <p th:each="err : ${#fields.errors('residentFirstName')}" th:text="${err}"
-                                       class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                                </div>
-                            </div>
-                            <div>
-                                <input th:field="*{residentMiddleName}"
-                                       th:placeholder="#{middle_name}" type="text" name="ownerMiddleName" id="residentMiddleName" class="add-field">
-                            </div>
-                            <div>
-                                <input th:field="*{residentLastName}"
-                                       th:placeholder="#{last_name}" type="text" name="residentLastName" id="residentLastName" class="add-field">
-                            </div>
-                            <div>
-                                <input th:field="*{residentEmail}" type="email" placeholder="email" name="residentEmail" id="residentEmail" class="add-field">
-                            </div>
-                            <div>
-                                <input th:field="*{residentPhoneNumber}"
-                                       th:errorclass="is-invalid"
-                                       th:placeholder="#{phone_number}" type="tel" name="residentPhoneNumber" id="residentPhoneNumber" class="add-field">
+                        <div>
+                            <input th:field="*{name}"
+                                   th:errorclass="is-invalid"
+                                   th:placeholder="|#{name}/#{number}|" type="text" name="name" id="name" class="add-field">
+                            <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
+                                <p th:each="err : ${#fields.errors('name')}" th:text="${err}"
+                                   class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
                             </div>
                         </div>
-                        <button th:text="#{add}" type="submit" class="button m-3"></button>
-                    </form>
-                </div>
+                    </div>
+                    <div class="add-owner">
+                        <h4 th:text="#{owner}" class="fw-bold"></h4>
+                        <div>
+                            <input th:field="*{ownerFirstName}"
+                                   th:errorclass="is-invalid"
+                                   th:placeholder="#{first_name}" type="text" name="ownerFirstName" id="ownerFirstName" class="add-field">
+                            <div th:if="${#fields.hasErrors('ownerFirstName')}" class="notificationRegister">
+                                <p th:each="err : ${#fields.errors('ownerFirstName')}" th:text="${err}"
+                                   class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                            </div>
+                        </div>
+                        <div>
+                            <input th:field="*{ownerMiddleName}"
+                                   th:placeholder="#{middle_name}" type="text" name="ownerMiddleName" id="ownerMiddleName" class="add-field">
+                        </div>
+                        <div>
+                            <input th:field="*{ownerLastName}"
+                                   th:placeholder="#{last_name}" type="text" name="ownerLastName" id="ownerLastName" class="add-field">
+                        </div>
+                        <div>
+                            <input th:field="*{ownerEmail}" type="email" placeholder="email" name="ownerEmail" id="ownerEmail" class="add-field">
+                        </div>
+                        <div>
+                            <input th:field="*{ownerPhoneNumber}"
+                                   th:errorclass="is-invalid"
+                                   th:placeholder="#{phone_number}" type="tel" name="ownerPhoneNumber" id="ownerPhoneNumber" class="add-field">
+                        </div>
+                        <label th:text="#{resident}" for="resident"></label>
+                        <input th:field="*{resident}"
+                               type="checkbox" name="resident" id="resident" style="width: 1rem"/>
+                    </div>
+                    <div th:style="${residentValue} == false ? 'display: block' : 'display: none'" class="add-resident">
+                        <h4 th:text="#{resident}" class="fw-bold"></h4>
+                        <div>
+                            <input th:field="*{residentFirstName}"
+                                   th:errorclass="is-invalid"
+                                   th:placeholder="#{first_name}" type="text" name="residentFirstName" id="residentFirstName" class="add-field">
+                            <div th:if="${#fields.hasErrors('residentFirstName')}" class="notificationRegister">
+                                <p th:each="err : ${#fields.errors('residentFirstName')}" th:text="${err}"
+                                   class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                            </div>
+                        </div>
+                        <div>
+                            <input th:field="*{residentMiddleName}"
+                                   th:placeholder="#{middle_name}" type="text" name="ownerMiddleName" id="residentMiddleName" class="add-field">
+                        </div>
+                        <div>
+                            <input th:field="*{residentLastName}"
+                                   th:placeholder="#{last_name}" type="text" name="residentLastName" id="residentLastName" class="add-field">
+                        </div>
+                        <div>
+                            <input th:field="*{residentEmail}" type="email" placeholder="email" name="residentEmail" id="residentEmail" class="add-field">
+                        </div>
+                        <div>
+                            <input th:field="*{residentPhoneNumber}"
+                                   th:errorclass="is-invalid"
+                                   th:placeholder="#{phone_number}" type="tel" name="residentPhoneNumber" id="residentPhoneNumber" class="add-field">
+                        </div>
+                    </div>
+                    <button th:text="#{add}" type="submit" class="button m-3"></button>
+                </form>
             </div>
         </div>
-        <div class="row">
-            <footer th:replace="fragments/footer :: footer"></footer>
-        </div>
     </div>
-</main>
-<script src="/js/addHome.js"></script>
+    <div class="row">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</div>
+<script type="text/javascript" src="/js/addHome.js"></script>
 </body>
 </html>

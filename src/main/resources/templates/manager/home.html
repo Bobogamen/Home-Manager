@@ -3,9 +3,11 @@
       xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="|${homesGroup.getName()} #{apartment} ${home.getName()}|"></title>
 </head>
 <body>
@@ -20,7 +22,8 @@
     </form>
 </div>
 
-<div class="container-fluid">
+<div id="loader"></div>
+<div id="main" class="container-fluid">
     <section th:replace="fragments/notification :: section"></section>
     <nav th:replace="fragments/nav_bar :: nav"></nav>
     <div class="row line">
@@ -63,7 +66,8 @@
                             </div>
                         </div>
                         <div class="card-body text-start pt-0">
-                            <div th:each="r, index : ${home.getResidents()}" class="card-body m-3 bg-success border border-dark rounded">
+                            <div th:each="r, index : ${home.getResidents()}"
+                                 th:class="${r.getId() == home.getOwner().getId()} ? 'card-body m-3 bg-danger border border-dark rounded' : 'card-body m-3 bg-success border border-dark rounded'">
                                 <span th:text="${index.count}" class="badge float-end text-bg-light"></span>
                                 <form th:action="@{|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/edit-resident${r.getId()}|}"
                                       th:method="PUT" onclick='editResident(this)'>
@@ -86,15 +90,38 @@
                                     <input th:value="${r.getPhoneNumber() != ''} ? ${r.getPhoneNumber()} : ''"
                                            th:placeholder="${r.getPhoneNumber() == ''} ? #{phone_number} : ''"
                                            type="text" id="phoneNumber" name="phoneNumber" class="field-fit-content px-1 mb-1">
-                                    <span id="button" class="d-none">
-                                        <button th:id="${index.count}"
-                                                th:text="#{change}" type="submit" class="btn btn-warning">
-                                        </button>
-                                        <a th:if="${home.getOwner().getId() != r.getId()}"
-                                           th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/delete-resident${r.getId()}|">
-                                            <img src="/images/delete.png" alt="delete" class="icon pointer">
-                                        </a>
-                                    </span>
+
+                                    <div>
+                                        <div th:if="${(r.getId() == home.getOwner().getId() && (home.getResidents().size() > 1))}" class="field-fit-content bg-info d-block">
+                                            <em th:text="#{resident}" class="px-1"></em>
+                                            <input th:checked="${r.getId() == home.getOwner().getId()}" type="checkbox" id="resident" name="resident"
+                                                   class="float-end w-auto mx-2" style="margin-top: 0.42rem">
+                                        </div>
+
+                                        <span id="button" class="d-none" style="margin-top: -2.2rem;">
+                                            <a th:if="${home.getOwner().getId() != r.getId()}"
+                                               th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/delete-resident${r.getId()}|"
+                                               class="text-decoration-none">
+                                                <img src="/images/delete.png" alt="delete" class="icon pointer">
+                                            </a>
+                                            <button th:id="${index.count}"
+                                                    th:text="#{change}" type="submit" class="btn btn-warning">
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                    <!--                                    <div class="justify-content-between d-flex">-->
+
+                                    <!--                                        <span th:id="|button${r.getId()}|" class="">-->
+                                    <!--                                            <button th:id="${index.count}"-->
+                                    <!--                                                th:text="#{change}" type="submit" class="btn btn-warning">-->
+                                    <!--                                            </button>-->
+                                    <!--                                            <a th:if="${(home.getOwner().getId() != r.getId()) && (home.getResidents().size() > 1)}"-->
+                                    <!--                                               th:href="|/profile/homesGroup${homesGroup.getId()}/home${home.getId()}/delete-resident${r.getId()}|">-->
+                                    <!--                                                <img src="/images/delete.png" alt="delete" class="icon pointer">-->
+                                    <!--                                            </a>-->
+                                    <!--                                        </span>-->
+                                    <!--                                    </div>-->
                                 </form>
                             </div>
                         </div>
@@ -144,7 +171,7 @@
         <footer th:replace="fragments/footer :: footer"></footer>
     </div>
 </div>
-<script src="/js/utils.js"></script>
-<script src="/js/edit.js"></script>
+<script type="text/javascript" src="/js/utils.js"></script>
+<script type="text/javascript" src="/js/edit.js"></script>
 </body>
 </html>

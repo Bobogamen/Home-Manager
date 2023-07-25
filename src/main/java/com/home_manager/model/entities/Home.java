@@ -40,7 +40,7 @@ public class Home implements Comparable<Home>{
     @OneToMany(mappedBy = "home", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HomesFee> fees;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private HomesGroup homesGroup;
 
     public Home() {
@@ -112,7 +112,6 @@ public class Home implements Comparable<Home>{
     public void setHomesGroup(HomesGroup homesGroup) {
         this.homesGroup = homesGroup;
     }
-
 
     public void setResidents(List<Resident> residents) {
         this.residents = residents;

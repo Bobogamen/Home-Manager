@@ -3,97 +3,100 @@
       xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script type="text/javascript" src="/js/loader.js"></script>
     <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="|#{add} #{homes_group}|"></title>
 </head>
 <body>
-<main class="w-100">
-    <div class="container-fluid">
-        <section th:replace="fragments/notification :: section"></section>
-        <nav th:replace="fragments/nav_bar :: nav"></nav>
-        <div class="row line">
-            <div class="row justify-content-center">
-                <div class="registrationForm">
-                    <h3 th:text="|#{add} #{homes_group}|" class="pb-4 fw-bold"></h3>
-                    <form th:action="@{/profile/add-homes_group}"
-                          th:method="POST"
-                          th:object="${addHomesGroupDTO}">
+<div id="loader"></div>
+<div id="main" class="container-fluid">
+    <section th:replace="fragments/notification :: section"></section>
+    <nav th:replace="fragments/nav_bar :: nav"></nav>
+    <div class="row line">
+        <div class="row justify-content-center">
+            <div class="registrationForm">
+                <h3 th:text="|#{add} #{homes_group}|" class="pb-4 fw-bold"></h3>
+                <form th:action="@{/profile/add-homes_group}"
+                      th:method="POST"
+                      th:object="${addHomesGroupDTO}">
 
-                        <div th:text="#{name}"></div>
-                        <label for="name"></label>
-                        <input th:field="*{name}"
-                               th:errorclass="is-invalid"
-                               th:placeholder="#{name_example}" type="text" name="name" id="name" class="field"/>
-                        <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
-                            <p th:each="err : ${#fields.errors('name')}"
-                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                        </div>
+                    <div th:text="#{name}"></div>
+                    <label for="name"></label>
+                    <input th:field="*{name}"
+                           th:errorclass="is-invalid"
+                           th:placeholder="#{name_example}" type="text" name="name" id="name" class="field"/>
+                    <div th:if="${#fields.hasErrors('name')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('name')}"
+                           th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                    </div>
 
-                        <div th:text="#{size_label}" class="mt-4"></div>
-                        <label for="size"></label>
-                        <input th:field="*{size}"
-                               th:errorclass="is-invalid"
-                               th:placeholder="#{size_example}" type="number" name="size" id="size" class="field"/>
-                        <div th:if="${#fields.hasErrors('size')}" class="notificationRegister">
-                            <p th:each="err : ${#fields.errors('size')}"
-                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                        </div>
+                    <div th:text="#{size_label}" class="mt-4"></div>
+                    <label for="size"></label>
+                    <input th:field="*{size}"
+                           th:errorclass="is-invalid"
+                           th:placeholder="#{size_example}" type="number" name="size" id="size" class="field"/>
+                    <div th:if="${#fields.hasErrors('size')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('size')}"
+                           th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                    </div>
 
-                        <div th:text="|#{choose} #{type}|" class="mt-4"></div>
-                        <label for="type"></label>
-                        <select th:field="*{type}" id="type" class="field">
-                            <option th:each="t : ${T(com.home_manager.model.enums.HomesGroupEnums).values()}"
-                                    th:value="${t.getValue()}"
-                                    th:text="${t.getValue()}"
-                                    th:selected="${t.getValue()} == *{type}">
-                            </option>
-                        </select>
-                        <div th:if="${#fields.hasErrors('type')}" class="notificationRegister">
-                            <p th:each="err : ${#fields.errors('type')}"
-                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                        </div>
+                    <div th:text="|#{choose} #{type}|" class="mt-4"></div>
+                    <label for="type"></label>
+                    <select th:field="*{type}" id="type" class="field">
+                        <option th:each="t : ${T(com.home_manager.model.enums.HomesGroupEnums).values()}"
+                                th:value="${t.getValue()}"
+                                th:text="${t.getValue()}"
+                                th:selected="${t.getValue()} == *{type}">
+                        </option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('type')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('type')}"
+                           th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                    </div>
 
-                        <div class="mt-4">
-                            <span th:text="|#{choose} #{start_period}|"></span>
-                            <span th:text="'&#9432;'" class="text-danger h3 fw-bold pointer" onmouseover="showWarning()" onmouseout="hideWarning()"></span>
-                            <span th:text="'&#9888;'" class="text-danger h2 fw-bold pointer" onmouseover="showInfo()" onmouseout="hideInfo()"></span>
-                            <p th:text="#{warning_start_period}" id="warning" class="card-info-warning position-absolute start-0 end-0 m-auto h6" style="display: none; white-space: pre-line">
-                            </p>
-                            <p th:utext="#{info_start_period}"  id="info" class="card-info-warning position-absolute start-0 end-0 m-auto h6" style="display: none; white-space: pre-line">
-                            </p>
-                        </div>
+                    <div class="mt-4">
+                        <span th:text="|#{choose} #{start_period}|"></span>
+                        <span th:text="'&#9432;'" class="text-danger h3 fw-bold pointer" onmouseover="showWarning()" onmouseout="hideWarning()"></span>
+                        <span th:text="'&#9888;'" class="text-danger h2 fw-bold pointer" onmouseover="showInfo()" onmouseout="hideInfo()"></span>
+                        <p th:text="#{warning_start_period}" id="warning" class="card-info-warning position-absolute start-0 end-0 m-auto h6"
+                           style="display: none; white-space: pre-line">
+                        </p>
+                        <p th:utext="#{info_start_period}" id="info" class="card-info-warning position-absolute start-0 end-0 m-auto h6"
+                           style="display: none; white-space: pre-line">
+                        </p>
+                    </div>
 
-                        <label for="startPeriod"></label>
-                        <input th:max="${#dates.format(#dates.createNow(), 'YYYY-MM-dd')}"
-                               type="date" name="startPeriod" id="startPeriod" class="field">
+                    <label for="startPeriod"></label>
+                    <input th:max="${#dates.format(#dates.createNow(), 'YYYY-MM-dd')}"
+                           type="date" name="startPeriod" id="startPeriod" class="field">
 
-                        <div th:if="${#fields.hasErrors('startPeriod')}" class="notificationRegister">
-                            <p th:each="err : ${#fields.errors('startPeriod')}"
-                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                        </div>
+                    <div th:if="${#fields.hasErrors('startPeriod')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('startPeriod')}"
+                           th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                    </div>
 
-                        <div class="mt-4">
-                            <div th:text="|#{choose} #{background_color}|"></div>
-                            <label for="backgroundColor"></label>
-                            <input th:field="*{backgroundColor}" type="color" id="backgroundColor" value="#000000" class="inputNumber">
-                        </div>
-                        <div th:if="${#fields.hasErrors('backgroundColor')}" class="notificationRegister">
-                            <p th:each="err : ${#fields.errors('backgroundColor')}"
-                               th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
-                        </div>
+                    <div class="mt-4">
+                        <div th:text="|#{choose} #{background_color}|"></div>
+                        <label for="backgroundColor"></label>
+                        <input th:field="*{backgroundColor}" type="color" id="backgroundColor" value="#000000" class="inputNumber">
+                    </div>
+                    <div th:if="${#fields.hasErrors('backgroundColor')}" class="notificationRegister">
+                        <p th:each="err : ${#fields.errors('backgroundColor')}"
+                           th:text="${err}" class="bg-danger text-light rounded d-inline-flex p-1 m-1"></p>
+                    </div>
 
-                        <button th:text="#{add}" type="submit" class="button mt-4"></button>
-                    </form>
-                </div>
+                    <button th:text="#{add}" type="submit" class="button mt-4"></button>
+                </form>
             </div>
         </div>
-        <div class="row">
-            <footer th:replace="fragments/footer :: footer"></footer>
-        </div>
     </div>
-</main>
+    <div class="row">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</div>
 </body>
 <script type="text/javascript" src="/js/showHide.js"></script>
 </html>

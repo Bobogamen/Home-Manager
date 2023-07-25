@@ -3,9 +3,11 @@
       xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <title th:text="${homesGroup.getName()}"></title>
 </head>
 <body>
@@ -38,7 +40,8 @@
     </div>
 </div>
 
-<div class="container-fluid">
+<div id="loader"></div>
+<div id="main" class="container-fluid">
     <section th:replace="fragments/notification :: section"></section>
     <nav th:replace="fragments/nav_bar :: nav"></nav>
     <div class="row line">
@@ -143,9 +146,9 @@
         <footer th:replace="fragments/footer :: footer"></footer>
     </div>
 </div>
-<script src="/js/utils.js"></script>
-<script src="/js/general.js"></script>
-<script src="/js/addResident.js"></script>
+<script type="text/javascript" src="/js/utils.js"></script>
+<script type="text/javascript" src="/js/addResident.js"></script>
+<script type="text/javascript" src="/js/general.js"></script>
 </body>
 </html>
 

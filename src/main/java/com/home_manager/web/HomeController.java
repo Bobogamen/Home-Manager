@@ -5,11 +5,13 @@ import com.home_manager.model.entities.Home;
 import com.home_manager.model.entities.HomesGroup;
 import com.home_manager.model.enums.Notifications;
 import com.home_manager.model.user.HomeManagerUserDetails;
-import com.home_manager.service.*;
+import com.home_manager.service.HomeService;
+import com.home_manager.service.HomesGroupService;
+import com.home_manager.service.ResidentService;
+import com.home_manager.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
@@ -112,6 +114,7 @@ public class HomeController {
                               AddResidentDTO addResidentDTO, RedirectAttributes redirectAttributes) {
 
         if (isAuthorized(homesGroupId, user.getId())) {
+
             this.residentService.addResident(addResidentDTO, this.homeService.getHomeById(homeId));
             redirectAttributes.addFlashAttribute("success", Notifications.RESIDENT_ADDED_SUCCESSFULLY.getValue());
         } else {
@@ -139,14 +142,15 @@ public class HomeController {
     }
 
     @PutMapping("/edit-resident{residentId}")
-    public String editResident(@PathVariable long homesGroupId,
-                               @PathVariable long residentId,
-                               @PathVariable String homeId,
-                               @AuthenticationPrincipal HomeManagerUserDetails user,
+    public String editResident(@PathVariable long homesGroupId, @PathVariable long residentId, @PathVariable long homeId,
+                               @RequestParam(name = "resident", required = false) String resident, @AuthenticationPrincipal HomeManagerUserDetails user,
                                AddResidentDTO addResidentDTO, RedirectAttributes redirectAttributes) {
 
         if (isAuthorized(homesGroupId, user.getId())) {
-            this.residentService.editResident(addResidentDTO, residentId);
+            Home home = this.homeService.getHomeById(homeId);
+
+            this.residentService.editResident(addResidentDTO, residentId, home, resident != null || home.getOwner().getId() != residentId || home.getResidents().size() <= 1);
+
             redirectAttributes.addFlashAttribute("success", Notifications.UPDATED_SUCCESSFULLY.getValue());
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);

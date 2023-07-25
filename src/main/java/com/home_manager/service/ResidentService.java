@@ -59,7 +59,7 @@ public class ResidentService {
         setResidentHome(home, resident);
     }
 
-    public void editResident(AddResidentDTO addResidentDTO, long id) {
+    public void editResident(AddResidentDTO addResidentDTO, long id, Home home, boolean isResident) {
         Resident resident = this.residentRepository.getResidentById(id);
 
         resident.setFirstName(addResidentDTO.getFirstName());
@@ -67,6 +67,12 @@ public class ResidentService {
         resident.setLastName(addResidentDTO.getLastName());
         resident.setEmail(addResidentDTO.getEmail());
         resident.setPhoneNumber(addResidentDTO.getPhoneNumber());
+
+        if (!isResident) {
+            resident.setHome(null);
+        } else {
+            resident.setHome(home);
+        }
 
         this.residentRepository.save(resident);
     }

@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM adoptopenjdk:11-jdk-hotspot AS build
+FROM adoptopenjdk:16-jdk-hotspot AS build
 WORKDIR /app
 # Copy your application source code and build it
 COPY . .
@@ -8,7 +8,7 @@ RUN ./gradlew clean
 RUN ./gradlew build
 
 # Stage 2: Create the final image
-FROM adoptopenjdk:11-jre-hotspot
+FROM adoptopenjdk:16-jre-hotspot
 WORKDIR /app
 # Copy the built JAR from the build stage
 COPY --from=build /app/build/libs/HomeManager.jar app.jar

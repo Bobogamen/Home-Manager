@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the Spring Boot JAR/WAR file into the container
 COPY . .
 
+#Run command for Gradle
+RUN ./gradlew clean build
+
 # Expose the port that the application will run on
 EXPOSE 8080
 

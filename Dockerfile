@@ -3,7 +3,8 @@ FROM adoptopenjdk:11-jdk-hotspot AS build
 WORKDIR /app
 # Copy your application source code and build it
 COPY . .
-RUN #chmod +x gradlew
+RUN chmod +x gradlew
+RUN ./gradlew clean
 RUN ./gradlew build
 
 # Stage 2: Create the final image

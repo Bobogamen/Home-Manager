@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the Spring Boot JAR/WAR file into the container
 COPY . .
 
+# Make the Gradle wrapper script executable
+RUN chmod +x gradlew
+
 #Run command for Gradle
 RUN ./gradlew clean build
 

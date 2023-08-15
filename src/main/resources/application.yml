@@ -14,9 +14,9 @@ server:
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}
-    username: ${MYSQLUSER}
-    password: ${MYSQLPASSWORD}
+    url: jdbc:mysql://localhost:3306/home_manager?useSSL=true&createDatabaseIfNotExist=true
+    username: root
+    password: 1234
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -24,14 +24,19 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        storage_engine: innodb
         format_sql: true
+        show_sql: true
+        validator:
+          apply_to_ddl: false
+
   mail:
     host: smtp.gmail.com
     protocol: smtp
     jndi-name: mail/Session
     username: bg.home.manager@gmail.com
-    password: ${mail_password}
+    password: qawbhpldamaankyz
     port: 465
     default-encoding: UTF-8
     properties:

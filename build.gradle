@@ -1,14 +1,14 @@
-buildscript {
-    ext {
-        springBootVersion = '1.5.9.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin")
-    }
-}
+//buildscript {
+//    ext {
+//        springBootVersion = '1.5.9.RELEASE'
+//    }
+//    repositories {
+//        mavenCentral()
+//    }
+//    dependencies {
+//        classpath("org.springframework.boot:spring-boot-gradle-plugin")
+//    }
+//}
 
 plugins {
     id 'org.springframework.boot' version '2.7.7'
@@ -19,13 +19,13 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'com.home_manager.HomeManagerApplication'
-        )
-    }
-}
+//jar {
+//    manifest {
+//        attributes(
+//                'Main-Class': 'com.home_manager.HomeManagerApplication'
+//        )
+//    }
+//}
 
 group = 'com.home_manager'
 

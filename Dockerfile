@@ -1,18 +1,14 @@
-# Use the official OpenJDK image as the base image
-FROM openjdk:11-jre-slim
-
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the Spring Boot JAR/WAR file into the container
+FROM ubuntu:lastest as build
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
 COPY . .
 
-# Run Gradle to build the application
 RUN chmod +x gradlew
-RUN ./gradlew build --debug
+RUN ./gradlew build
 
-# Expose the port that the application will run on
+FROM openjdk-17-jdk-slim
 EXPOSE 8080
 
-# Define the command to run your Spring Boot application
-CMD ["java", "-jar", "build/libs/app.jar"]
+COPY --from-build /build/libs/HomeManager.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "build/libs/app.jar"]

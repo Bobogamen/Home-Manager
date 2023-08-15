@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # Copy the Spring Boot JAR/WAR file into the container
-COPY target/app.jar /app/app.jar
+COPY . .
 
 # Expose the port that the application will run on
 EXPOSE 8080

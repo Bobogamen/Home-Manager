@@ -7,14 +7,12 @@ WORKDIR /app
 # Copy the Spring Boot JAR/WAR file into the container
 COPY . .
 
-# Make the Gradle wrapper script executable
+# Run Gradle to build the application
 RUN chmod +x gradlew
-
-#Run command for Gradle
-RUN ./gradlew clean build
+RUN ./gradlew build
 
 # Expose the port that the application will run on
 EXPOSE 8080
 
 # Define the command to run your Spring Boot application
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "build/libs/app.jar"]

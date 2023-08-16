@@ -13,18 +13,18 @@ server:
   port: 8080
 spring:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/home_manager?useSSL=true&createDatabaseIfNotExist=true
-    username: root
-    password: 1234
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgres://${db_user}:${db_password}@${db_hostname}/home_manager_3k02
+    username: ${db_user}
+    password: ${db_password}
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         storage_engine: innodb
         format_sql: true
         show_sql: true
@@ -36,7 +36,7 @@ spring:
     protocol: smtp
     jndi-name: mail/Session
     username: bg.home.manager@gmail.com
-    password: qawbhpldamaankyz
+    password: ${mail_password}
     port: 465
     default-encoding: UTF-8
     properties:

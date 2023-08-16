@@ -49,7 +49,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-parent:3.0.0'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 
-    runtimeOnly 'mysql:mysql-connector-java'
+//    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'org.postgresql:postgresql'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

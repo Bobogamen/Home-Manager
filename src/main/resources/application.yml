@@ -14,7 +14,7 @@ server:
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgres://${db_user}:${db_password}@${db_hostname}/home_manager_3k02
+    url: jdbc:postgres://${db_hostname}:5432/home_manager_3k02
     username: ${db_user}
     password: ${db_password}
   jpa:

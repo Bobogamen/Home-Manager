@@ -1,5 +1,7 @@
 package com.home_manager.model.entities;
 
+import jakarta.persistence.Entity;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;

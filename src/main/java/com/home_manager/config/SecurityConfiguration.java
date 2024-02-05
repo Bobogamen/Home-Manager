@@ -25,11 +25,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
 
-        http.
-                sessionManagement().
-                sessionCreationPolicy( SessionCreationPolicy.ALWAYS).
-        and().
-                authorizeHttpRequests().
+        http.sessionManagement().
+                sessionCreationPolicy(SessionCreationPolicy.ALWAYS).
+                and().authorizeHttpRequests().
                 requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
                 antMatchers("/favicon.ico", "/", "/register", "/forgot-password", "/reset-password").permitAll().
                 antMatchers("/admin").hasRole(RoleEnum.ADMIN.name()).
